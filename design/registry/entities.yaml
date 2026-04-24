@@ -37,132 +37,1802 @@
 #   Each entry: name, status, source, referenced_by[], attributes{}, added, revised
 
 version: 1
-last_updated: ""
+last_updated: "2026-04-22"
 
 # ─── ENTITIES ────────────────────────────────────────────────────────────────
-# Named game-world objects: enemies, NPCs, characters, factions, bosses.
-# Register an entity here when it appears in more than one GDD — e.g., an
-# enemy defined in combat.md that also drops items listed in inventory.md.
-#
-# Required fields: name, status, source, referenced_by, added
-# Attribute fields: any key stats that could appear in another GDD
-#   (health, damage, drops, faction, etc.)
 
 entities: []
 
-# Example (remove when first real entry is added):
-#
-# entities:
-#   - name: goblin
-#     status: active              # active | deprecated
-#     source: design/gdd/combat.md
-#     referenced_by:
-#       - design/gdd/combat.md
-#       - design/gdd/inventory.md
-#     health: 40
-#     damage: 8
-#     drops:
-#       - item: goblin_arm        # must match an entry in items section
-#         qty: 1
-#         drop_rate: 0.8          # 0.0–1.0
-#     added: 2026-03-26
-#     revised: ""
-
-
 # ─── ITEMS ───────────────────────────────────────────────────────────────────
-# Named collectables, equipment, consumables, crafting materials, currency.
-# Register an item when its name or value appears in more than one GDD.
-#
-# Required fields: name, status, source, referenced_by, added
-# Attribute fields: value_gold, weight, stackable, category, and any stat
-#   modifiers that another system (e.g., economy, crafting) might reference.
 
 items: []
 
-# Example:
-#
-# items:
-#   - name: goblin_arm
-#     status: active
-#     source: design/gdd/combat.md   # drop defined in combat GDD
-#     referenced_by:
-#       - design/gdd/combat.md
-#       - design/gdd/inventory.md    # inventory GDD lists its weight/stack rules
-#       - design/gdd/economy.md      # economy GDD references its sell price
-#     value_gold: 5
-#     weight: 1
-#     stackable: true
-#     category: crafting_material
-#     added: 2026-03-26
-#     revised: ""
-
-
 # ─── FORMULAS ────────────────────────────────────────────────────────────────
-# Named calculations with defined variables and output ranges.
-# Register a formula when its output feeds into another system's input,
-# or when another GDD references it by name.
-#
-# Required fields: name, status, source, referenced_by, variables[],
-#   output_range[min, max], added
-# Optional: expression (the actual formula), notes
 
 formulas: []
 
-# Example:
-#
-# formulas:
-#   - name: damage_formula
-#     status: active
-#     source: design/gdd/combat.md
-#     referenced_by:
-#       - design/gdd/combat.md
-#       - design/gdd/progression.md   # progression GDD scales attack variable
-#     variables:
-#       - attack
-#       - defense
-#       - crit_chance
-#       - crit_multiplier
-#     output_range: [0, 999]
-#     expression: "max(0, attack - defense) * (1 + crit_chance * crit_multiplier)"
-#     notes: "Output feeds into health-system damage intake. Min is 0 (armour
-#       can absorb all damage). Max is uncapped in formula but tuning knob
-#       damage_cap in combat.md clamps at 999."
-#     added: 2026-03-26
-#     revised: ""
-
-
 # ─── CONSTANTS ───────────────────────────────────────────────────────────────
-# Named numerical values referenced across multiple systems.
-# Register a constant when it is defined in one GDD but another GDD must
-# agree with it (e.g., gold carry limit defined in economy but checked in
-# inventory, or base inventory slots defined in inventory but displayed in HUD).
-#
-# Required fields: name, status, source, referenced_by, value, unit, added
 
-constants: []
+constants:
+  - name: CELL_SIZE
+    status: active
+    source: design/gdd/tilemap-world-system.md
+    referenced_by:
+      - design/gdd/tilemap-world-system.md
+      - design/gdd/block-collision-system.md
+      - design/gdd/block-digging-system.md
+      - design/gdd/block-type-database.md
+      - design/gdd/vehicle-driving-system.md
+    value: 32
+    unit: pixels
+    notes: "Grid cell pixel size. All coordinate conversion depends on this. Changing requires re-scaling all tile assets."
+    added: 2026-04-22
+    revised: ""
 
-# Example:
-#
-# constants:
-#   - name: gold_carry_limit
-#     status: active
-#     source: design/gdd/economy.md
-#     referenced_by:
-#       - design/gdd/economy.md
-#       - design/gdd/inventory.md   # inventory enforces the carry limit
-#       - design/gdd/ui.md          # HUD displays current gold vs limit
-#     value: 9999
-#     unit: gold
-#     added: 2026-03-26
-#     revised: ""
-#
-#   - name: base_inventory_slots
-#     status: active
-#     source: design/gdd/inventory.md
-#     referenced_by:
-#       - design/gdd/inventory.md
-#       - design/gdd/progression.md  # progression unlocks additional slots
-#     value: 20
-#     unit: slots
-#     added: 2026-03-26
-#     revised: ""
+  - name: CHUNK_SIZE
+    status: active
+    source: design/gdd/tilemap-world-system.md
+    referenced_by:
+      - design/gdd/tilemap-world-system.md
+    value: 32
+    unit: cells
+    notes: "Cells per chunk (32×32 = 1024 tiles). Memory footprint per chunk depends on this. Changing requires save file migration."
+    added: 2026-04-22
+    revised: ""
+
+  - name: MAX_WORLD_BOUNDS
+    status: active
+    source: design/gdd/tilemap-world-system.md
+    referenced_by:
+      - design/gdd/tilemap-world-system.md
+    value: 1000
+    unit: cells
+    notes: "World coordinate limit (-1000 to +1000). Total world size = 2001×2001 cells. Changing affects chunk dictionary memory budget."
+    added: 2026-04-22
+    revised: ""
+
+  - name: THRESHOLD_CRITICAL
+    status: active
+    source: design/gdd/tilemap-world-system.md
+    referenced_by:
+      - design/gdd/tilemap-world-system.md
+      - design/gdd/block-digging-system.md
+      - design/gdd/block-type-database.md
+    value: 0.8
+    unit: ratio
+    notes: "Damage ratio for CRITICAL state (80% of hardness). Tunable 0.5-0.95. Visual/audio feedback triggers at this threshold."
+    added: 2026-04-22
+    revised: ""
+
+  - name: THRESHOLD_DAMAGED
+    status: active
+    source: design/gdd/tilemap-world-system.md
+    referenced_by:
+      - design/gdd/tilemap-world-system.md
+      - design/gdd/block-digging-system.md
+      - design/gdd/block-type-database.md
+    value: 0.5
+    unit: ratio
+    notes: "Damage ratio for DAMAGED state (50% of hardness). Tunable 0.3-0.7. Visual damage variant (cracked texture) triggers at this threshold. Referenced by digging progress bar color transition."
+    added: 2026-04-23
+    revised: ""
+
+  - name: LOAD_RADIUS_CHUNKS
+    status: active
+    source: design/gdd/tilemap-world-system.md
+    referenced_by:
+      - design/gdd/tilemap-world-system.md
+    value: 2
+    unit: chunks
+    notes: "Chunks loaded around active entity. Memory footprint scales with this value. Tunable 1-5, safe range 2-3."
+    added: 2026-04-22
+    revised: ""
+
+  - name: UNLOAD_RADIUS_CHUNKS
+    status: active
+    source: design/gdd/tilemap-world-system.md
+    referenced_by:
+      - design/gdd/tilemap-world-system.md
+    value: 3
+    unit: chunks
+    notes: "Distance to trigger unload timer. Must be ≥ LOAD_RADIUS + 1. Tunable 2-6, safe range 3-4."
+    added: 2026-04-22
+    revised: ""
+
+  - name: UNLOAD_TIMER_SECONDS
+    status: active
+    source: design/gdd/tilemap-world-system.md
+    referenced_by:
+      - design/gdd/tilemap-world-system.md
+    value: 30
+    unit: seconds
+    notes: "Delay before chunk unload after entity departure. Tunable 10-120, safe range 20-45. Shorter = more memory churn."
+    added: 2026-04-22
+    revised: ""
+
+  # ─── RESOURCE IDs (Cross-system: BlockTypeDatabase ↔ ResourceDatabase) ────────
+
+  - name: RESOURCE_IRON_ID
+    status: active
+    source: design/gdd/resource-database.md
+    referenced_by:
+      - design/gdd/resource-database.md
+      - design/gdd/block-type-database.md
+    value: 101
+    unit: resource_id
+    notes: "Iron resource ID — 铁矿. Referenced by iron_ore block (block_id=500) for drop table."
+    added: 2026-04-22
+    revised: ""
+
+  - name: RESOURCE_COPPER_ID
+    status: active
+    source: design/gdd/resource-database.md
+    referenced_by:
+      - design/gdd/resource-database.md
+      - design/gdd/block-type-database.md
+    value: 102
+    unit: resource_id
+    notes: "Copper resource ID — 铜矿. Referenced by copper_ore block (block_id=501) for drop table."
+    added: 2026-04-22
+    revised: ""
+
+  - name: RESOURCE_COAL_ID
+    status: active
+    source: design/gdd/resource-database.md
+    referenced_by:
+      - design/gdd/resource-database.md
+      - design/gdd/block-type-database.md
+    value: 103
+    unit: resource_id
+    notes: "Coal resource ID — 煤矿. Referenced by coal_ore block (block_id=502) for drop table."
+    added: 2026-04-22
+    revised: ""
+
+  - name: RESOURCE_CRYSTAL_SHARD_ID
+    status: active
+    source: design/gdd/resource-database.md
+    referenced_by:
+      - design/gdd/resource-database.md
+      - design/gdd/block-type-database.md
+    value: 201
+    unit: resource_id
+    notes: "Crystal shard resource ID — 魔力晶石碎片. Referenced by crystal_deposit block (block_id=503) for drop table."
+    added: 2026-04-22
+    revised: ""
+
+  - name: RESOURCE_CRYSTAL_CLUSTER_ID
+    status: active
+    source: design/gdd/resource-database.md
+    referenced_by:
+      - design/gdd/resource-database.md
+      - design/gdd/block-type-database.md
+    value: 202
+    unit: resource_id
+    notes: "Crystal cluster resource ID — 魔力晶石簇. Referenced by crystal_deposit block (block_id=503) rare drop variant."
+    added: 2026-04-22
+    revised: ""
+
+  - name: RESOURCE_GOLD_ID
+    status: active
+    source: design/gdd/resource-database.md
+    referenced_by:
+      - design/gdd/resource-database.md
+      - design/gdd/block-type-database.md
+    value: 203
+    unit: resource_id
+    notes: "Gold resource ID — 金矿. Referenced by gold_ore block (block_id=504) for drop table."
+    added: 2026-04-22
+    revised: ""
+
+  - name: RESOURCE_MITHRIL_ID
+    status: active
+    source: design/gdd/resource-database.md
+    referenced_by:
+      - design/gdd/resource-database.md
+      - design/gdd/block-type-database.md
+    value: 301
+    unit: resource_id
+    notes: "Mithril resource ID — 秘银. Referenced by mithril_deposit block (block_id=505) for drop table."
+    added: 2026-04-22
+    revised: ""
+
+  - name: RESOURCE_ANCIENT_MITHRIL_ID
+    status: active
+    source: design/gdd/resource-database.md
+    referenced_by:
+      - design/gdd/resource-database.md
+      - design/gdd/block-type-database.md
+    value: 302
+    unit: resource_id
+    notes: "Ancient Mithril resource ID — 古代秘银. Referenced by mithril_deposit block (block_id=505) rare drop variant."
+    added: 2026-04-22
+    revised: ""
+
+  # ─── CRAFTED OUTPUT MATERIALS (合成产物) ─────────────────────────────────────
+
+  - name: RESOURCE_IRON_INGOT_ID
+    status: active
+    source: design/gdd/bunker-facility-system.md
+    referenced_by:
+      - design/gdd/bunker-facility-system.md
+      - design/gdd/resource-database.md
+    value: 151
+    unit: resource_id
+    notes: "Iron ingot resource ID — 铁锭. Crafted output from workbench R001 recipe (铁矿×5 → 铁锭×1). is_craftable_output=1, base_value=6."
+    added: 2026-04-24
+    revised: ""
+
+  - name: RESOURCE_COPPER_INGOT_ID
+    status: active
+    source: design/gdd/bunker-facility-system.md
+    referenced_by:
+      - design/gdd/bunker-facility-system.md
+      - design/gdd/resource-database.md
+    value: 152
+    unit: resource_id
+    notes: "Copper ingot resource ID — 铜锭. Crafted output from workbench R002 recipe (铜矿×5 → 铜锭×1). is_craftable_output=1, base_value=9."
+    added: 2026-04-24
+    revised: ""
+
+  - name: RESOURCE_BASIC_PARTS_ID
+    status: active
+    source: design/gdd/bunker-facility-system.md
+    referenced_by:
+      - design/gdd/bunker-facility-system.md
+      - design/gdd/resource-database.md
+    value: 160
+    unit: resource_id
+    notes: "Basic parts resource ID — 基础零件. Crafted output from workbench R004 recipe (铁锭×2 + 铜锭×1 → 基础零件×1). is_craftable_output=1, base_value=15."
+    added: 2026-04-24
+    revised: ""
+
+  # Additional build materials used by BuildItemDatabase
+
+  - name: RESOURCE_STONE_ID
+    status: active
+    source: design/gdd/resource-database.md
+    referenced_by:
+      - design/gdd/resource-database.md
+      - design/gdd/build-item-database.md
+    value: 110
+    unit: resource_id
+    notes: "Stone resource ID — 石料. Used in wall and turret recipes. is_build_material=1."
+    added: 2026-04-22
+    revised: ""
+
+  - name: RESOURCE_WOOD_ID
+    status: active
+    source: design/gdd/resource-database.md
+    referenced_by:
+      - design/gdd/resource-database.md
+      - design/gdd/build-item-database.md
+    value: 120
+    unit: resource_id
+    notes: "Wood resource ID — 木材. Used in facility and platform recipes. is_build_material=1."
+    added: 2026-04-22
+    revised: ""
+
+  - name: RESOURCE_COAL_BUILD_ID
+    status: active
+    source: design/gdd/resource-database.md
+    referenced_by:
+      - design/gdd/resource-database.md
+      - design/gdd/build-item-database.md
+    value: 103
+    unit: resource_id
+    notes: "Coal resource ID — 煤矿. Now is_build_material=1 (updated for wall_reinforced recipe)."
+    added: 2026-04-22
+    revised: ""
+
+  - name: RESOURCE_CRYSTAL_SHARD_BUILD_ID
+    status: active
+    source: design/gdd/resource-database.md
+    referenced_by:
+      - design/gdd/resource-database.md
+      - design/gdd/build-item-database.md
+    value: 201
+    unit: resource_id
+    notes: "Crystal shard resource ID — 魔力晶石碎片. Now is_build_material=1 (updated for魔导build recipes)."
+    added: 2026-04-22
+    revised: ""
+
+  - name: RESOURCE_CRYSTAL_CLUSTER_BUILD_ID
+    status: active
+    source: design/gdd/resource-database.md
+    referenced_by:
+      - design/gdd/resource-database.md
+      - design/gdd/build-item-database.md
+    value: 202
+    unit: resource_id
+    notes: "Crystal cluster resource ID — 魔力晶石簇. Now is_build_material=1 (updated for turret_rune recipe)."
+    added: 2026-04-22
+    revised: ""
+
+  # ─── VEHICLE THRESHOLDS (Cross-system: VehicleDatabase ↔ Retreat判定系统 ↔ HUD系统) ────────
+
+  - name: VEHICLE_DEPLOY_DURABILITY_MIN
+    status: active
+    source: design/gdd/game-concept.md
+    referenced_by:
+      - design/gdd/game-concept.md
+      - design/gdd/vehicle-type-database.md
+    value: 0.80
+    unit: ratio
+    notes: "Minimum durability ratio to deploy vehicle (80%). Locked from game concept. Referenced by 出发条件 and retreat判定系统."
+    added: 2026-04-22
+    revised: ""
+
+  - name: VEHICLE_DEPLOY_MAGIC_MIN
+    status: active
+    source: design/gdd/game-concept.md
+    referenced_by:
+      - design/gdd/game-concept.md
+      - design/gdd/vehicle-type-database.md
+    value: 0.50
+    unit: ratio
+    notes: "Minimum magic energy ratio to deploy vehicle (50%). Locked from game concept. Referenced by 出发条件 and retreat判定系统."
+    added: 2026-04-22
+    revised: ""
+
+  - name: VEHICLE_RETREAT_MAGIC_THRESHOLD
+    status: active
+    source: design/gdd/game-concept.md
+    referenced_by:
+      - design/gdd/game-concept.md
+      - design/gdd/vehicle-type-database.md
+    value: 0.20
+    unit: ratio
+    notes: "Magic energy ratio triggering retreat warning (20%). Locked from game concept. Referenced by 撤退触发 and HUD警告系统."
+    added: 2026-04-22
+    revised: ""
+
+  - name: VEHICLE_RETREAT_DURABILITY_THRESHOLD
+    status: active
+    source: design/gdd/game-concept.md
+    referenced_by:
+      - design/gdd/game-concept.md
+      - design/gdd/vehicle-type-database.md
+    value: 0.30
+    unit: ratio
+    notes: "Durability ratio triggering retreat warning (30%). Locked from game concept. Referenced by 撤退触发 and HUD警告系统."
+    added: 2026-04-22
+    revised: ""
+
+  - name: VEHICLE_WAREHOUSE_SLOTS
+    status: active
+    source: design/gdd/game-concept.md
+    referenced_by:
+      - design/gdd/game-concept.md
+      - design/gdd/vehicle-type-database.md
+    value: 100
+    unit: slots
+    notes: "Default warehouse slot count for vehicles. Locked from game concept. Referenced by 战车仓库系统."
+    added: 2026-04-22
+    revised: ""
+
+  # ─── INPUT CONSTANTS (Cross-system: Input ↔ Driving/Digging/Placing) ────────────
+
+  - name: DIGITAL_RAMP_TIME
+    status: active
+    source: design/gdd/input-control-system.md
+    referenced_by:
+      - design/gdd/input-control-system.md
+      - design/gdd/vehicle-driving-system.md
+    value: 300
+    unit: ms
+    notes: "Keyboard steering ramp duration. Tunable 200-400ms. Lower = snappier, Higher = smoother. Affects Pillar 1 (战车即生命) driving feel."
+    added: 2026-04-22
+    revised: ""
+
+  - name: DIGITAL_CANCEL_TIME
+    status: active
+    source: design/gdd/input-control-system.md
+    referenced_by:
+      - design/gdd/input-control-system.md
+      - design/gdd/vehicle-driving-system.md
+    value: 80
+    unit: ms
+    notes: "Return to neutral on key release. Tunable 50-100ms. Lower = instant stop, Higher = gentle fade. Affects driving feel."
+    added: 2026-04-22
+    revised: ""
+
+  - name: DEADZONE_AXIS_INNER
+    status: active
+    source: design/gdd/input-control-system.md
+    referenced_by:
+      - design/gdd/input-control-system.md
+      - design/gdd/vehicle-driving-system.md
+    value: 0.15
+    unit: ratio
+    notes: "Gamepad stick inner deadzone. Tunable 0.05-0.25. Lower = hyper-responsive, Higher = forgiving. Affects driving/digging precision."
+    added: 2026-04-22
+    revised: ""
+
+  - name: DEADZONE_AXIS_OUTER
+    status: active
+    source: design/gdd/input-control-system.md
+    referenced_by:
+      - design/gdd/input-control-system.md
+      - design/gdd/vehicle-driving-system.md
+    value: 0.95
+    unit: ratio
+    notes: "Gamepad stick outer deadzone clamp. Tunable 0.90-0.99. Hardware variance guard at stick extremes."
+    added: 2026-04-22
+    revised: ""
+
+  - name: DEADZONE_TRIGGER
+    status: active
+    source: design/gdd/input-control-system.md
+    referenced_by:
+      - design/gdd/input-control-system.md
+      - design/gdd/vehicle-driving-system.md
+    value: 0.10
+    unit: ratio
+    notes: "Trigger activation threshold. Tunable 0.05-0.20. Affects combat/driving trigger responsiveness."
+    added: 2026-04-22
+    revised: ""
+
+  - name: RADIAL_DEADZONE
+    status: active
+    source: design/gdd/input-control-system.md
+    referenced_by:
+      - design/gdd/input-control-system.md
+      - design/gdd/vehicle-driving-system.md
+    value: 0.15
+    unit: ratio
+    notes: "Circular deadzone for get_vector(). Tunable 0.05-0.20. Prevents micro-drift on dual-axis input."
+    added: 2026-04-22
+    revised: ""
+
+  - name: MERGE_THRESHOLD
+    status: active
+    source: design/gdd/input-control-system.md
+    referenced_by:
+      - design/gdd/input-control-system.md
+      - design/gdd/vehicle-driving-system.md
+    value: 0.15
+    unit: ratio
+    notes: "Soft merge boundary for keyboard/gamepad fallback. Tunable 0.05-0.20. Keyboard applies when gamepad below threshold."
+    added: 2026-04-22
+    revised: ""
+
+  # ─── COLLISION LAYER BITS (Cross-system: Collision ↔ Vehicle ↔ Enemy ↔ Projectile) ────────
+
+  - name: COLLISION_TERRAIN
+    status: active
+    source: design/gdd/block-collision-system.md
+    referenced_by:
+      - design/gdd/block-collision-system.md
+      - design/gdd/vehicle-driving-system.md
+      - design/gdd/tilemap-world-system.md
+    value: 1
+    unit: collision_layer_bit
+    notes: "Terrain collision layer. Bit 0 (value 1). Used by TileMap Layer 1 terrain_base. Entities with this mask bit detect terrain collision."
+    added: 2026-04-22
+    revised: 2026-04-23
+
+  - name: COLLISION_STRUCTURE
+    status: active
+    source: design/gdd/block-collision-system.md
+    referenced_by:
+      - design/gdd/block-collision-system.md
+      - design/gdd/vehicle-driving-system.md
+      - design/gdd/tilemap-world-system.md
+      - design/gdd/build-item-database.md
+    value: 2
+    unit: collision_layer_bit
+    notes: "Structure collision layer. Bit 1 (value 2). Used by TileMap Layer 2 structures (walls, turrets). Entities with this mask bit detect structure collision."
+    added: 2026-04-22
+    revised: 2026-04-23
+
+  - name: COLLISION_PLATFORM
+    status: active
+    source: design/gdd/block-collision-system.md
+    referenced_by:
+      - design/gdd/block-collision-system.md
+      - design/gdd/vehicle-driving-system.md
+      - design/gdd/tilemap-world-system.md
+    value: 4
+    unit: collision_layer_bit
+    notes: "Platform collision layer. Bit 2 (value 4). Used by TileMap Layer 3 platforms (one-way via mask filtering). Battle Wagon includes this mask bit; walking enemies exclude it (fall through)."
+    added: 2026-04-22
+    revised: 2026-04-23
+
+  - name: COLLISION_ENEMY_BODY
+    status: active
+    source: design/gdd/block-collision-system.md
+    referenced_by:
+      - design/gdd/block-collision-system.md
+      - design/gdd/vehicle-driving-system.md
+      - design/gdd/enemy-type-database.md
+    value: 8
+    unit: collision_layer_bit
+    notes: "Enemy body collision layer. Bit 3 (value 8). Walking enemies and flying enemies have this layer. Player projectiles detect this layer to hit enemies."
+    added: 2026-04-22
+    revised: 2026-04-23
+
+  - name: COLLISION_PLAYER_PROJECTILE
+    status: active
+    source: design/gdd/vehicle-weapon-system.md
+    referenced_by:
+      - design/gdd/vehicle-weapon-system.md
+      - design/gdd/block-collision-system.md
+    value: 16
+    unit: collision_layer_bit
+    notes: "Player projectile collision layer. Bit 4 (value 16). Player weapon projectiles (cannon, beam, missile) have this layer. Enemy bodies detect this layer for damage. Complement to COLLISION_ENEMY_BODY."
+    added: 2026-04-23
+    revised: ""
+
+  - name: COLLISION_PLAYER_BODY
+    status: active
+    source: design/gdd/block-collision-system.md
+    referenced_by:
+      - design/gdd/block-collision-system.md
+      - design/gdd/vehicle-driving-system.md
+      - design/gdd/vehicle-type-database.md
+    value: 64
+    unit: collision_layer_bit
+    notes: "Player body collision layer. Bit 6 (value 64). Battle Wagon has this layer. Enemy projectiles detect this layer to hit player vehicle."
+    added: 2026-04-22
+    revised: 2026-04-23
+
+  # ─── COLLISION PERFORMANCE CONSTANTS (Cross-system: Collision ↔ Driving ↔ Combat) ────────
+
+  - name: MAX_SWEPT_STEPS
+    status: active
+    source: design/gdd/block-collision-system.md
+    referenced_by:
+      - design/gdd/block-collision-system.md
+      - design/gdd/vehicle-driving-system.md
+    value: 64
+    unit: iterations
+    notes: "Maximum steps for swept collision traversal. Cap prevents performance spikes for fast-moving entities. Tunable 16-128. Affects collision detection precision."
+    added: 2026-04-22
+    revised: ""
+
+  - name: MAX_RAYCAST_STEPS
+    status: active
+    source: design/gdd/block-collision-system.md
+    referenced_by:
+      - design/gdd/block-collision-system.md
+      - design/gdd/vehicle-driving-system.md
+    value: 128
+    unit: iterations
+    notes: "Maximum steps for raycast cell traversal. Cap prevents long-ray performance issues. Tunable 32-256. Match to turret max range."
+    added: 2026-04-22
+    revised: ""
+
+  - name: MAX_SEARCH_RADIUS_CELLS
+    status: active
+    source: design/gdd/block-collision-system.md
+    referenced_by:
+      - design/gdd/block-collision-system.md
+      - design/gdd/vehicle-driving-system.md
+    value: 32
+    unit: cells
+    notes: "Maximum search radius for nearest collision query (WALL_BREAKER targeting). 32 cells = 1024 px. Tunable 8-64."
+    added: 2026-04-22
+    revised: ""
+
+  - name: COLLISION_EPSILON
+    status: active
+    source: design/gdd/block-collision-system.md
+    referenced_by:
+      - design/gdd/block-collision-system.md
+      - design/gdd/vehicle-driving-system.md
+    value: 0.001
+    unit: pixels
+    notes: "Minimum motion threshold for collision detection. Motion < EPSILON treated as static. Tunable 0.0001-0.01."
+    added: 2026-04-22
+    revised: ""
+
+  # ─── TIME CONSTANTS (Cross-system: Time ↔ DayNight ↔ Retreat判定) ────────
+
+  - name: BASE_TIME_SCALE
+    status: active
+    source: design/gdd/time-system.md
+    referenced_by:
+      - design/gdd/time-system.md
+    value: 72.0
+    unit: game_seconds_per_real_second
+    notes: "Base time scale ratio (1 real second = 72 game seconds). 20 real minutes = 1 game day. Tunable 36.0-180.0. Affects all time-dependent systems (DayNight, Retreat, 尸潮周期)."
+    added: 2026-04-22
+    revised: ""
+
+  # ─── PLACEMENT CONSTANTS (Cross-system: BlockPlacing ↔ TileMap ↔ Input) ────────────
+
+  - name: MAX_PLACE_RANGE
+    status: active
+    source: design/gdd/block-placing-system.md
+    referenced_by:
+      - design/gdd/block-placing-system.md
+      - design/gdd/build-validation-system.md
+    value: 5.0
+    unit: cells
+    notes: "Maximum placement range from player to target cell. Tunable 3.0-10.0. Affects Pillar 2 (搜打撤节奏) — closer placement = more exposure risk."
+    added: 2026-04-23
+    revised: ""
+
+  # ─── VEHICLE DRIVING TUNING (Cross-system: VehicleDriving ↔ VehicleAttribute ↔ Balance) ────────
+
+  - name: ACCELERATION_BASE
+    status: active
+    source: design/gdd/vehicle-driving-system.md
+    referenced_by:
+      - design/gdd/vehicle-driving-system.md
+    value: 2.0
+    unit: cells/sec²
+    notes: "Base acceleration rate for vehicle driving. Tunable 1.0-5.0. Lower = heavy acceleration feel, higher = snappy response. Affects Pillar 1 (战车即生命) driving feel."
+    added: 2026-04-23
+    revised: ""
+
+  - name: DRAG_COEFFICIENT
+    status: active
+    source: design/gdd/vehicle-driving-system.md
+    referenced_by:
+      - design/gdd/vehicle-driving-system.md
+    value: 1.0
+    unit: ratio
+    notes: "Natural deceleration rate multiplier. Tunable 0.5-2.0. Lower = momentum-heavy (vehicle drifts), higher = responsive stop. Affects 撤退紧张感."
+    added: 2026-04-23
+    revised: ""
+
+  - name: MAGIC_COST_PER_CELL
+    status: active
+    source: design/gdd/vehicle-driving-system.md
+    referenced_by:
+      - design/gdd/vehicle-driving-system.md
+      - design/gdd/magic-energy-consumption.md
+    value: 0.5
+    unit: magic/cell
+    notes: "Magic energy cost per cell traveled. Tunable 0.1-1.0. Lower = longer exploration range, higher = tighter 搜打撤 pressure. Affects Pillar 2."
+    added: 2026-04-23
+    revised: ""
+
+  - name: BASE_TURN_RATE
+    status: active
+    source: design/gdd/vehicle-driving-system.md
+    referenced_by:
+      - design/gdd/vehicle-driving-system.md
+    value: 120
+    unit: deg/sec
+    notes: "Base steering turn rate. Tunable 90-180. Lower = deliberate turns (heavy feel), higher = agile turns. Affects 驾驶掌控感."
+    added: 2026-04-23
+    revised: ""
+
+  - name: TURN_SPEED_FACTOR
+    status: active
+    source: design/gdd/vehicle-driving-system.md
+    referenced_by:
+      - design/gdd/vehicle-driving-system.md
+    value: 0.5
+    unit: ratio
+    notes: "Speed-dependent turn penalty factor. Tunable 0.3-0.7. Lower = fast turns at high speed, higher = slow turns at high speed. Affects collision avoidance."
+    added: 2026-04-23
+    revised: ""
+
+  - name: COLLISION_PENALTY_FACTOR
+    status: active
+    source: design/gdd/vehicle-driving-system.md
+    referenced_by:
+      - design/gdd/vehicle-driving-system.md
+    value: 0.7
+    unit: ratio
+    notes: "Collision speed reduction severity. Tunable 0.5-1.0. Lower = forgiving collision (minor speed loss), higher = hard stop on impact. Affects 物理可信度."
+    added: 2026-04-23
+    revised: ""
+
+  # ─── MAGIC CONSUMPTION TUNING (Cross-system: MagicConsumption ↔ VehicleDriving ↔ VehicleWeapon) ────────
+
+  - name: OVERLOAD_COST_PENALTY
+    status: active
+    source: design/gdd/magic-energy-consumption.md
+    referenced_by:
+      - design/gdd/magic-energy-consumption.md
+    value: 0.5
+    unit: ratio
+    notes: "Max load modifier penalty cap for driving. Tunable 0.3-0.8. Higher = harsher overload cost on driving. Affects load management incentive."
+    added: 2026-04-23
+    revised: ""
+
+  - name: ACCUMULATION_THRESHOLD
+    status: active
+    source: design/gdd/magic-energy-consumption.md
+    referenced_by:
+      - design/gdd/magic-energy-consumption.md
+    value: 5.0
+    unit: magic
+    notes: "Magic threshold triggering accumulation flush. Tunable 1.0-20.0. Higher = fewer flushes, smoother HUD but risk of depletion before flush."
+    added: 2026-04-23
+    revised: ""
+
+  - name: ACCUMULATION_INTERVAL
+    status: active
+    source: design/gdd/magic-energy-consumption.md
+    referenced_by:
+      - design/gdd/magic-energy-consumption.md
+    value: 5
+    unit: frames
+    notes: "Frame count threshold triggering accumulation flush. Tunable 1-30. Higher = fewer flushes, more per-frame accumulation."
+    added: 2026-04-23
+    revised: ""
+
+  - name: CONSUMPTION_RATE_WINDOW
+    status: active
+    source: design/gdd/magic-energy-consumption.md
+    referenced_by:
+      - design/gdd/magic-energy-consumption.md
+    value: 3.0
+    unit: seconds
+    notes: "Sliding window duration for consumption rate averaging. Tunable 1.0-10.0. Longer = smoother rate display, less responsive to spikes."
+    added: 2026-04-23
+    revised: ""
+
+  - name: MAX_LOAD_PENALTY_SHOOTING
+    status: active
+    source: design/gdd/magic-energy-consumption.md
+    referenced_by:
+      - design/gdd/magic-energy-consumption.md
+    value: 0.15
+    unit: ratio
+    notes: "Max shooting cost load penalty cap. Tunable 0.05-0.25. Higher = overloaded vehicles pay more per shot. Affects driving/shooting resource competition."
+    added: 2026-04-23
+    revised: ""
+
+  # ─── VEHICLE WEAPON TUNING (Cross-system: VehicleWeapon ↔ Combat ↔ Balance) ────────
+
+  - name: WEAPON_SWITCH_COOLDOWN
+    status: active
+    source: design/gdd/vehicle-weapon-system.md
+    referenced_by:
+      - design/gdd/vehicle-weapon-system.md
+    value: 0.3
+    unit: seconds
+    notes: "Cooldown between weapon slot switches. Tunable 0.1-0.5. Lower = fluid switching, higher = deliberate weapon selection. Affects combat pacing."
+    added: 2026-04-23
+    revised: ""
+
+  - name: MINIMUM_DAMAGE
+    status: active
+    source: design/gdd/vehicle-weapon-system.md
+    referenced_by:
+      - design/gdd/vehicle-weapon-system.md
+    value: 1
+    unit: damage_points
+    notes: "Minimum damage floor after all reductions. Prevents zero-damage edge cases. Tunable 1-5. Higher = guaranteed chip damage even vs heavy armor."
+    added: 2026-04-23
+    revised: ""
+
+  - name: MAX_ARMOR_REDUCTION
+    status: active
+    source: design/gdd/vehicle-weapon-system.md
+    referenced_by:
+      - design/gdd/vehicle-weapon-system.md
+    value: 0.8
+    unit: ratio
+    notes: "Maximum armor damage reduction cap. Tunable 0.5-0.95. Higher = heavy armor very effective, lower = armor less impactful. Affects weapon vs armor balance."
+    added: 2026-04-23
+    revised: ""
+
+  - name: RANGE_FALLOFF_THRESHOLD_RATIO
+    status: active
+    source: design/gdd/vehicle-weapon-system.md
+    referenced_by:
+      - design/gdd/vehicle-weapon-system.md
+    value: 0.8
+    unit: ratio
+    notes: "Range ratio where falloff begins (0.8 = 80% of max range). Tunable 0.6-1.0. Lower = earlier falloff, higher = damage maintained longer. Affects effective engagement distance."
+    added: 2026-04-23
+    revised: ""
+
+  - name: MIN_RANGE_FALLOFF
+    status: active
+    source: design/gdd/vehicle-weapon-system.md
+    referenced_by:
+      - design/gdd/vehicle-weapon-system.md
+    value: 0.5
+    unit: ratio
+    notes: "Minimum damage multiplier at max range. Tunable 0.3-0.7. Lower = steep range penalty, higher = forgiving long-range shots. Affects close-range combat incentive."
+    added: 2026-04-23
+    revised: ""
+
+  - name: AIM_DEADZONE
+    status: active
+    source: design/gdd/vehicle-weapon-system.md
+    referenced_by:
+      - design/gdd/vehicle-weapon-system.md
+    value: 5.0
+    unit: degrees
+    notes: "Aim angle deadzone before auto-aim engages. Tunable 2.0-10.0. Lower = precise manual aim required, higher = generous auto-aim assist. Affects skill ceiling."
+    added: 2026-04-23
+    revised: ""
+
+  - name: AUTO_AIM_RANGE
+    status: active
+    source: design/gdd/vehicle-weapon-system.md
+    referenced_by:
+      - design/gdd/vehicle-weapon-system.md
+    value: 64.0
+    unit: pixels
+    notes: "Pixel radius for auto-aim target acquisition. Tunable 32.0-128.0. Lower = precise targeting, higher = forgiving acquisition. Affects controller vs KBM balance."
+    added: 2026-04-23
+    revised: ""
+
+  # ─── VEHICLE DAMAGE TUNING (Cross-system: VehicleDamage ↔ Combat ↔ Armor) ────────
+
+  - name: COLLISION_ARMOR_EFFECTIVENESS
+    status: active
+    source: design/gdd/vehicle-damage-system.md
+    referenced_by:
+      - design/gdd/vehicle-damage-system.md
+    value: 0.50
+    unit: ratio
+    notes: "Armor effectiveness for collision damage reduction. Tunable 0.3-0.7. Higher = armor blocks more collision damage, lower = collision less mitigated. Affects collision vs armor balance."
+    added: 2026-04-23
+    revised: ""
+
+  - name: FRAME_ACCUMULATION_BATCH_SIZE
+    status: active
+    source: design/gdd/vehicle-damage-system.md
+    referenced_by:
+      - design/gdd/vehicle-damage-system.md
+    value: 500
+    unit: damage_points
+    notes: "Max damage per single durability deduction call. Tunable 100-1000. Higher = faster processing, lower = more granular visual feedback. Performance/feedback trade-off."
+    added: 2026-04-23
+    revised: ""
+
+  - name: ARMOR_PIERCE_BOSS_FLAG
+    status: active
+    source: design/gdd/vehicle-damage-system.md
+    referenced_by:
+      - design/gdd/vehicle-damage-system.md
+    value: true
+    unit: boolean
+    notes: "Boss attacks bypass armor reduction. Tunable true/false. true = boss damage always full (scary encounters), false = armor applies normally. Affects Pillar 3 boss threat."
+    added: 2026-04-23
+    revised: ""
+
+  - name: COOLDOWN_TRACKING_ENABLED
+    status: active
+    source: design/gdd/vehicle-damage-system.md
+    referenced_by:
+      - design/gdd/vehicle-damage-system.md
+    value: true
+    unit: boolean
+    notes: "Enemy attack cooldown enforcement toggle. Tunable true/false. false = enemies attack every contact (extreme pressure, debug mode). Affects 尸潮 damage intensity."
+    added: 2026-04-23
+    revised: ""
+
+  - name: UNKNOWN_SOURCE_DEFAULT
+    status: active
+    source: design/gdd/vehicle-damage-system.md
+    referenced_by:
+      - design/gdd/vehicle-damage-system.md
+    value: 1
+    unit: damage_source_type_id
+    notes: "Default damage source type for unrecognized events. Tunable 1-5 (melee/ranged/collision/special/environment). Affects fallback damage processing behavior."
+    added: 2026-04-23
+    revised: ""
+
+  - name: TIME_FAIL_OPEN
+    status: active
+    source: design/gdd/vehicle-damage-system.md
+    referenced_by:
+      - design/gdd/vehicle-damage-system.md
+    value: true
+    unit: boolean
+    notes: "Allow attack when time system fails. Tunable true/false. true = fail-open (attacks allowed, safer), false = fail-closed (attacks blocked, may freeze combat)."
+    added: 2026-04-23
+    revised: ""
+
+  - name: DAMAGE_BATCH_VISUAL_DELAY
+    status: active
+    source: design/gdd/vehicle-damage-system.md
+    referenced_by:
+      - design/gdd/vehicle-damage-system.md
+    value: 0.05
+    unit: seconds
+    notes: "Delay between batch damage calls for visual feedback spread. Tunable 0.0-0.2. Higher = damage appears gradual, lower = instant feedback. Affects damage perception."
+    added: 2026-04-23
+    revised: ""
+
+  # ─── ENEMY AI TUNING (Cross-system: EnemyAI ↔ EnemyTypeDB ↔ Pathfinding ↔ Behavior) ────────
+
+  - name: DETECTION_RANGE_MULT
+    status: active
+    source: design/gdd/enemy-ai-system.md
+    referenced_by:
+      - design/gdd/enemy-ai-system.md
+    value: 2.0
+    unit: ratio
+    notes: "Detection range multiplier (attack_range × MULT). Tunable 1.0-3.0. Lower = contact detection, higher = early warning detection. Affects threat anticipation."
+    added: 2026-04-23
+    revised: ""
+
+  - name: STATE_LOCK_FRAMES
+    status: active
+    source: design/gdd/enemy-ai-system.md
+    referenced_by:
+      - design/gdd/enemy-ai-system.md
+    value: 3
+    unit: frames
+    notes: "State transition debounce frames. Tunable 1-10. Lower = no debounce (may loop), higher = delayed transitions. Prevents state flip-flop."
+    added: 2026-04-23
+    revised: ""
+
+  - name: MAX_PATH_RETRIES
+    status: active
+    source: design/gdd/enemy-ai-system.md
+    referenced_by:
+      - design/gdd/enemy-ai-system.md
+    value: 3
+    unit: iterations
+    notes: "Maximum path recalc retries on failure. Tunable 1-10. Lower = quick abandon, higher = persistent retry. Affects unreachable target handling."
+    added: 2026-04-23
+    revised: ""
+
+  - name: PATH_RECALC_INTERVAL_TRACKER
+    status: active
+    source: design/gdd/enemy-ai-system.md
+    referenced_by:
+      - design/gdd/enemy-ai-system.md
+    value: 0.1
+    unit: seconds
+    notes: "TRACKER_HUNT path recalc interval. Tunable 0.05-0.3. Lower = real-time tracking, higher = laggy pursuit. High-speed pursuers need frequent updates."
+    added: 2026-04-23
+    revised: ""
+
+  - name: PATH_RECALC_INTERVAL_STANDARD
+    status: active
+    source: design/gdd/enemy-ai-system.md
+    referenced_by:
+      - design/gdd/enemy-ai-system.md
+    value: 0.5
+    unit: seconds
+    notes: "Standard behavior path recalc interval. Tunable 0.2-1.0. Lower = high-frequency recalc, higher = performance optimization. Static targets need less recalc."
+    added: 2026-04-23
+    revised: ""
+
+  - name: TRACKER_HUNT_SPEED_MULT
+    status: active
+    source: design/gdd/enemy-ai-system.md
+    referenced_by:
+      - design/gdd/enemy-ai-system.md
+    value: 1.5
+    unit: ratio
+    notes: "Tracker hunt state speed multiplier. Tunable 1.0-2.0. Lower = normal pursuit, higher = high-speed chase. Affects TRACKER threat intensity."
+    added: 2026-04-23
+    revised: ""
+
+  - name: SEPARATION_FORCE
+    status: active
+    source: design/gdd/enemy-ai-system.md
+    referenced_by:
+      - design/gdd/enemy-ai-system.md
+    value: 0.3
+    unit: ratio
+    notes: "SWARM_CHARGE cluster separation force (Boids). Tunable 0.0-1.0. Lower = no separation (stacking), higher = strong spreading. Prevents enemy overlap."
+    added: 2026-04-23
+    revised: ""
+
+  - name: SEPARATION_RADIUS
+    status: active
+    source: design/gdd/enemy-ai-system.md
+    referenced_by:
+      - design/gdd/enemy-ai-system.md
+    value: 32
+    unit: pixels
+    notes: "SWARM separation detection radius. Tunable 16-64. Lower = tight cluster, higher = sparse spread. Affects 尸潮 visual density."
+    added: 2026-04-23
+    revised: ""
+
+  - name: FLEE_DISTANCE_MULT
+    status: active
+    source: design/gdd/enemy-ai-system.md
+    referenced_by:
+      - design/gdd/enemy-ai-system.md
+    value: 1.5
+    unit: ratio
+    notes: "SNIPER flee distance multiplier (attack_range × MULT). Tunable 1.0-3.0. Lower = close retreat, higher = distant retreat. Affects sniper escape behavior."
+    added: 2026-04-23
+    revised: ""
+
+  - name: MAX_SUMMONS
+    status: active
+    source: design/gdd/enemy-ai-system.md
+    referenced_by:
+      - design/gdd/enemy-ai-system.md
+    value: 5
+    unit: count
+    notes: "SUMMONER maximum summon count. Tunable 1-10. Lower = limited reinforcement, higher = mass spawning. Affects summoner threat escalation."
+    added: 2026-04-23
+    revised: ""
+
+  - name: BUFF_RADIUS
+    status: active
+    source: design/gdd/enemy-ai-system.md
+    referenced_by:
+      - design/gdd/enemy-ai-system.md
+    value: 96
+    unit: pixels
+    notes: "SUPPORT buff detection radius. Tunable 48-192. Lower = tight buff zone, higher = wide support range. Affects support enemy positioning."
+    added: 2026-04-23
+    revised: ""
+
+  - name: AMBUSH_ALPHA
+    status: active
+    source: design/gdd/enemy-ai-system.md
+    referenced_by:
+      - design/gdd/enemy-ai-system.md
+    value: 0.3
+    unit: ratio
+    notes: "AMBUSHER hiding transparency. Tunable 0.0-0.5. Lower = near invisible, higher = partially visible. Affects ambush surprise factor."
+    added: 2026-04-23
+    revised: ""
+
+  - name: AIMING_DELAY
+    status: active
+    source: design/gdd/enemy-ai-system.md
+    referenced_by:
+      - design/gdd/enemy-ai-system.md
+    value: 0.3
+    unit: seconds
+    notes: "SNIPER aiming delay before shot. Tunable 0.1-0.5. Lower = quick shot, higher = slow aim. Affects sniper anticipation warning."
+    added: 2026-04-23
+    revised: ""
+
+  - name: SUMMONING_DELAY
+    status: active
+    source: design/gdd/enemy-ai-system.md
+    referenced_by:
+      - design/gdd/enemy-ai-system.md
+    value: 2.0
+    unit: seconds
+    notes: "SUMMONER summon action delay. Tunable 1.0-5.0. Lower = rapid summon, higher = slow reinforcement. Affects summoner priority window."
+    added: 2026-04-23
+    revised: ""
+
+  - name: IDLE_TIMEOUT
+    status: active
+    source: design/gdd/enemy-ai-system.md
+    referenced_by:
+      - design/gdd/enemy-ai-system.md
+    value: 5.0
+    unit: seconds
+    notes: "IDLE state timeout before recheck. Tunable 1.0-10.0. Lower = fast recheck, higher = slow response. Affects enemy responsiveness after target loss."
+    added: 2026-04-23
+    revised: ""
+
+  # ─── ENEMY SPAWN TUNING (Cross-system: EnemySpawn ↔ 尸潮周期 ↔ Performance) ────────
+
+  - name: MAX_ACTIVE_ENEMIES
+    status: active
+    source: design/gdd/enemy-spawn-system.md
+    referenced_by:
+      - design/gdd/enemy-spawn-system.md
+    value: 100
+    unit: count
+    notes: "Active enemy count cap (performance limit). Tunable 50-200. Lower = small battlefield, higher = large 尸潮 (performance risk). Affects max simultaneous enemies."
+    added: 2026-04-23
+    revised: ""
+
+  - name: MAX_POSITION_RETRIES
+    status: active
+    source: design/gdd/enemy-spawn-system.md
+    referenced_by:
+      - design/gdd/enemy-spawn-system.md
+    value: 5
+    unit: iterations
+    notes: "Spawn position retry count when blocked. Tunable 3-10. Lower = quick abandon, higher = persistent retry. Affects blocked spawn handling."
+    added: 2026-04-23
+    revised: ""
+
+  - name: SPAWN_INTERVAL_BASE
+    status: active
+    source: design/gdd/enemy-spawn-system.md
+    referenced_by:
+      - design/gdd/enemy-spawn-system.md
+    value: 0.1
+    unit: seconds
+    notes: "Base interval between individual spawns. Tunable 0.05-0.5. Lower = rapid emergence, higher = slow appearance. Affects 尸潮 visual rhythm."
+    added: 2026-04-23
+    revised: ""
+
+  - name: WAVE_COUNT_PER_TIDE
+    status: active
+    source: design/gdd/enemy-spawn-system.md
+    referenced_by:
+      - design/gdd/enemy-spawn-system.md
+    value: 5
+    unit: count
+    notes: "Wave count per tide event. Tunable 1-10. Lower = single burst, higher = multi-wave rhythm. Affects 尸潮 pacing structure."
+    added: 2026-04-23
+    revised: ""
+
+  - name: WAVE_INTERVAL
+    status: active
+    source: design/gdd/enemy-spawn-system.md
+    referenced_by:
+      - design/gdd/enemy-spawn-system.md
+    value: 30
+    unit: seconds
+    notes: "Interval between waves in a tide. Tunable 10-60. Lower = continuous pressure, higher = long喘息. Affects wave rhythm timing."
+    added: 2026-04-23
+    revised: ""
+
+  - name: BATCH_SPAWN_DELAY
+    status: active
+    source: design/gdd/enemy-spawn-system.md
+    referenced_by:
+      - design/gdd/enemy-spawn-system.md
+    value: 0.5
+    unit: seconds
+    notes: "Delay between enemies in same batch spawn animation. Tunable 0.3-1.0. Lower = quick animation, higher = slow appearance. Affects batch visual flow."
+    added: 2026-04-23
+    revised: ""
+
+  - name: SPAWN_ZONE_MIN_DISTANCE
+    status: active
+    source: design/gdd/enemy-spawn-system.md
+    referenced_by:
+      - design/gdd/enemy-spawn-system.md
+    value: 10
+    unit: cells
+    notes: "Minimum distance from player to spawn zone. Tunable 5-30. Lower = close spawn (high pressure), higher = far spawn (early warning). Affects spawn proximity tension."
+    added: 2026-04-23
+    revised: ""
+
+  - name: SPAWN_ZONE_WIDTH
+    status: active
+    source: design/gdd/enemy-spawn-system.md
+    referenced_by:
+      - design/gdd/enemy-spawn-system.md
+    value: 20
+    unit: cells
+    notes: "Width of spawn zone area. Tunable 10-50. Lower = tight cluster point, higher = dispersed spawn line. Affects spawn distribution."
+    added: 2026-04-23
+    revised: ""
+
+  - name: SPAWN_ZONE_SAFE_MARGIN
+    status: active
+    source: design/gdd/enemy-spawn-system.md
+    referenced_by:
+      - design/gdd/enemy-spawn-system.md
+    value: 2
+    unit: cells
+    notes: "Safe margin from spawn zone edge to walls. Tunable 0-5. Lower = may spawn near walls, higher = ensure clear spawn. Affects spawn position safety."
+    added: 2026-04-23
+    revised: ""
+
+  - name: SPAWN_ANIMATION_DURATION
+    status: active
+    source: design/gdd/enemy-spawn-system.md
+    referenced_by:
+      - design/gdd/enemy-spawn-system.md
+    value: 0.5
+    unit: seconds
+    notes: "Spawn animation play duration. Tunable 0.3-1.0. Lower = quick appear, higher = slow fade-in. Affects emergence visual impact."
+    added: 2026-04-23
+    revised: ""
+
+  - name: SPAWN_FADE_ALPHA_START
+    status: active
+    source: design/gdd/enemy-spawn-system.md
+    referenced_by:
+      - design/gdd/enemy-spawn-system.md
+    value: 0.0
+    unit: ratio
+    notes: "Spawn animation start alpha (transparency). Tunable 0.0-0.5. Lower = invisible start, higher = semi-visible start. Affects spawn reveal style."
+    added: 2026-04-23
+    revised: ""
+
+  - name: SPAWN_VFX_DURATION
+    status: active
+    source: design/gdd/enemy-spawn-system.md
+    referenced_by:
+      - design/gdd/enemy-spawn-system.md
+    value: 1.0
+    unit: seconds
+    notes: "Spawn VFX effect duration. Tunable 0.5-2.0. Lower = brief effect, higher = long effect (visual impact). Affects spawn特效 duration."
+    added: 2026-04-23
+    revised: ""
+
+  - name: QUERY_USE_SPATIAL_PARTITION
+    status: active
+    source: design/gdd/enemy-spawn-system.md
+    referenced_by:
+      - design/gdd/enemy-spawn-system.md
+      - design/gdd/turret-system.md
+    value: true
+    unit: boolean
+    notes: "Use spatial partition for range queries. Tunable true/false. false = direct iteration (low count), true = partition optimization (high count). Affects query performance."
+    added: 2026-04-23
+    revised: ""
+
+  - name: DEATH_SIGNAL_QUEUE_SIZE
+    status: active
+    source: design/gdd/enemy-spawn-system.md
+    referenced_by:
+      - design/gdd/enemy-spawn-system.md
+    value: 20
+    unit: count
+    notes: "Death signal processing queue size. Tunable 10-50. Lower = small queue (may block), higher = large queue (smooth processing). Affects death handling throughput."
+    added: 2026-04-23
+    revised: ""
+
+  # ─── RESOURCE DROP TUNING (Cross-system: ResourceDrop ↔ Exploration ↔ Balance) ────────
+
+  - name: GLOBAL_DROP_RATE_MULT
+    status: active
+    source: design/gdd/resource-drop-system.md
+    referenced_by:
+      - design/gdd/resource-drop-system.md
+    value: 1.0
+    unit: ratio
+    notes: "Global drop probability multiplier. Tunable 0.5-2.0. ×2.0 = rare resources easier, ×0.5 = scarcer. Affects exploration reward balance."
+    added: 2026-04-23
+    revised: ""
+
+  - name: GLOBAL_QUANTITY_MULT
+    status: active
+    source: design/gdd/resource-drop-system.md
+    referenced_by:
+      - design/gdd/resource-drop-system.md
+    value: 1.0
+    unit: ratio
+    notes: "Global drop quantity multiplier. Tunable 0.5-2.0. ×2.0 = doubled output, ×0.5 = halved output. Affects resource economy."
+    added: 2026-04-23
+    revised: ""
+
+  - name: MAX_DROPS_PER_FRAME
+    status: active
+    source: design/gdd/resource-drop-system.md
+    referenced_by:
+      - design/gdd/resource-drop-system.md
+    value: 20
+    unit: count
+    notes: "Maximum drop events processed per frame. Tunable 10-100. Lower = batch throttling, higher = instant processing (frame risk). Affects batch destruction performance."
+    added: 2026-04-23
+    revised: ""
+
+  - name: DROP_OFFSET_RANGE
+    status: active
+    source: design/gdd/resource-drop-system.md
+    referenced_by:
+      - design/gdd/resource-drop-system.md
+    value: 8
+    unit: pixels
+    notes: "Random offset range for spawned resource entities. Tunable 4-16. Lower = stacked appearance, higher = dispersed. Affects visual clutter."
+    added: 2026-04-23
+    revised: ""
+
+  - name: BASE_DROP_RATE
+    status: active
+    source: design/gdd/resource-drop-system.md
+    referenced_by:
+      - design/gdd/resource-drop-system.md
+    value: 1.0
+    unit: ratio
+    notes: "Base drop rate before rarity modifier. MVP fixed at 100%. Future: area/difficulty modifier hook. Affects all drop calculations."
+    added: 2026-04-23
+    revised: ""
+
+  # ─── DAY/NIGHT CYCLE TUNING (Cross-system: DayNight ↔ Retreat判定 ↔ EnemySpawn) ────────
+
+  - name: DANGER_GLOBAL_MULT
+    status: active
+    source: design/gdd/day-night-cycle-system.md
+    referenced_by:
+      - design/gdd/day-night-cycle-system.md
+    value: 1.0
+    unit: ratio
+    notes: "Global danger multiplier for all phases. Tunable 0.5-2.0. ×2.0 = NIGHT danger×3.0, ×0.5 = safer phases. Affects Pillar 2 retreat pressure."
+    added: 2026-04-23
+    revised: ""
+
+  - name: TRANSITION_DURATION
+    status: active
+    source: design/gdd/day-night-cycle-system.md
+    referenced_by:
+      - design/gdd/day-night-cycle-system.md
+    value: 30
+    unit: game_seconds
+    notes: "Visual transition duration between phases. Tunable 10-60. Lower = abrupt switch, higher = smooth gradient. Affects phase visual feel."
+    added: 2026-04-23
+    revised: ""
+
+  # ─── TURRET SYSTEM TUNING (Cross-system: Turret ↔ Combat ↔ Defense) ────────
+
+  - name: TARGETING_RANGE_MULT
+    status: active
+    source: design/gdd/turret-system.md
+    referenced_by:
+      - design/gdd/turret-system.md
+    value: 2.0
+    unit: ratio
+    notes: "Targeting range multiplier (attack_range × MULT). Tunable 1.5-3.0. Lower = tight search, higher = wide pre-aim. Affects turret pre-aim timing."
+    added: 2026-04-23
+    revised: ""
+
+  - name: TURRET_ARMOR_EFFECTIVENESS
+    status: active
+    source: design/gdd/turret-system.md
+    referenced_by:
+      - design/gdd/turret-system.md
+    value: 0.6
+    unit: ratio
+    notes: "Armor effectiveness for turret damage reduction. Tunable 0.5-0.8. Higher = armor strong vs turrets, lower = turret火力 vs armor. Affects turret vs armored enemies."
+    added: 2026-04-23
+    revised: ""
+
+  - name: TURRET_CRIT_CHANCE_BASE
+    status: active
+    source: design/gdd/turret-system.md
+    referenced_by:
+      - design/gdd/turret-system.md
+    value: 0.05
+    unit: ratio
+    notes: "Base crit probability for all turrets. Tunable 0.0-0.15. Higher = frequent火力 spikes, lower = consistent damage. Affects turret火力 variance."
+    added: 2026-04-23
+    revised: ""
+
+  - name: TURRET_EFFICIENCY_DAMAGE_THRESHOLD
+    status: active
+    source: design/gdd/turret-system.md
+    referenced_by:
+      - design/gdd/turret-system.md
+    value: 0.5
+    unit: ratio
+    notes: "Health ratio where efficiency drops to 0.8. Tunable 0.3-0.7. Lower = earlier efficiency penalty, higher = later penalty. Affects turret damage state timing."
+    added: 2026-04-23
+    revised: ""
+
+  - name: TURRET_EFFICIENCY_HEAVY_DAMAGE_THRESHOLD
+    status: active
+    source: design/gdd/turret-system.md
+    referenced_by:
+      - design/gdd/turret-system.md
+    value: 0.3
+    unit: ratio
+    notes: "Health ratio where efficiency drops to 0.5. Tunable 0.1-0.5. Lower = turret stays effective longer under damage. Affects turret heavy damage state."
+    added: 2026-04-23
+    revised: ""
+
+  - name: MAX_TURRETS_PER_FRAME
+    status: active
+    source: design/gdd/turret-system.md
+    referenced_by:
+      - design/gdd/turret-system.md
+    value: 50
+    unit: count
+    notes: "Turret processing batch limit per frame. Tunable 20-100. Cap prevents frame spikes when many turrets active. Affects大规模防守 performance."
+    added: 2026-04-23
+    revised: ""
+
+  - name: TARGET_LOCK_FRAMES
+    status: active
+    source: design/gdd/turret-system.md
+    referenced_by:
+      - design/gdd/turret-system.md
+    value: 3
+    unit: frames
+    notes: "Frames before turret can switch target. Tunable 1-10. Higher = stable targeting, lower = reactive targeting. Prevents target flip-flop."
+    added: 2026-04-23
+    revised: ""
+
+  # ─── RETREAT JUDGMENT TUNING (Cross-system: RetreatJudgment ↔ VehicleAttribute ↔ DayNight) ────────
+
+  - name: MAGIC_WARN_THRESHOLD_OVERRIDE
+    status: active
+    source: design/gdd/retreat-judgment-system.md
+    referenced_by:
+      - design/gdd/retreat-judgment-system.md
+    value: 0.20
+    unit: ratio
+    notes: "Magic energy warning threshold override. Tunable 0.10-0.30. Lower = earlier warning, higher = later warning. Affects Pillar 2撤退节奏."
+    added: 2026-04-23
+    revised: ""
+
+  - name: DURABILITY_WARN_THRESHOLD_OVERRIDE
+    status: active
+    source: design/gdd/retreat-judgment-system.md
+    referenced_by:
+      - design/gdd/retreat-judgment-system.md
+    value: 0.30
+    unit: ratio
+    notes: "Durability warning threshold override. Tunable 0.15-0.40. Lower = earlier warning, higher = later warning. Affects Pillar 2撤退节奏."
+    added: 2026-04-23
+    revised: ""
+
+  - name: MAGIC_CRITICAL_THRESHOLD
+    status: active
+    source: design/gdd/retreat-judgment-system.md
+    referenced_by:
+      - design/gdd/retreat-judgment-system.md
+    value: 0.10
+    unit: ratio
+    notes: "Magic energy CRITICAL level threshold. Tunable 0.05-0.15. Lower = more lenient, higher = stricter. Affects CRITICAL warning trigger."
+    added: 2026-04-23
+    revised: ""
+
+  - name: DURABILITY_CRITICAL_THRESHOLD
+    status: active
+    source: design/gdd/retreat-judgment-system.md
+    referenced_by:
+      - design/gdd/retreat-judgment-system.md
+    value: 0.15
+    unit: ratio
+    notes: "Durability CRITICAL level threshold. Tunable 0.10-0.25. CRITICAL trigger point for retreat urgency."
+    added: 2026-04-23
+    revised: ""
+
+  - name: MAGIC_WEIGHT
+    status: active
+    source: design/gdd/retreat-judgment-system.md
+    referenced_by:
+      - design/gdd/retreat-judgment-system.md
+    value: 2.0
+    unit: ratio
+    notes: "Magic urgency weight coefficient. Tunable 0.5-3.0. Higher = magic urgency dominates撤退决策, lower = magic less prioritized."
+    added: 2026-04-23
+    revised: ""
+
+  - name: DURABILITY_WEIGHT
+    status: active
+    source: design/gdd/retreat-judgment-system.md
+    referenced_by:
+      - design/gdd/retreat-judgment-system.md
+    value: 1.5
+    unit: ratio
+    notes: "Durability urgency weight coefficient. Tunable 0.5-2.5. Higher = durability urgency dominates."
+    added: 2026-04-23
+    revised: ""
+
+  - name: TIME_WEIGHT
+    status: active
+    source: design/gdd/retreat-judgment-system.md
+    referenced_by:
+      - design/gdd/retreat-judgment-system.md
+    value: 1.0
+    unit: ratio
+    notes: "Time urgency weight coefficient. Tunable 0.5-2.0. Higher = time urgency dominates (黄昏预警更紧迫)."
+    added: 2026-04-23
+    revised: ""
+
+  - name: DANGER_WEIGHT
+    status: active
+    source: design/gdd/retreat-judgment-system.md
+    referenced_by:
+      - design/gdd/retreat-judgment-system.md
+    value: 0.5
+    unit: ratio
+    notes: "Danger urgency weight coefficient. Tunable 0.0-1.0. Higher = danger multiplier affects urgency more."
+    added: 2026-04-23
+    revised: ""
+
+  - name: SIGNAL_COOLDOWN_SECONDS
+    status: active
+    source: design/gdd/retreat-judgment-system.md
+    referenced_by:
+      - design/gdd/retreat-judgment-system.md
+    value: 10.0
+    unit: seconds
+    notes: "Retreat warning signal cooldown period. Tunable 5.0-30.0. Higher = less signal noise, lower = more responsive warnings."
+    added: 2026-04-23
+    revised: ""
+
+  - name: TIME_DUSK_WARN_HOUR
+    status: active
+    source: design/gdd/retreat-judgment-system.md
+    referenced_by:
+      - design/gdd/retreat-judgment-system.md
+    value: 18
+    unit: game_hour
+    notes: "Dusk warning trigger hour. Tunable 17-19. Earlier = more time buffer, later = tighter timing. Affects Pillar 2黄昏预警."
+    added: 2026-04-23
+    revised: ""
+
+  - name: TIME_NIGHT_CRITICAL_HOUR
+    status: active
+    source: design/gdd/retreat-judgment-system.md
+    referenced_by:
+      - design/gdd/retreat-judgment-system.md
+    value: 20
+    unit: game_hour
+    notes: "Night CRITICAL trigger hour. Tunable 19-21. Must align with DayNightCycle phase boundaries. Affects CRITICAL time urgency."
+    added: 2026-04-23
+    revised: ""
+
+  # ─── EXPLORATION AREA TUNING (Cross-system: ExplorationArea ↔ EnemySpawn ↔ RetreatJudgment ↔ HUD) ────────
+
+  - name: ENEMY_BASE_DENSITY
+    status: active
+    source: design/gdd/exploration-area-system.md
+    referenced_by:
+      - design/gdd/exploration-area-system.md
+      - design/gdd/enemy-spawn-system.md
+    value: 4
+    unit: enemies/chunk
+    notes: "Base enemy density at danger_level=1. Tunable 2-8. Higher = denser spawns at all danger levels. Affects exploration pressure."
+    added: 2026-04-23
+    revised: ""
+
+  - name: BASE_RARE_DROP
+    status: active
+    source: design/gdd/exploration-area-system.md
+    referenced_by:
+      - design/gdd/exploration-area-system.md
+      - design/gdd/scavenge-container-database.md
+    value: 0.05
+    unit: ratio
+    notes: "Base rare drop chance in loot tier 1 regions. Tunable 0.02-0.10. Higher = luckier common zones. Affects loot expectation."
+    added: 2026-04-23
+    revised: ""
+
+  - name: RARE_DROP_INCREMENT
+    status: active
+    source: design/gdd/exploration-area-system.md
+    referenced_by:
+      - design/gdd/exploration-area-system.md
+      - design/gdd/scavenge-container-database.md
+    value: 0.05
+    unit: ratio
+    notes: "Rare drop chance increment per loot tier. Tunable 0.02-0.10. Higher = steeper tier rewards. Affects loot tier differentiation."
+    added: 2026-04-23
+    revised: ""
+
+  - name: TRANSITION_DISPLAY_DURATION
+    status: active
+    source: design/gdd/exploration-area-system.md
+    referenced_by:
+      - design/gdd/exploration-area-system.md
+      - design/gdd/hud-system.md
+    value: 3.0
+    unit: seconds
+    notes: "Duration zone name appears on HUD after transition. Tunable 1.0-5.0. Higher = longer visibility. Affects region awareness."
+    added: 2026-04-23
+    revised: ""
+
+  - name: HIGH_DANGER_WARNING_THRESHOLD
+    status: active
+    source: design/gdd/exploration-area-system.md
+    referenced_by:
+      - design/gdd/exploration-area-system.md
+      - design/gdd/hud-system.md
+    value: 4
+    unit: danger_level
+    notes: "Danger level triggering '高危区域' warning prompt. Tunable 3-5. Higher = less warning. Affects risk communication."
+    added: 2026-04-23
+    revised: ""
+
+  - name: DISCOVERY_NOTIFICATION_DURATION
+    status: active
+    source: design/gdd/exploration-area-system.md
+    referenced_by:
+      - design/gdd/exploration-area-system.md
+      - design/gdd/hud-system.md
+    value: 2.0
+    unit: seconds
+    notes: "Duration of '发现新区域' notification. Tunable 1.0-4.0. Higher = longer celebration. Affects discovery moment."
+    added: 2026-04-23
+    revised: ""
+
+  # ─── BUNKER FACILITY TUNING (Cross-system: Facility ↔ Storage ↔ Crafting ↔ Magic) ────────
+
+  - name: STORAGE_SLOT_COUNT
+    status: active
+    source: design/gdd/bunker-facility-system.md
+    referenced_by:
+      - design/gdd/bunker-facility-system.md
+    value: 100
+    unit: slots
+    notes: "Storage box slot count. Tunable 50-200. Higher = single box sufficient, lower = multiple boxes required. Affects bunker layout planning."
+    added: 2026-04-24
+    revised: ""
+
+  - name: MAGIC_CONNECTION_RANGE
+    status: active
+    source: design/gdd/bunker-facility-system.md
+    referenced_by:
+      - design/gdd/bunker-facility-system.md
+    value: 10.0
+    unit: cells
+    notes: "Workbench magic connection range to vehicle. Tunable 5.0-20.0. Higher = workbench anywhere, lower = must be near vehicle. Affects layout constraints."
+    added: 2026-04-24
+    revised: ""
+
+  - name: CRAFT_MAGIC_COST_BASE
+    status: active
+    source: design/gdd/bunker-facility-system.md
+    referenced_by:
+      - design/gdd/bunker-facility-system.md
+    value: 8
+    unit: magic_points
+    notes: "Base magic cost for crafting recipes. Tunable 5-15. Higher = expensive crafting, lower = cheap crafting. Affects resource conversion frequency."
+    added: 2026-04-24
+    revised: ""
+
+  - name: CRAFT_TIME_BASE
+    status: active
+    source: design/gdd/bunker-facility-system.md
+    referenced_by:
+      - design/gdd/bunker-facility-system.md
+    value: 10
+    unit: seconds
+    notes: "Base crafting time for recipes. Tunable 5-20. Higher = slow crafting, lower = fast crafting. Affects time pressure in preparation."
+    added: 2026-04-24
+    revised: ""
+
+  - name: DROP_EXPIRATION_SECONDS
+    status: active
+    source: design/gdd/bunker-facility-system.md
+    referenced_by:
+      - design/gdd/bunker-facility-system.md
+      - design/gdd/resource-drop-system.md
+    value: 30.0
+    unit: seconds
+    notes: "Facility destruction content drop expiration. Tunable 15.0-60.0. Higher = forgiving salvage window, lower = urgent salvage pressure. Affects Pillar 3 tension."
+    added: 2026-04-24
+    revised: ""
+
+  - name: DEMOLITION_REFUND_RATE
+    status: active
+    source: design/gdd/bunker-facility-system.md
+    referenced_by:
+      - design/gdd/bunker-facility-system.md
+      - design/gdd/block-digging-system.md
+    value: 0.50
+    unit: ratio
+    notes: "Facility demolition material refund rate. Tunable 0.30-0.80. Consistent with wall demolition. Higher = cheap removal, lower = costly commitment."
+    added: 2026-04-24
+    revised: ""
+
+  - name: RECIPE_IRON_INPUT
+    status: active
+    source: design/gdd/bunker-facility-system.md
+    referenced_by:
+      - design/gdd/bunker-facility-system.md
+    value: 5
+    unit: resource_count
+    notes: "Iron ore input for R001: 铁矿→铁锭. Tunable 3-8. Part of recipe balance tuning."
+    added: 2026-04-24
+    revised: ""
+
+  - name: RECIPE_IRON_MAGIC_COST
+    status: active
+    source: design/gdd/bunker-facility-system.md
+    referenced_by:
+      - design/gdd/bunker-facility-system.md
+    value: 8
+    unit: magic_points
+    notes: "Magic cost for R001: 铁矿→铁锭. Tunable 5-12. Part of recipe balance tuning."
+    added: 2026-04-24
+    revised: ""
+
+  - name: RECIPE_IRON_TIME
+    status: active
+    source: design/gdd/bunker-facility-system.md
+    referenced_by:
+      - design/gdd/bunker-facility-system.md
+    value: 10
+    unit: seconds
+    notes: "Crafting time for R001: 铁矿→铁锭. Tunable 5-15. Part of recipe balance tuning."
+    added: 2026-04-24
+    revised: ""
+
+  - name: RECIPE_COPPER_INPUT
+    status: active
+    source: design/gdd/bunker-facility-system.md
+    referenced_by:
+      - design/gdd/bunker-facility-system.md
+    value: 5
+    unit: resource_count
+    notes: "Copper ore input for R002: 铜矿→铜锭. Tunable 3-8. Part of recipe balance tuning."
+    added: 2026-04-24
+    revised: ""
+
+  - name: RECIPE_COPPER_MAGIC_COST
+    status: active
+    source: design/gdd/bunker-facility-system.md
+    referenced_by:
+      - design/gdd/bunker-facility-system.md
+    value: 8
+    unit: magic_points
+    notes: "Magic cost for R002: 铜矿→铜锭. Tunable 5-12. Part of recipe balance tuning."
+    added: 2026-04-24
+    revised: ""
+
+  - name: RECIPE_COPPER_TIME
+    status: active
+    source: design/gdd/bunker-facility-system.md
+    referenced_by:
+      - design/gdd/bunker-facility-system.md
+    value: 10
+    unit: seconds
+    notes: "Crafting time for R002: 铜矿→铜锭. Tunable 5-15. Part of recipe balance tuning."
+    added: 2026-04-24
+    revised: ""
+
+  - name: RECIPE_CRYSTAL_INPUT
+    status: active
+    source: design/gdd/bunker-facility-system.md
+    referenced_by:
+      - design/gdd/bunker-facility-system.md
+    value: 3
+    unit: resource_count
+    notes: "Crystal shard input for R003: 晶石碎片→晶石簇. Tunable 2-5. Part of recipe balance tuning."
+    added: 2026-04-24
+    revised: ""
+
+  - name: RECIPE_CRYSTAL_MAGIC_COST
+    status: active
+    source: design/gdd/bunker-facility-system.md
+    referenced_by:
+      - design/gdd/bunker-facility-system.md
+    value: 15
+    unit: magic_points
+    notes: "Magic cost for R003: 晶石碎片→晶石簇. Tunable 10-20. Part of recipe balance tuning."
+    added: 2026-04-24
+    revised: ""
+
+  - name: RECIPE_CRYSTAL_TIME
+    status: active
+    source: design/gdd/bunker-facility-system.md
+    referenced_by:
+      - design/gdd/bunker-facility-system.md
+    value: 15
+    unit: seconds
+    notes: "Crafting time for R003: 晶石碎片→晶石簇. Tunable 10-20. Part of recipe balance tuning."
+    added: 2026-04-24
+    revised: ""
+
+  - name: RECIPE_PART_MAGIC_COST
+    status: active
+    source: design/gdd/bunker-facility-system.md
+    referenced_by:
+      - design/gdd/bunker-facility-system.md
+    value: 12
+    unit: magic_points
+    notes: "Magic cost for R004: 铁锭+铜锭→基础零件. Tunable 8-18. Part of recipe balance tuning."
+    added: 2026-04-24
+    revised: ""
+
+  - name: RECIPE_PART_TIME
+    status: active
+    source: design/gdd/bunker-facility-system.md
+    referenced_by:
+      - design/gdd/bunker-facility-system.md
+    value: 12
+    unit: seconds
+    notes: "Crafting time for R004: 铁锭+铜锭→基础零件. Tunable 8-18. Part of recipe balance tuning."
+    added: 2026-04-24
+    revised: ""
+
+  # ─── FACILITY TILE IDs (Cross-system: BlockTypeDatabase ↔ BuildItemDatabase ↔ BunkerFacility) ────────
+
+  - name: BLOCKTYPE_FACILITY_STORAGE_ID
+    status: active
+    source: design/gdd/block-type-database.md
+    referenced_by:
+      - design/gdd/block-type-database.md
+      - design/gdd/build-item-database.md
+      - design/gdd/bunker-facility-system.md
+    value: 2000
+    unit: tile_type_id
+    notes: "Facility storage tile ID — 基础储物箱. Layer 2 only, hardness=50, collision=FULL. Mapped from build_item_id 400 (facility_storage)."
+    added: 2026-04-24
+    revised: ""
+
+  - name: BLOCKTYPE_FACILITY_WORKBENCH_ID
+    status: active
+    source: design/gdd/block-type-database.md
+    referenced_by:
+      - design/gdd/block-type-database.md
+      - design/gdd/build-item-database.md
+      - design/gdd/bunker-facility-system.md
+    value: 2001
+    unit: tile_type_id
+    notes: "Facility workbench tile ID — 工作台. Layer 2 only, hardness=40, collision=FULL. Mapped from build_item_id 410 (facility_workbench). Provides crafting recipes R001-R004."
+    added: 2026-04-24
+    revised: ""

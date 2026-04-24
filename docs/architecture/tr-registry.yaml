@@ -24,33 +24,552 @@
 #
 # STATUS VALUES: active | deprecated | superseded-by: TR-[system]-NNN
 
-version: 1
-last_updated: ""
+version: 2
+last_updated: "2026-04-24"
 
-requirements: []
+requirements:
+  # === TILEMAP WORLD SYSTEM ===
+  - id: TR-tilemap-001
+    system: tilemap-world
+    gdd: design/gdd/tilemap-world-system.md
+    requirement: "5-layer structure: background/terrain_base/structures/platforms/overlay"
+    created: "2026-04-24"
+    revised: ""
+    status: active
 
-# --- EXAMPLE ENTRIES (remove when first real entries are added) ---
-#
-# - id: TR-combat-001
-#   system: combat
-#   gdd: design/gdd/combat-system.md
-#   requirement: "Player takes damage from enemies based on attack power minus defence"
-#   created: 2026-03-10
-#   revised: ""
-#   status: active
-#
-# - id: TR-combat-002
-#   system: combat
-#   gdd: design/gdd/combat-system.md
-#   requirement: "Combo window timing is 0.4 seconds between hits"
-#   created: 2026-03-10
-#   revised: "2026-04-01"
-#   status: active
-#
-# - id: TR-combat-003
-#   system: combat
-#   gdd: design/gdd/combat-system.md
-#   requirement: "Old damage formula using raw stats"
-#   created: 2026-03-10
-#   revised: ""
-#   status: superseded-by: TR-combat-001
+  - id: TR-tilemap-002
+    system: tilemap-world
+    gdd: design/gdd/tilemap-world-system.md
+    requirement: "Chunk-based loading: 32x32 cells per chunk (CHUNK_SIZE constant)"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  - id: TR-tilemap-003
+    system: tilemap-world
+    gdd: design/gdd/tilemap-world-system.md
+    requirement: "Procedural terrain generation with seed for consistency"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  - id: TR-tilemap-004
+    system: tilemap-world
+    gdd: design/gdd/tilemap-world-system.md
+    requirement: "Cell coordinate system: grid_pos = world_pos / CELL_SIZE (32 pixels)"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  - id: TR-tilemap-005
+    system: tilemap-world
+    gdd: design/gdd/tilemap-world-system.md
+    requirement: "Use TileMapLayer API (Godot 4.3+), not deprecated TileMap"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  # === BLOCK TYPE DATABASE ===
+  - id: TR-blocktype-001
+    system: block-type-database
+    gdd: design/gdd/block-type-database.md
+    requirement: "Block collision profiles: solid/passable/one-way with friction value"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  - id: TR-blocktype-002
+    system: block-type-database
+    gdd: design/gdd/block-type-database.md
+    requirement: "Block dig difficulty formula: time = base_difficulty * tool_modifier"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  - id: TR-blocktype-003
+    system: block-type-database
+    gdd: design/gdd/block-type-database.md
+    requirement: "Block resource drops: loot_table per block type with probability weights"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  # === RESOURCE DATABASE ===
+  - id: TR-resource-001
+    system: resource-database
+    gdd: design/gdd/resource-database.md
+    requirement: "Resource stack size limits: 100 for most raw materials"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  - id: TR-resource-002
+    system: resource-database
+    gdd: design/gdd/resource-database.md
+    requirement: "Resource categories: raw_material, processed, component, ammo"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  - id: TR-resource-003
+    system: resource-database
+    gdd: design/gdd/resource-database.md
+    requirement: "New MVP resources: 铁锭(151), 铜锭(152), 基础零件(160) for workbench crafting"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  # === ENEMY TYPE DATABASE ===
+  - id: TR-enemytype-001
+    system: enemy-type-database
+    gdd: design/gdd/enemy-type-database.md
+    requirement: "Enemy stats definition: health, damage, armor, speed, behavior_hint"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  - id: TR-enemytype-002
+    system: enemy-type-database
+    gdd: design/gdd/enemy-type-database.md
+    requirement: "8 behavior_hint types: aggressive, defensive, swarm, wall_breaker, tracker, ambusher, retreat_early, boss"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  # === BUILD ITEM DATABASE ===
+  - id: TR-builditem-001
+    system: build-item-database
+    gdd: design/gdd/build-item-database.md
+    requirement: "Build item cost formula: total_cost = base_cost * quantity"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  - id: TR-builditem-002
+    system: build-item-database
+    gdd: design/gdd/build-item-database.md
+    requirement: "Build item placement rules: terrain_support_required check before placement"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  # === VEHICLE TYPE DATABASE ===
+  - id: TR-vehicletype-001
+    system: vehicle-type-database
+    gdd: design/gdd/vehicle-type-database.md
+    requirement: "Vehicle state machine: GARAGE_IDLE → DEPLOYABLE → DEPLOYED → DISABLED → DESTROYED"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  - id: TR-vehicletype-002
+    system: vehicle-type-database
+    gdd: design/gdd/vehicle-type-database.md
+    requirement: "Vehicle base stats: max_health, armor, magic_pool, max_speed, acceleration_rate"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  # === SCAVENGE CONTAINER DATABASE ===
+  - id: TR-scavenge-001
+    system: scavenge-container-database
+    gdd: design/gdd/scavenge-container-database.md
+    requirement: "Container loot tables with probability weights for resource drops"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  # === TIME SYSTEM ===
+  - id: TR-time-001
+    system: time-system
+    gdd: design/gdd/time-system.md
+    requirement: "Game time scale: 1 real second = 60 game seconds (TIME_SCALE = 60)"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  - id: TR-time-002
+    system: time-system
+    gdd: design/gdd/time-system.md
+    requirement: "Day/night cycle duration: 10 minutes real time per full cycle (24 hours game time)"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  # === INPUT CONTROL SYSTEM ===
+  - id: TR-input-001
+    system: input-control-system
+    gdd: design/gdd/input-control-system.md
+    requirement: "Dual-focus input system: KB/gamepad focus separate from mouse/touch focus (Godot 4.6)"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  - id: TR-input-002
+    system: input-control-system
+    gdd: design/gdd/input-control-system.md
+    requirement: "Input action mapping: move_up/down/left/right, fire, dig, place, menu_toggle, pause"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  # === BLOCK COLLISION SYSTEM ===
+  - id: TR-collision-001
+    system: block-collision-system
+    gdd: design/gdd/block-collision-system.md
+    requirement: "Swept collision algorithm: DDA raycast traversal to prevent tunneling"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  - id: TR-collision-002
+    system: block-collision-system
+    gdd: design/gdd/block-collision-system.md
+    requirement: "MAX_SWEPT_STEPS = 64 (TK-018) — maximum traversal steps per frame"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  - id: TR-collision-003
+    system: block-collision-system
+    gdd: design/gdd/block-collision-system.md
+    requirement: "Severity formula: severity = velocity.magnitude * block_friction / SEVERITY_BASE (TK-019 = 100)"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  # === BLOCK DIGGING SYSTEM ===
+  - id: TR-digging-001
+    system: block-digging-system
+    gdd: design/gdd/block-digging-system.md
+    requirement: "Dig progress: accumulated_damage >= block.difficulty → block destroyed"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  - id: TR-digging-002
+    system: block-digging-system
+    gdd: design/gdd/block-digging-system.md
+    requirement: "Dig tool modifiers: tool_power / block.difficulty affects dig speed"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  # === BLOCK PLACING SYSTEM ===
+  - id: TR-placing-001
+    system: block-placing-system
+    gdd: design/gdd/block-placing-system.md
+    requirement: "Block placement validation: BuildValidator.check_terrain_support required before placement"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  - id: TR-placing-002
+    system: block-placing-system
+    gdd: design/gdd/block-placing-system.md
+    requirement: "Block placement cost: consume from player cargo (VehicleAttribute.cargo_contents)"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  # === RESOURCE DROP SYSTEM ===
+  - id: TR-drop-001
+    system: resource-drop-system
+    gdd: design/gdd/resource-drop-system.md
+    requirement: "Resource drop entity: lifetime (30s default), pickup_radius for collection"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  - id: TR-drop-002
+    system: resource-drop-system
+    gdd: design/gdd/resource-drop-system.md
+    requirement: "Drop spawn position: random offset from destroyed block position"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  # === DAY/NIGHT CYCLE SYSTEM ===
+  - id: TR-daynight-001
+    system: day-night-cycle-system
+    gdd: design/gdd/day-night-cycle-system.md
+    requirement: "Ambient lighting changes per time phase (DAWN/DAY/DUSK/NIGHT)"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  - id: TR-daynight-002
+    system: day-night-cycle-system
+    gdd: design/gdd/day-night-cycle-system.md
+    requirement: "Overlay layer visibility for night effects (darkness overlay)"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  # === VEHICLE ATTRIBUTE SYSTEM ===
+  - id: TR-vehicleattr-001
+    system: vehicle-attribute-system
+    gdd: design/gdd/vehicle-attribute-system.md
+    requirement: "Current health tracking with damage events (emit GlobalSignals.vehicle_damaged)"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  - id: TR-vehicleattr-002
+    system: vehicle-attribute-system
+    gdd: design/gdd/vehicle-attribute-system.md
+    requirement: "Current magic pool tracking with consumption events (emit GlobalSignals.magic_changed)"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  # === VEHICLE DRIVING SYSTEM ===
+  - id: TR-driving-001
+    system: vehicle-driving-system
+    gdd: design/gdd/vehicle-driving-system.md
+    requirement: "Acceleration formula: velocity = velocity + acceleration_rate * input_direction * delta"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  - id: TR-driving-002
+    system: vehicle-driving-system
+    gdd: design/gdd/vehicle-driving-system.md
+    requirement: "Speed clamp: |velocity| <= max_speed from VehicleTypeDB"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  - id: TR-driving-003
+    system: vehicle-driving-system
+    gdd: design/gdd/vehicle-driving-system.md
+    requirement: "Magic consumption per movement: cells * MAGIC_COST_PER_CELL (TK-013 = 0.5)"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  # === MAGIC ENERGY CONSUMPTION ===
+  - id: TR-magic-001
+    system: magic-energy-consumption
+    gdd: design/gdd/magic-energy-consumption.md
+    requirement: "Magic pool management: consume/replenish with GlobalSignals events"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  - id: TR-magic-002
+    system: magic-energy-consumption
+    gdd: design/gdd/magic-energy-consumption.md
+    requirement: "Magic depletion behavior: slowdown vehicle velocity to 50% when pool < 10% (TK-014)"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  # === VEHICLE WEAPON SYSTEM ===
+  - id: TR-weapon-001
+    system: vehicle-weapon-system
+    gdd: design/gdd/vehicle-weapon-system.md
+    requirement: "Weapon cooldown timer per shot (prevent rapid fire)"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  - id: TR-weapon-002
+    system: vehicle-weapon-system
+    gdd: design/gdd/vehicle-weapon-system.md
+    requirement: "Projectile spawn at weapon muzzle position with direction vector"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  - id: TR-weapon-003
+    system: vehicle-weapon-system
+    gdd: design/gdd/vehicle-weapon-system.md
+    requirement: "Ammo consumption per shot from VehicleAttribute.cargo_contents"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  # === VEHICLE DAMAGE SYSTEM ===
+  - id: TR-damage-001
+    system: vehicle-damage-system
+    gdd: design/gdd/vehicle-damage-system.md
+    requirement: "Damage calculation: effective_damage = incoming_damage - armor (min 0)"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  - id: TR-damage-002
+    system: vehicle-damage-system
+    gdd: design/gdd/vehicle-damage-system.md
+    requirement: "Damage state transitions: NORMAL → DAMAGED → DISABLED → DESTROYED based on health threshold"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  # === EXPLORATION AREA SYSTEM ===
+  - id: TR-area-001
+    system: exploration-area-system
+    gdd: design/gdd/exploration-area-system.md
+    requirement: "Area bounds definition: Rect2(center, size) defining explorable region"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  - id: TR-area-002
+    system: exploration-area-system
+    gdd: design/gdd/exploration-area-system.md
+    requirement: "Area entry detection: vehicle.position crosses area boundary triggers GlobalSignals.area_entered"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  # === ENEMY AI SYSTEM ===
+  - id: TR-enemyai-001
+    system: enemy-ai-system
+    gdd: design/gdd/enemy-ai-system.md
+    requirement: "NavigationAgent2D for pathfinding (Godot 4.5+ dedicated 2D navigation server)"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  - id: TR-enemyai-002
+    system: enemy-ai-system
+    gdd: design/gdd/enemy-ai-system.md
+    requirement: "State machine: IDLE → PATROL → CHASE → ATTACK → FLEE → DEAD"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  - id: TR-enemyai-003
+    system: enemy-ai-system
+    gdd: design/gdd/enemy-ai-system.md
+    requirement: "Boids separation force: SEPARATION_FORCE = 0.3 (TK-064) to prevent enemy overlap"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  - id: TR-enemyai-004
+    system: enemy-ai-system
+    gdd: design/gdd/enemy-ai-system.md
+    requirement: "Target acquisition: vehicle.position for hostile enemies (CHASE state)"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  # === ENEMY SPAWN SYSTEM ===
+  - id: TR-spawn-001
+    system: enemy-spawn-system
+    gdd: design/gdd/enemy-spawn-system.md
+    requirement: "Spawn wave timing: spawn_interval per area (night triggers spawn waves)"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  - id: TR-spawn-002
+    system: enemy-spawn-system
+    gdd: design/gdd/enemy-spawn-system.md
+    requirement: "Spawn position validation: within area bounds, not overlapping existing entities"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  # === TURRET SYSTEM ===
+  - id: TR-turret-001
+    system: turret-system
+    gdd: design/gdd/turret-system.md
+    requirement: "Turret state machine: IDLE → TARGETING → FIRING → COOLDOWN → DISABLED"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  - id: TR-turret-002
+    system: turret-system
+    gdd: design/gdd/turret-system.md
+    requirement: "Targeting: nearest enemy within detection_radius (EnemyAIController positions)"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  - id: TR-turret-003
+    system: turret-system
+    gdd: design/gdd/turret-system.md
+    requirement: "Ammo consumption from linked storage (FacilityController.contents)"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  # === RETREAT JUDGMENT SYSTEM ===
+  - id: TR-retreat-001
+    system: retreat-judgment-system
+    gdd: design/gdd/retreat-judgment-system.md
+    requirement: "Retreat threshold: health < 20% OR magic_pool < 10% OR night_fall (TimeSystem.get_phase() == NIGHT)"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  - id: TR-retreat-002
+    system: retreat-judgment-system
+    gdd: design/gdd/retreat-judgment-system.md
+    requirement: "Retreat warning UI trigger: GlobalSignals.retreat_threshold_reached.emit(reason)"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  # === BUILD VALIDATION SYSTEM ===
+  - id: TR-buildvalid-001
+    system: build-validation-system
+    gdd: design/gdd/build-validation-system.md
+    requirement: "Terrain support check: block_type requires specific terrain layer type for placement"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  - id: TR-buildvalid-002
+    system: build-validation-system
+    gdd: design/gdd/build-validation-system.md
+    requirement: "Entity collision check: no overlap with existing entities at placement position"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  # === BUNKER FACILITY SYSTEM ===
+  - id: TR-facility-001
+    system: bunker-facility-system
+    gdd: design/gdd/bunker-facility-system.md
+    requirement: "Facility entity lifecycle: create → interact → damage → demolish with state management"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  - id: TR-facility-002
+    system: bunker-facility-system
+    gdd: design/gdd/bunker-facility-system.md
+    requirement: "Storage box capacity: 100 slots per box (TK-032 STORAGE_CAPACITY)"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  - id: TR-facility-003
+    system: bunker-facility-system
+    gdd: design/gdd/bunker-facility-system.md
+    requirement: "Workbench crafting: 4 MVP recipes with cost and craft_time"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  - id: TR-facility-004
+    system: bunker-facility-system
+    gdd: design/gdd/bunker-facility-system.md
+    requirement: "Magic connection: facility within 10 cells of vehicle for power (TK-047)"
+    created: "2026-04-24"
+    revised: ""
+    status: active
+
+  - id: TR-facility-005
+    system: bunker-facility-system
+    gdd: design/gdd/bunker-facility-system.md
+    requirement: "Demolition refund: 50% of build cost returned (TK-048 DEMOLITION_REFUND_RATE)"
+    created: "2026-04-24"
+    revised: ""
+    status: active
