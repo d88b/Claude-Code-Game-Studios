@@ -79,7 +79,7 @@ func _create_mvp_block_definitions() -> void:
 	for i in range(100, 105):
 		var block: BlockDefinition = BlockDefinition.new()
 		block.tile_type_id = i
-		block.display_name = LocalizationManager.tr("block.terrain.display_name") + " " + str(i)
+		block.display_name = LocalizationManager.translate("block.terrain.display_name") + " " + str(i)
 		block.hardness = 60
 		block.destructibility = 1
 		block.collision_shape = 1
@@ -91,7 +91,7 @@ func _create_mvp_block_definitions() -> void:
 	# 基岩 (ID 1) — 不可破坏
 	var bedrock: BlockDefinition = BlockDefinition.new()
 	bedrock.tile_type_id = 1
-	bedrock.display_name = LocalizationManager.tr("block.bedrock.display_name")
+	bedrock.display_name = LocalizationManager.translate("block.bedrock.display_name")
 	bedrock.hardness = 100  # 原始硬度
 	bedrock.destructibility = 0  # 不可破坏
 	bedrock.collision_shape = 1
@@ -104,7 +104,7 @@ func _create_mvp_block_definitions() -> void:
 	for i in range(500, 505):
 		var ore: BlockDefinition = BlockDefinition.new()
 		ore.tile_type_id = i
-		ore.display_name = LocalizationManager.tr("block.ore.display_name") + " " + str(i)
+		ore.display_name = LocalizationManager.translate("block.ore.display_name") + " " + str(i)
 		ore.hardness = 80
 		ore.destructibility = 1
 		ore.collision_shape = 1
@@ -119,7 +119,7 @@ func _create_mvp_block_definitions() -> void:
 	for i in range(1000, 1005):
 		var building: BlockDefinition = BlockDefinition.new()
 		building.tile_type_id = i
-		building.display_name = LocalizationManager.tr("block.building.display_name") + " " + str(i)
+		building.display_name = LocalizationManager.translate("block.building.display_name") + " " + str(i)
 		building.hardness = 50
 		building.destructibility = 1
 		building.collision_shape = 1
@@ -131,7 +131,7 @@ func _create_mvp_block_definitions() -> void:
 	# 平台方块 (ID 1510)
 	var platform: BlockDefinition = BlockDefinition.new()
 	platform.tile_type_id = 1510
-	platform.display_name = LocalizationManager.tr("block.platform.display_name")
+	platform.display_name = LocalizationManager.translate("block.platform.display_name")
 	platform.hardness = 30
 	platform.destructibility = 1
 	platform.collision_shape = 2  # PLATFORM
@@ -143,7 +143,7 @@ func _create_mvp_block_definitions() -> void:
 	# NULL_TILE 定义 (ID 0)
 	var null_tile: BlockDefinition = BlockDefinition.new()
 	null_tile.tile_type_id = 0
-	null_tile.display_name = LocalizationManager.tr("block.empty.display_name")
+	null_tile.display_name = LocalizationManager.translate("block.empty.display_name")
 	null_tile.hardness = INDESTRUCTIBLE_HARDNESS
 	null_tile.destructibility = 0
 	null_tile.collision_shape = 0

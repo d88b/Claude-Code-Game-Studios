@@ -105,7 +105,7 @@ func _create_mvp_areas() -> void:
 	# 地堡周边 (默认安全区)
 	var bunker: AreaDefinition = AreaDefinition.new()
 	bunker.area_id = 0
-	bunker.display_name = LocalizationManager.tr("area.bunker_perimeter.name")
+	bunker.display_name = LocalizationManager.translate("area.bunker_perimeter.name")
 	bunker.bounds = Rect2(Vector2(-320, -320), Vector2(640, 640))  # 20x20 格
 	bunker.danger_level = 1
 	bunker.loot_tier = 1
@@ -116,7 +116,7 @@ func _create_mvp_areas() -> void:
 	# 废弃城市
 	var city: AreaDefinition = AreaDefinition.new()
 	city.area_id = 1
-	city.display_name = LocalizationManager.tr("area.abandoned_city.name")
+	city.display_name = LocalizationManager.translate("area.abandoned_city.name")
 	city.bounds = Rect2(Vector2(320, -320), Vector2(960, 640))  # 30x20 格
 	city.danger_level = 3
 	city.loot_tier = 2
@@ -128,7 +128,7 @@ func _create_mvp_areas() -> void:
 	# 恶魔荒原
 	var demon: AreaDefinition = AreaDefinition.new()
 	demon.area_id = 2
-	demon.display_name = LocalizationManager.tr("area.demon_wasteland.name")
+	demon.display_name = LocalizationManager.translate("area.demon_wasteland.name")
 	demon.bounds = Rect2(Vector2(1280, -320), Vector2(960, 640))
 	demon.danger_level = 4
 	demon.loot_tier = 3
@@ -140,7 +140,7 @@ func _create_mvp_areas() -> void:
 	# 元素矿洞
 	var element: AreaDefinition = AreaDefinition.new()
 	element.area_id = 3
-	element.display_name = LocalizationManager.tr("area.element_mine.name")
+	element.display_name = LocalizationManager.translate("area.element_mine.name")
 	element.bounds = Rect2(Vector2(2240, -320), Vector2(640, 640))
 	element.danger_level = 5
 	element.loot_tier = 4
@@ -245,7 +245,7 @@ func get_loot_tier() -> int:
 ## 获取当前区域名称
 func get_area_name() -> String:
 	if current_area == null:
-		return LocalizationManager.tr("area.bunker_perimeter.name")
+		return LocalizationManager.translate("area.bunker_perimeter.name")
 	return current_area.display_name
 
 ## 获取当前区域战利品池

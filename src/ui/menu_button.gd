@@ -51,4 +51,4 @@ func _update_style(color: Color) -> void:
 # === 公共 API ===
 
 func set_text_localized(key: String) -> void:
-    text = LocalizationManager.tr(key)
+    text = LocalizationManager.translate(key)

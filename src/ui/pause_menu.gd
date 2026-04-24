@@ -40,10 +40,10 @@ func _ready() -> void:
     print("[PauseMenu] Ready")
 
 func _setup_localized_text() -> void:
-    _pause_title.text = LocalizationManager.tr("menu.pause.title")
-    _resume_button.text = LocalizationManager.tr("menu.pause.resume")
-    _settings_button.text = LocalizationManager.tr("menu.pause.settings")
-    _quit_to_menu_button.text = LocalizationManager.tr("menu.pause.quit_to_menu")
+    _pause_title.text = LocalizationManager.translate("menu.pause.title")
+    _resume_button.text = LocalizationManager.translate("menu.pause.resume")
+    _settings_button.text = LocalizationManager.translate("menu.pause.settings")
+    _quit_to_menu_button.text = LocalizationManager.translate("menu.pause.quit_to_menu")
 
 func _connect_buttons() -> void:
     _resume_button.pressed.connect(_on_resume_pressed)

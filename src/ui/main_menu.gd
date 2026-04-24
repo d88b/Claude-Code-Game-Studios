@@ -54,11 +54,11 @@ func _ready() -> void:
     print("[MainMenu] Ready — Has save: %s" % _has_save_data)
 
 func _setup_localized_text() -> void:
-    _title_label.text = LocalizationManager.tr("menu.main.title")
-    _play_button.text = LocalizationManager.tr("menu.main.play")
-    _continue_button.text = LocalizationManager.tr("menu.main.continue") if _has_save_data else "新游戏"
-    _settings_button.text = LocalizationManager.tr("menu.main.settings")
-    _quit_button.text = LocalizationManager.tr("menu.main.quit")
+    _title_label.text = LocalizationManager.translate("menu.main.title")
+    _play_button.text = LocalizationManager.translate("menu.main.play")
+    _continue_button.text = LocalizationManager.translate("menu.main.continue") if _has_save_data else "新游戏"
+    _settings_button.text = LocalizationManager.translate("menu.main.settings")
+    _quit_button.text = LocalizationManager.translate("menu.main.quit")
 
     # 版本号
     var version: String = ProjectSettings.get_setting("application/config/version", "0.1.0")

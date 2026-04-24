@@ -30,7 +30,7 @@ func _ready() -> void:
     # 设置跳过按钮
     if _skip_button:
         _skip_button.pressed.connect(_on_skip_pressed)
-        _skip_button.text = LocalizationManager.tr("credits.skip")
+        _skip_button.text = LocalizationManager.translate("credits.skip")
 
     # 初始化显示
     _setup_credits_content()
@@ -65,42 +65,42 @@ func _process(delta: float) -> void:
 func _setup_credits_content() -> void:
     # 设置标题
     if _title_label:
-        _title_label.text = LocalizationManager.tr("credits.title")
+        _title_label.text = LocalizationManager.translate("credits.title")
         _title_label.add_theme_font_size_override("font_size", 48)
 
     if _version_label:
-        _version_label.text = LocalizationManager.tr("credits.version")
+        _version_label.text = LocalizationManager.translate("credits.version")
 
     # 添加各部分内容
-    _add_section_header(LocalizationManager.tr("credits.development"))
+    _add_section_header(LocalizationManager.translate("credits.development"))
     _add_content_block([
-        LocalizationManager.tr("credits.game_design") + "\n[Game Designer]",
-        LocalizationManager.tr("credits.programming") + "\n[Programmer]",
-        LocalizationManager.tr("credits.art") + "\n[Artist]",
-        LocalizationManager.tr("credits.audio") + "\n[Sound Designer]",
-        LocalizationManager.tr("credits.qa") + "\n[QA Tester]"
+        LocalizationManager.translate("credits.game_design") + "\n[Game Designer]",
+        LocalizationManager.translate("credits.programming") + "\n[Programmer]",
+        LocalizationManager.translate("credits.art") + "\n[Artist]",
+        LocalizationManager.translate("credits.audio") + "\n[Sound Designer]",
+        LocalizationManager.translate("credits.qa") + "\n[QA Tester]"
     ])
 
-    _add_section_header(LocalizationManager.tr("credits.tools"))
+    _add_section_header(LocalizationManager.translate("credits.tools"))
     _add_content_block([
-        LocalizationManager.tr("credits.engine") + "\nGodot 4.6",
-        LocalizationManager.tr("credits.testing") + "\nGUT (Godot Unit Testing)",
-        LocalizationManager.tr("credits.special_thanks") + "\nGodot Community\nGUT Contributors"
+        LocalizationManager.translate("credits.engine") + "\nGodot 4.6",
+        LocalizationManager.translate("credits.testing") + "\nGUT (Godot Unit Testing)",
+        LocalizationManager.translate("credits.special_thanks") + "\nGodot Community\nGUT Contributors"
     ])
 
-    _add_section_header(LocalizationManager.tr("credits.legal"))
+    _add_section_header(LocalizationManager.translate("credits.legal"))
     _add_content_block([
-        LocalizationManager.tr("credits.eula") + "\nlegal/EULA.md",
-        LocalizationManager.tr("credits.privacy") + "\nlegal/PRIVACY_POLICY.md",
-        LocalizationManager.tr("credits.age_ratings") + "\nESRB Teen, PEGI 12"
+        LocalizationManager.translate("credits.eula") + "\nlegal/EULA.md",
+        LocalizationManager.translate("credits.privacy") + "\nlegal/PRIVACY_POLICY.md",
+        LocalizationManager.translate("credits.age_ratings") + "\nESRB Teen, PEGI 12"
     ])
 
     # 结尾感谢
-    _add_section_header(LocalizationManager.tr("credits.thanks"))
+    _add_section_header(LocalizationManager.translate("credits.thanks"))
     _add_content_block([
-        LocalizationManager.tr("credits.game_name_zh"),
-        LocalizationManager.tr("credits.game_name_en"),
-        LocalizationManager.tr("credits.website")
+        LocalizationManager.translate("credits.game_name_zh"),
+        LocalizationManager.translate("credits.game_name_en"),
+        LocalizationManager.translate("credits.website")
     ])
 
 func _add_section_header(text: String) -> void:

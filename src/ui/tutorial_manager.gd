@@ -224,7 +224,7 @@ func _show_current_step() -> void:
     _step_start_time = Time.get_ticks_msec() / 1000.0
 
     # 显示提示文本
-    var text: String = LocalizationManager.tr(step_data["key"])
+    var text: String = LocalizationManager.translate(step_data["key"])
     _show_tutorial_prompt(text, step_data)
 
     # 高亮相关元素

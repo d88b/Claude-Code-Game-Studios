@@ -97,7 +97,7 @@ func _create_ui_elements() -> void:
 	vbox.add_child(time_hbox)
 
 	var time_title: Label = Label.new()
-	time_title.text = LocalizationManager.tr("ui.hud.time_title")
+	time_title.text = LocalizationManager.translate("ui.hud.time_title")
 	time_title.add_theme_color_override("font_color", Color(1, 1, 1, 1))
 	time_hbox.add_child(time_title)
 
@@ -111,12 +111,12 @@ func _create_ui_elements() -> void:
 	vbox.add_child(phase_hbox)
 
 	var phase_title: Label = Label.new()
-	phase_title.text = LocalizationManager.tr("ui.hud.phase_title")
+	phase_title.text = LocalizationManager.translate("ui.hud.phase_title")
 	phase_title.add_theme_color_override("font_color", Color(1, 1, 1, 1))
 	phase_hbox.add_child(phase_title)
 
 	_phase_label = Label.new()
-	_phase_label.text = LocalizationManager.tr("ui.hud.phase.day")
+	_phase_label.text = LocalizationManager.translate("ui.hud.phase.day")
 	_phase_label.add_theme_color_override("font_color", Color(1, 1, 1, 1))
 	phase_hbox.add_child(_phase_label)
 
@@ -125,37 +125,37 @@ func _create_ui_elements() -> void:
 	vbox.add_child(state_hbox)
 
 	var state_title: Label = Label.new()
-	state_title.text = LocalizationManager.tr("ui.hud.state_title")
+	state_title.text = LocalizationManager.translate("ui.hud.state_title")
 	state_title.add_theme_color_override("font_color", Color(1, 1, 1, 1))
 	state_hbox.add_child(state_title)
 
 	_state_label = Label.new()
-	_state_label.text = LocalizationManager.tr("ui.hud.state.bunker")
+	_state_label.text = LocalizationManager.translate("ui.hud.state.bunker")
 	_state_label.add_theme_color_override("font_color", Color(0.8, 0.8, 1, 1))
 	state_hbox.add_child(_state_label)
 
 	# === 魔能耗尽警告 ===
 	_warning_label = Label.new()
-	_warning_label.text = LocalizationManager.tr("ui.hud.warning.magic_depleted_speed")
+	_warning_label.text = LocalizationManager.translate("ui.hud.warning.magic_depleted_speed")
 	_warning_label.modulate = Color(1, 0.3, 0.3, 1)
 	_warning_label.visible = false
 	vbox.add_child(_warning_label)
 
 	# === Elite/Boss 警告 ===
 	_elite_warning_label = Label.new()
-	_elite_warning_label.text = LocalizationManager.tr("ui.hud.warning.elite_appear")
+	_elite_warning_label.text = LocalizationManager.translate("ui.hud.warning.elite_appear")
 	_elite_warning_label.modulate = Color(1, 0.5, 0, 1)  # 橙色警告
 	_elite_warning_label.visible = false
 	vbox.add_child(_elite_warning_label)
 
 	# === 操作提示 ===
 	_deploy_hint_label = Label.new()
-	_deploy_hint_label.text = LocalizationManager.tr("ui.hud.deploy_hint")
+	_deploy_hint_label.text = LocalizationManager.translate("ui.hud.deploy_hint")
 	_deploy_hint_label.add_theme_color_override("font_color", Color(0.7, 1, 0.7, 1))
 	vbox.add_child(_deploy_hint_label)
 
 	_return_hint_label = Label.new()
-	_return_hint_label.text = LocalizationManager.tr("ui.hud.return_hint")
+	_return_hint_label.text = LocalizationManager.translate("ui.hud.return_hint")
 	_return_hint_label.add_theme_color_override("font_color", Color(0.7, 0.7, 1, 1))
 	_return_hint_label.visible = false
 	vbox.add_child(_return_hint_label)
@@ -259,7 +259,7 @@ func _on_hour_changed(hour: int) -> void:
 
 func _on_phase_changed(phase: int) -> void:
 	var phase_keys: Array = ["ui.hud.phase.dawn", "ui.hud.phase.day", "ui.hud.phase.dusk", "ui.hud.phase.night"]
-	_phase_label.text = LocalizationManager.tr(phase_keys[phase]) if phase < phase_keys.size() else "?"
+	_phase_label.text = LocalizationManager.translate(phase_keys[phase]) if phase < phase_keys.size() else "?"
 
 func _on_magic_changed(current: float, max_magic: float) -> void:
 	_magic_bar.max_value = max_magic
@@ -278,10 +278,10 @@ func _on_elite_spawned(enemy_id: int, tier: int) -> void:
 
 	# 根据 tier 更新警告文本
 	if tier >= 3:  # Boss tier
-		_elite_warning_label.text = LocalizationManager.tr("ui.hud.warning.boss_appear")
+		_elite_warning_label.text = LocalizationManager.translate("ui.hud.warning.boss_appear")
 		_elite_warning_label.modulate = Color(1, 0.2, 0.2, 1)  # 红色（更高危险）
 	else:
-		_elite_warning_label.text = LocalizationManager.tr("ui.hud.warning.elite_appear")
+		_elite_warning_label.text = LocalizationManager.translate("ui.hud.warning.elite_appear")
 
 	# 3 秒后隐藏警告
 	await get_tree().create_timer(3.0).timeout
@@ -398,7 +398,7 @@ func _create_summary_panel() -> void:
 
 	# 继续提示
 	var continue_hint: Label = Label.new()
-	continue_hint.text = LocalizationManager.tr("ui.summary.continue_hint")
+	continue_hint.text = LocalizationManager.translate("ui.summary.continue_hint")
 	continue_hint.add_theme_color_override("font_color", Color(0.7, 1, 0.7, 1))
 	vbox.add_child(continue_hint)
 

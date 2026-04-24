@@ -41,7 +41,7 @@ func _create_mvp_resources() -> void:
 	# 铁锭 (151)
 	var iron: ResourceDefinition = ResourceDefinition.new()
 	iron.resource_id = 151
-	iron.display_name = LocalizationManager.tr("resource.iron.display_name")
+	iron.display_name = LocalizationManager.translate("resource.iron.display_name")
 	iron.max_stack_size = 100
 	iron.category = "processed"
 	_resources[151] = iron
@@ -49,7 +49,7 @@ func _create_mvp_resources() -> void:
 	# 铜锭 (152)
 	var copper: ResourceDefinition = ResourceDefinition.new()
 	copper.resource_id = 152
-	copper.display_name = LocalizationManager.tr("resource.copper.display_name")
+	copper.display_name = LocalizationManager.translate("resource.copper.display_name")
 	copper.max_stack_size = 100
 	copper.category = "processed"
 	_resources[152] = copper
@@ -57,7 +57,7 @@ func _create_mvp_resources() -> void:
 	# 基础零件 (160)
 	var parts: ResourceDefinition = ResourceDefinition.new()
 	parts.resource_id = 160
-	parts.display_name = LocalizationManager.tr("resource.parts.display_name")
+	parts.display_name = LocalizationManager.translate("resource.parts.display_name")
 	parts.max_stack_size = 100
 	parts.category = "component"
 	_resources[160] = parts
@@ -65,7 +65,7 @@ func _create_mvp_resources() -> void:
 	# 魔力晶石 (101)
 	var crystal: ResourceDefinition = ResourceDefinition.new()
 	crystal.resource_id = 101
-	crystal.display_name = LocalizationManager.tr("resource.crystal.display_name")
+	crystal.display_name = LocalizationManager.translate("resource.crystal.display_name")
 	crystal.max_stack_size = 50
 	crystal.category = "raw_material"
 	_resources[101] = crystal
@@ -73,7 +73,7 @@ func _create_mvp_resources() -> void:
 	# 秘银 (102)
 	var mithril: ResourceDefinition = ResourceDefinition.new()
 	mithril.resource_id = 102
-	mithril.display_name = LocalizationManager.tr("resource.mithril.display_name")
+	mithril.display_name = LocalizationManager.translate("resource.mithril.display_name")
 	mithril.max_stack_size = 50
 	mithril.category = "raw_material"
 	_resources[102] = mithril
@@ -81,7 +81,7 @@ func _create_mvp_resources() -> void:
 	# 奥术碎片 (103)
 	var arcana: ResourceDefinition = ResourceDefinition.new()
 	arcana.resource_id = 103
-	arcana.display_name = LocalizationManager.tr("resource.arcana.display_name")
+	arcana.display_name = LocalizationManager.translate("resource.arcana.display_name")
 	arcana.max_stack_size = 100
 	arcana.category = "raw_material"
 	_resources[103] = arcana
@@ -89,7 +89,7 @@ func _create_mvp_resources() -> void:
 	# 食物 (200)
 	var food: ResourceDefinition = ResourceDefinition.new()
 	food.resource_id = 200
-	food.display_name = LocalizationManager.tr("resource.food.display_name")
+	food.display_name = LocalizationManager.translate("resource.food.display_name")
 	food.max_stack_size = 50
 	food.category = "raw_material"
 	_resources[200] = food
@@ -98,7 +98,7 @@ func _create_mvp_resources() -> void:
 	for i in range(300, 306):
 		var ammo: ResourceDefinition = ResourceDefinition.new()
 		ammo.resource_id = i
-		ammo.display_name = LocalizationManager.tr("resource.ammo.display_name") + " " + str(i)
+		ammo.display_name = LocalizationManager.translate("resource.ammo.display_name") + " " + str(i)
 		ammo.max_stack_size = 200
 		ammo.category = "ammo"
 		_resources[i] = ammo

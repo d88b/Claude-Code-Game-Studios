@@ -43,7 +43,7 @@ func _show_notification(achievement_id: String, achievement_name: String) -> voi
     _current_achievement_id = achievement_id
 
     # 设置文本
-    _title_label.text = LocalizationManager.tr("achievement.unlocked_title")
+    _title_label.text = LocalizationManager.translate("achievement.unlocked_title")
     _achievement_name.text = achievement_name
 
     # 获取描述

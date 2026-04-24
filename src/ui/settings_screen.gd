@@ -21,13 +21,13 @@ func _ready() -> void:
 
 func _setup_localized_text() -> void:
     # 音频设置标签
-    $SettingsContainer/VBoxContainer/TitleLabel.text = LocalizationManager.tr("menu.main.settings")
+    $SettingsContainer/VBoxContainer/TitleLabel.text = LocalizationManager.translate("menu.main.settings")
 
-    $SettingsContainer/VBoxContainer/AudioSection/MasterLabel.text = LocalizationManager.tr("audio.settings.master")
-    $SettingsContainer/VBoxContainer/AudioSection/BGMLabel.text = LocalizationManager.tr("audio.settings.bgm")
-    $SettingsContainer/VBoxContainer/AudioSection/SFXLabel.text = LocalizationManager.tr("audio.settings.sfx")
+    $SettingsContainer/VBoxContainer/AudioSection/MasterLabel.text = LocalizationManager.translate("audio.settings.master")
+    $SettingsContainer/VBoxContainer/AudioSection/BGMLabel.text = LocalizationManager.translate("audio.settings.bgm")
+    $SettingsContainer/VBoxContainer/AudioSection/SFXLabel.text = LocalizationManager.translate("audio.settings.sfx")
 
-    _close_button.text = LocalizationManager.tr("menu.pause.resume")
+    _close_button.text = LocalizationManager.translate("menu.pause.resume")
 
 func _connect_signals() -> void:
     _close_button.pressed.connect(_on_close_pressed)

@@ -73,10 +73,10 @@ func set_locale(locale_code: String) -> bool:
 func get_locale() -> String:
 	return current_locale
 
-## 获取翻译字符串（核心 tr() 函数）
+## 获取翻译字符串（核心 translate() 函数）
 ## @param key: 字符串键名，格式 "category.subcategory.description"
 ## @return: 翻译后的字符串，如果键不存在则返回键名本身
-func tr(key: String) -> String:
+func translate(key: String) -> String:
 	if not _is_loaded:
 		push_warning("[LocalizationManager] String table not loaded, returning key: %s" % key)
 		return key
@@ -96,8 +96,8 @@ func tr(key: String) -> String:
 ## @param key: 字符串键名
 ## @param placeholders: 占位符字典 {"name": value}
 ## @return: 格式化后的翻译字符串
-func tr_format(key: String, placeholders: Dictionary) -> String:
-	var template: String = tr(key)
+func translate_format(key: String, placeholders: Dictionary) -> String:
+	var template: String = translate(key)
 
 	for placeholder_name: String in placeholders:
 		var placeholder_value: String = str(placeholders.get(placeholder_name, ""))
