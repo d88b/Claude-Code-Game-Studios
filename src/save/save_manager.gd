@@ -268,7 +268,7 @@ func _collect_save_data() -> Dictionary:
 	}
 
 func _get_game_version() -> String:
-	return ProjectSettings.get_setting("application/config/version", "0.1.0-alpha")
+	return ProjectSettings.get_setting("application/config/version") if ProjectSettings.has_setting("application/config/version") else "0.1.0-alpha"
 
 func _collect_game_state() -> Dictionary:
 	# GameState 数据

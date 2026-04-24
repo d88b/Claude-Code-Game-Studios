@@ -70,7 +70,7 @@ func record_event(event_name: String, data: Dictionary = {}) -> void:
         "event_timestamp": Time.get_datetime_string_from_system(),
         "session_id": _session_id,
         "player_id": _player_id,
-        "build_version": ProjectSettings.get_setting("application/config/version", "0.1.0"),
+        "build_version": ProjectSettings.get_setting("application/config/version") if ProjectSettings.has_setting("application/config/version") else "0.1.0",
         "platform": OS.get_name(),
         "locale": TranslationServer.get_locale(),
         "event_data": data

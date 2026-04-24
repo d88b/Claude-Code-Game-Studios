@@ -52,7 +52,7 @@ func capture_crash(error_type: String, error_message: String, stack_trace: Strin
     var report: Dictionary = {
         "crash_id": crash_id,
         "timestamp": Time.get_datetime_string_from_system(),
-        "build_version": ProjectSettings.get_setting("application/config/version", "0.1.0"),
+        "build_version": ProjectSettings.get_setting("application/config/version") if ProjectSettings.has_setting("application/config/version") else "0.1.0",
         "platform": OS.get_name(),
         "device_info": _collect_device_info(),
         "game_state": _collect_game_state(),

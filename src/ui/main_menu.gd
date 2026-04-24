@@ -61,7 +61,7 @@ func _setup_localized_text() -> void:
     _quit_button.text = LocalizationManager.translate("menu.main.quit")
 
     # 版本号
-    var version: String = ProjectSettings.get_setting("application/config/version", "0.1.0")
+    var version: String = ProjectSettings.get_setting("application/config/version") if ProjectSettings.has_setting("application/config/version") else "0.1.0"
     _version_label.text = "v%s" % version
 
 func _check_save_data() -> void:
