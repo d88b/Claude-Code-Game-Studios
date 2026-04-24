@@ -34,10 +34,11 @@ stories:
     name: "Placement Validation"
     file: "production/epics/block-placing-system/story-001-placement-validation.md"
     priority: must-have
-    status: ready-for-dev
+    status: done
     owner: "gameplay-programmer"
     estimate_days: 2
-    blocker: "collision-001, digging-001"
+    blocker: ""
+    completed: "2026-04-24"
 
   - id: "daynight-001"
     name: "Day-Night Phase Manager"
