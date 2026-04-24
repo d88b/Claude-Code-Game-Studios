@@ -14,19 +14,21 @@ stories:
     name: "Collision Query API"
     file: "production/epics/block-collision-system/story-001-collision-query-api.md"
     priority: must-have
-    status: in-progress
+    status: done
     owner: "engine-programmer"
     estimate_days: 2
     blocker: ""
+    completed: "2026-04-24"
 
   - id: "digging-001"
     name: "Damage Accumulation"
     file: "production/epics/block-digging-system/story-001-damage-accumulation.md"
     priority: must-have
-    status: ready-for-dev
+    status: done
     owner: "gameplay-programmer"
     estimate_days: 2
-    blocker: "collision-001"
+    blocker: ""
+    completed: "2026-04-24"
 
   - id: "placing-001"
     name: "Placement Validation"
