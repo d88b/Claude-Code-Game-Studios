@@ -307,9 +307,12 @@ func _collect_vehicle_data() -> Dictionary:
 		# 获取 VehicleAttribute
 		var attr: Node = vehicle.get_node_or_null("VehicleAttribute")
 		if attr != null:
-			vehicle_data["health"] = attr.get("current_health", 100.0)
-			vehicle_data["magic"] = attr.get("current_magic", 100.0)
-			vehicle_data["vehicle_type_id"] = attr.get("vehicle_type_id", 1)
+			var health_val = attr.get("current_health")
+			vehicle_data["health"] = health_val if health_val != null else 100.0
+			var magic_val = attr.get("current_magic")
+			vehicle_data["magic"] = magic_val if magic_val != null else 100.0
+			var type_val = attr.get("vehicle_type_id")
+			vehicle_data["vehicle_type_id"] = type_val if type_val != null else 1
 
 	return vehicle_data
 
