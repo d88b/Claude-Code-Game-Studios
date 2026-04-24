@@ -4,6 +4,15 @@
 > **Last Updated**: 2026-04-24
 > **Game**: 铁锈魔潮 (Rust Magic Tide)
 > **Accessibility Tier**: Standard
+> **GDD References**: design/gdd/vehicle-attribute-system.md, design/gdd/time-system.md, design/gdd/day-night-cycle-system.md
+
+---
+
+## HUD Philosophy
+
+玩家在探索和战斗过程中需要实时了解战车状态、环境信息，以做出撤退或继续探索的决策。HUD 必须提供关键信息而不遮挡游戏视野，支持快速决策，不干扰游戏体验。
+
+**Player Need**: "我需要知道战车还能撑多久，是否应该撤退。"
 
 ---
 
@@ -128,6 +137,65 @@ Per Art Bible Section 7 (UI/HUD Visual Direction):
 | HUD render time | < 0.5ms per frame |
 | Update latency | < 100ms from data change |
 | Memory footprint | < 2MB |
+
+---
+
+## HUD States by Gameplay Context
+
+| Context | HUD Visibility | Modified Elements |
+|---------|----------------|-------------------|
+| **Exploration (Bunker)** | Full visible | Area = "地堡", No danger level |
+| **Exploration (Surface)** | Full visible | Area = current zone, Danger active |
+| **Combat** | Full visible + emphasis | Health/Magic bars enlarged, Warning priority |
+| **Dialogue/Cutscene** | Minimal (only time) | Bottom bar hidden, Left panel dimmed |
+| **Paused** | Hidden (pause overlay) | All HUD elements hidden |
+| **Retreat Warning** | Warning overlay active | Full-screen warning, HUD dimmed |
+| **Inventory/Build Menu** | Partial (status bars only) | Bottom bar replaced by menu |
+
+---
+
+## Platform Adaptation
+
+### PC (Keyboard/Mouse)
+
+- **Primary Input**: WASD + Mouse
+- **HUD Interactions**: H key toggle, Mouse hover for numeric values
+- **Resolution Support**: 1920x1080 (design target), scales to 4K
+
+### PC (Gamepad)
+
+- **Primary Input**: Left Stick + Face Buttons
+- **HUD Interactions**: D-pad navigation, A button confirm
+- **Focus Indicator**: Enhanced glow for gamepad focus
+
+### Console (Future)
+
+- **TV Safe Zone**: HUD elements within 90% screen bounds
+- **Minimum Click Target**: 44x44 pixels enforced
+- **No Mouse-Only Interactions**: All HUD actions gamepad-accessible
+
+---
+
+## Tuning Knobs
+
+| Element | Player Adjustable | Range | Default |
+|---------|-------------------|-------|---------|
+| HUD Scale | Yes | 0.8x - 1.3x | 1.0x |
+| HUD Opacity | Yes | 50% - 100% | 70% |
+| Warning Duration | Yes | 1 min - 5 min | 2 min |
+| Health Warning Threshold | No (GDD-defined) | — | 20% |
+| Magic Warning Threshold | No (GDD-defined) | — | 10% |
+
+---
+
+## Localization Considerations
+
+| Element | Max Characters (EN) | Expansion Space |
+|---------|--------------------|-----------------| 
+| Area Name | 20 | +40% (28 chars) |
+| Time Display | "Day XX:XX" | Fixed format |
+| Warning Text | 50 | +40% (70 chars) |
+| Button Labels | 15 | +40% (21 chars) |
 
 ---
 

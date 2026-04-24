@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://enemyai0001"]
+
+[ext_resource type="Script" path="res://src/ai/enemy_ai_controller.gd" id="Script_enemy_ai"]
+
+[node name="EnemyAIController" type="CharacterBody2D"]
+script = ExtResource("Script_enemy_ai")
+collision_layer = 4
+collision_mask = 1
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+avoidance_enabled = false
+path_desired_distance = 10.0
+target_desired_distance = 10.0
+radius = 16.0
+neighbor_distance = 50.0
+max_neighbors = 10
+time_horizon = 0.5
+max_speed = 100.0

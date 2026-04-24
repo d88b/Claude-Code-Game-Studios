@@ -1,0 +1,560 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "locale": "en",
+    "generated": "2026-04-25",
+    "game_title": "铁锈魔潮 (Rust Magic Tide)",
+    "engine": "Godot 4.6",
+    "string_count": 99
+  },
+  "strings": {
+    "area.bunker_perimeter.name": {
+      "source": "地堡周边",
+      "context": "Area name displayed in HUD when player enters zone. Appears in area_manager.gd line 108. Max 12 chars recommended."
+    },
+    "area.bunker_perimeter.description": {
+      "source": "Default safe zone around the bunker",
+      "context": "Area description for tooltips or info panels. English placeholder — translate based on game tone."
+    },
+    "area.abandoned_city.name": {
+      "source": "废弃城市",
+      "context": "Area name for mid-tier danger zone. Appears in area_manager.gd line 119. Max 12 chars."
+    },
+    "area.abandoned_city.description": {
+      "source": "Ruined cityscape, graveyard faction territory",
+      "context": "Area description. English placeholder."
+    },
+    "area.demon_wasteland.name": {
+      "source": "恶魔荒原",
+      "context": "Area name for high-tier danger zone. Appears in area_manager.gd line 131. Max 12 chars."
+    },
+    "area.demon_wasteland.description": {
+      "source": "Hell faction territory, extreme danger",
+      "context": "Area description. English placeholder."
+    },
+    "area.element_mine.name": {
+      "source": "元素矿洞",
+      "context": "Area name for elemental faction zone. Appears in area_manager.gd line 143. Max 12 chars."
+    },
+    "area.element_mine.description": {
+      "source": "Deep cavern with elemental creatures",
+      "context": "Area description. English placeholder."
+    },
+
+    "block.terrain.display_name": {
+      "source": "地形方块",
+      "context": "Generic terrain block name displayed in build menu. Used with index suffix. Appears in block_type_db.gd line 82."
+    },
+    "block.ore.display_name": {
+      "source": "矿石",
+      "context": "Ore block name for resource blocks. Appears in block_type_db.gd line 107."
+    },
+    "block.building.display_name": {
+      "source": "建筑方块",
+      "context": "Building block name. Appears in block_type_db.gd line 122."
+    },
+    "block.empty.display_name": {
+      "source": "空单元格",
+      "context": "Empty cell designation. Appears in block_type_db.gd line 146."
+    },
+    "block.bedrock.display_name": {
+      "source": "基岩",
+      "context": "Undestructible base layer block. Appears in block_type_db.gd line 94."
+    },
+    "block.platform.display_name": {
+      "source": "平台",
+      "context": "Walkable platform block. Appears in block_type_db.gd line 136."
+    },
+
+    "build.wall.display_name": {
+      "source": "墙体",
+      "context": "Wall build item name. Used with index suffix. Appears in build_item_db.gd line 46."
+    },
+    "build.turret.display_name": {
+      "source": "炮塔",
+      "context": "Turret build item name. Appears in build_item_db.gd line 57."
+    },
+    "build.trap.display_name": {
+      "source": "陷阱",
+      "context": "Trap build item name. Appears in build_item_db.gd line 67."
+    },
+    "build.facility.display_name": {
+      "source": "设施",
+      "context": "Facility build item name (storage/workbench). Appears in build_item_db.gd line 78."
+    },
+    "build.floor.display_name": {
+      "source": "地板",
+      "context": "Floor tile build item name. Appears in build_item_db.gd line 88."
+    },
+
+    "resource.iron.display_name": {
+      "source": "铁锭",
+      "context": "Iron ingot resource. Appears in resource_db.gd line 44."
+    },
+    "resource.copper.display_name": {
+      "source": "铜锭",
+      "context": "Copper ingot resource. Appears in resource_db.gd line 52."
+    },
+    "resource.parts.display_name": {
+      "source": "基础零件",
+      "context": "Basic parts component. Appears in resource_db.gd line 60."
+    },
+    "resource.mithril.display_name": {
+      "source": "秘银",
+      "context": "Mithril raw material. Appears in resource_db.gd line 76."
+    },
+    "resource.arcana.display_name": {
+      "source": "奥术碎片",
+      "context": "Arcana shard material. Appears in resource_db.gd line 84."
+    },
+    "resource.food.display_name": {
+      "source": "食物",
+      "context": "Food resource. Appears in resource_db.gd line 92."
+    },
+    "resource.ammo.display_name": {
+      "source": "弹药",
+      "context": "Ammunition resource name. Appears in resource_db.gd line 101."
+    },
+    "resource.crystal.display_name": {
+      "source": "魔力晶石",
+      "context": "Magic crystal resource name. Placeholder — verify in resource_db."
+    },
+    "resource.metal.display_name": {
+      "source": "金属",
+      "context": "Metal scrap resource name. Placeholder — verify in resource_db."
+    },
+    "resource.gunpowder.display_name": {
+      "source": "火药",
+      "context": "Gunpowder resource name. Placeholder — verify in resource_db."
+    },
+
+    "enemy.swarm.display_name": {
+      "source": "集群僵尸",
+      "context": "Swarm zombie enemy. Appears in enemy_type_db.gd line 70."
+    },
+    "enemy.breaker.display_name": {
+      "source": "拆墙僵尸",
+      "context": "Wall breaker zombie. Appears in enemy_type_db.gd line 81."
+    },
+    "enemy.tracker.display_name": {
+      "source": "追踪僵尸",
+      "context": "Tracker zombie. Appears in enemy_type_db.gd line 92."
+    },
+    "enemy.ambusher.display_name": {
+      "source": "伏击僵尸",
+      "context": "Ambusher zombie. Appears in enemy_type_db.gd line 103."
+    },
+    "enemy.elite.display_name": {
+      "source": "精英僵尸",
+      "context": "Elite zombie enemy. Appears in enemy_type_db.gd line 114."
+    },
+    "enemy.boss.display_name": {
+      "source": "尸潮首领",
+      "context": "Tide boss enemy. Appears in enemy_type_db.gd line 126."
+    },
+    "enemy.zombie_basic.display_name": {
+      "source": "普通僵尸",
+      "context": "Basic graveyard zombie name. Appears in enemy_type_db.gd line 59."
+    },
+    "enemy.zombie_runner.display_name": {
+      "source": "奔跑僵尸",
+      "context": "Fast graveyard zombie variant. Placeholder — verify in enemy_type_db."
+    },
+    "enemy.skeleton_basic.display_name": {
+      "source": "骷髅战士",
+      "context": "Wall-breaker skeleton type. Placeholder — verify in enemy_type_db."
+    },
+    "enemy.skeleton_archer.display_name": {
+      "source": "骷髅弓箭手",
+      "context": "Sniper-range skeleton. Placeholder — verify in enemy_type_db."
+    },
+    "enemy.bone_knight.display_name": {
+      "source": "骨甲骑士",
+      "context": "Elite graveyard enemy. Placeholder — verify in enemy_type_db."
+    },
+    "enemy.hell_imp.display_name": {
+      "source": "地狱小鬼",
+      "context": "Basic hell faction enemy. Placeholder — verify in enemy_type_db."
+    },
+    "enemy.hell_demon.display_name": {
+      "source": "恶魔战士",
+      "context": "Hell faction warrior. Placeholder — verify in enemy_type_db."
+    },
+
+    "ui.hud.health_label": {
+      "source": "HP",
+      "context": "Health bar label in HUD. Max 4 chars. Appears in simple_hud.gd."
+    },
+    "ui.hud.magic_label": {
+      "source": "MP",
+      "context": "Magic bar label in HUD. Max 4 chars. Appears in simple_hud.gd."
+    },
+    "ui.hud.time_title": {
+      "source": "时间:",
+      "context": "Time label title. Max 8 chars."
+    },
+    "ui.hud.phase_title": {
+      "source": "阶段:",
+      "context": "Phase label title. Max 8 chars."
+    },
+    "ui.hud.state_title": {
+      "source": "状态:",
+      "context": "State label title. Max 8 chars."
+    },
+    "ui.hud.time_format": {
+      "source": "{hour}:00",
+      "context": "Time display format. Placeholder {hour} is integer 0-23. Appears in simple_hud.gd line 258. Keep :00 for game clock style."
+    },
+    "ui.hud.phase.dawn": {
+      "source": "黎明",
+      "context": "Day-night phase name displayed in HUD. Appears in day_night_cycle.gd phase enum."
+    },
+    "ui.hud.phase.day": {
+      "source": "白天",
+      "context": "Day phase name."
+    },
+    "ui.hud.phase.dusk": {
+      "source": "黄昏",
+      "context": "Dusk phase name."
+    },
+    "ui.hud.phase.night": {
+      "source": "夜晚",
+      "context": "Night phase name — highest danger period."
+    },
+    "ui.hud.warning.magic_depleted": {
+      "source": "魔能耗尽！",
+      "context": "Warning message when magic pool empty. Max 15 chars. Appears in simple_hud.gd warning_label."
+    },
+    "ui.hud.warning.elite_appear": {
+      "source": "精英出现！",
+      "context": "Elite enemy warning. Max 12 chars. Appears in simple_hud.gd elite_warning_label."
+    },
+    "ui.hud.warning.boss_appear": {
+      "source": "BOSS 出现！极度危险！",
+      "context": "Boss enemy warning. Max 20 chars. Appears in simple_hud.gd elite_warning_label."
+    },
+    "ui.hud.warning.magic_depleted_speed": {
+      "source": "能耗尽！速度降低",
+      "context": "Magic depleted speed warning. Max 15 chars. Appears in simple_hud.gd warning_label."
+    },
+    "ui.hud.warning.retreat": {
+      "source": "建议撤退",
+      "context": "Retreat suggestion warning. Max 10 chars. Appears in retreat_judge.gd."
+    },
+    "ui.hud.resource_detail_format": {
+      "source": "{name}: {qty}",
+      "context": "Resource detail line format. {name} is resource display_name, {qty} is float quantity. Appears in simple_hud.gd line 385."
+    },
+    "ui.hud.state.bunker": {
+      "source": "地堡",
+      "context": "Game state label when in bunker mode. Max 8 chars."
+    },
+    "ui.hud.state.exploring": {
+      "source": "探索中",
+      "context": "Game state label during exploration. Max 10 chars."
+    },
+    "ui.hud.state.returning": {
+      "source": "返回中",
+      "context": "Game state label during return trip. Max 10 chars."
+    },
+    "ui.hud.deploy_hint": {
+      "source": "按 SPACE 出发",
+      "context": "Deploy hint shown at bunker. Max 15 chars. {key} placeholder recommended for remappable input."
+    },
+    "ui.hud.return_hint": {
+      "source": "按 RETURN 返回",
+      "context": "Return hint shown during exploration. Max 15 chars."
+    },
+    "ui.summary.title": {
+      "source": "探索总结",
+      "context": "Summary panel title after return. Max 12 chars."
+    },
+    "ui.summary.total_collected": {
+      "source": "收集总量",
+      "context": "Summary stat label. Max 10 chars."
+    },
+    "ui.summary.total_format": {
+      "source": "总计收集: {total}",
+      "context": "Summary total format. {total} is numeric quantity. Max 15 chars."
+    },
+    "ui.summary.continue_hint": {
+      "source": "[SPACE] 开始下一次探索",
+      "context": "Summary continue hint. Max 20 chars."
+    },
+
+    "enemy.target_lost.reason_invalid": {
+      "source": "目标无效",
+      "context": "Signal emit reason when target becomes invalid. Appears in enemy_ai_controller.gd line 256. Internal use, may not need player-facing translation."
+    },
+
+    "menu.main.title": {
+      "source": "铁锈魔潮",
+      "context": "Main menu game title. Should match game branding. Max 20 chars."
+    },
+    "menu.main.play": {
+      "source": "开始游戏",
+      "context": "Main menu start button. Max 12 chars."
+    },
+    "menu.main.settings": {
+      "source": "设置",
+      "context": "Settings button. Max 8 chars."
+    },
+    "menu.main.quit": {
+      "source": "退出",
+      "context": "Quit button. Max 6 chars."
+    },
+    "menu.pause.title": {
+      "source": "暂停",
+      "context": "Pause menu title. Max 8 chars."
+    },
+    "menu.pause.resume": {
+      "source": "继续",
+      "context": "Resume game button. Max 8 chars."
+    },
+    "menu.pause.settings": {
+      "source": "设置",
+      "context": "Settings button in pause menu."
+    },
+    "menu.pause.quit_to_menu": {
+      "source": "返回主菜单",
+      "context": "Quit to main menu button. Max 12 chars."
+    },
+
+    "input.action.move_up": {
+      "source": "向上移动",
+      "context": "Input action name for key remapping screen. Max 15 chars."
+    },
+    "input.action.move_down": {
+      "source": "向下移动",
+      "context": "Input action name."
+    },
+    "input.action.move_left": {
+      "source": "向左移动",
+      "context": "Input action name."
+    },
+    "input.action.move_right": {
+      "source": "向右移动",
+      "context": "Input action name."
+    },
+    "input.action.fire": {
+      "source": "射击",
+      "context": "Input action name."
+    },
+    "input.action.dig": {
+      "source": "挖掘",
+      "context": "Input action name."
+    },
+    "input.action.place": {
+      "source": "放置",
+      "context": "Input action name."
+    },
+    "input.action.pause": {
+      "source": "暂停",
+      "context": "Input action name."
+    },
+
+    "tutorial.move": {
+      "source": "使用 WASD 键移动战车",
+      "context": "Tutorial step: movement controls. Max 30 chars."
+    },
+    "tutorial.fire": {
+      "source": "点击鼠标左键射击",
+      "context": "Tutorial step: firing controls. Max 30 chars."
+    },
+    "tutorial.dig": {
+      "source": "按 E 键挖掘方块",
+      "context": "Tutorial step: digging controls. Max 30 chars."
+    },
+    "tutorial.place": {
+      "source": "按 Q 键放置设施",
+      "context": "Tutorial step: placement controls. Max 30 chars."
+    },
+    "tutorial.hp_mp": {
+      "source": "HP 是生命值，MP 是魔能",
+      "context": "Tutorial step: HUD explanation. Max 30 chars."
+    },
+    "tutorial.daynight": {
+      "source": "夜晚更危险，尽快返回",
+      "context": "Tutorial step: day/night cycle. Max 30 chars."
+    },
+    "tutorial.resources": {
+      "source": "收集资源用于建造",
+      "context": "Tutorial step: resource collection. Max 30 chars."
+    },
+    "tutorial.return": {
+      "source": "按 R 键返回地堡",
+      "context": "Tutorial step: retreat controls. Max 30 chars."
+    },
+    "tutorial.explore_start": {
+      "source": "出发探索世界",
+      "context": "Tutorial step: start exploration. Max 30 chars."
+    },
+    "tutorial.collect_resources": {
+      "source": "搜集足够的资源",
+      "context": "Tutorial step: collect target. Max 30 chars."
+    },
+    "tutorial.encounter_enemy": {
+      "source": "遭遇敌人，使用射击消灭",
+      "context": "Tutorial step: combat tutorial. Max 30 chars."
+    },
+    "tutorial.safe_return": {
+      "source": "在夜晚前安全返回",
+      "context": "Tutorial step: safe return warning. Max 30 chars."
+    },
+    "tutorial.skip_prompt": {
+      "source": "跳过教程?",
+      "context": "Tutorial skip confirmation. Max 15 chars."
+    },
+    "tutorial.phase.basics": {
+      "source": "基础操作",
+      "context": "Tutorial phase title. Max 12 chars."
+    },
+    "tutorial.phase.systems": {
+      "source": "核心系统",
+      "context": "Tutorial phase title. Max 12 chars."
+    },
+    "tutorial.phase.explore": {
+      "source": "首次探索",
+      "context": "Tutorial phase title. Max 12 chars."
+    },
+
+    "credits.title": {
+      "source": "铁锈魔潮",
+      "context": "Credits title, Chinese. Max 20 chars."
+    },
+    "credits.title_en": {
+      "source": "RUST MAGIC TIDE",
+      "context": "Credits title, English. Max 20 chars."
+    },
+    "credits.version": {
+      "source": "Version 0.1.0-alpha",
+      "context": "Version display. Max 20 chars."
+    },
+    "credits.development": {
+      "source": "DEVELOPMENT",
+      "context": "Credits section header. Max 15 chars."
+    },
+    "credits.game_design": {
+      "source": "Game Design",
+      "context": "Credits role title. Max 15 chars."
+    },
+    "credits.programming": {
+      "source": "Programming",
+      "context": "Credits role title. Max 15 chars."
+    },
+    "credits.art": {
+      "source": "Art & Visuals",
+      "context": "Credits role title. Max 15 chars."
+    },
+    "credits.audio": {
+      "source": "Audio",
+      "context": "Credits role title. Max 15 chars."
+    },
+    "credits.qa": {
+      "source": "QA & Testing",
+      "context": "Credits role title. Max 15 chars."
+    },
+    "credits.tools": {
+      "source": "TOOLS & TECHNOLOGY",
+      "context": "Credits section header. Max 20 chars."
+    },
+    "credits.engine": {
+      "source": "Engine",
+      "context": "Credits tool title. Max 10 chars."
+    },
+    "credits.testing": {
+      "source": "Testing Framework",
+      "context": "Credits tool title. Max 15 chars."
+    },
+    "credits.special_thanks": {
+      "source": "Special Thanks",
+      "context": "Credits section. Max 15 chars."
+    },
+    "credits.legal": {
+      "source": "LEGAL",
+      "context": "Credits section header. Max 10 chars."
+    },
+    "credits.eula": {
+      "source": "EULA",
+      "context": "Legal document name. Max 10 chars."
+    },
+    "credits.privacy": {
+      "source": "Privacy Policy",
+      "context": "Legal document name. Max 15 chars."
+    },
+    "credits.age_ratings": {
+      "source": "Age Ratings",
+      "context": "Legal info title. Max 15 chars."
+    },
+    "credits.thanks": {
+      "source": "THANK YOU FOR PLAYING",
+      "context": "Credits closing message. Max 25 chars."
+    },
+    "credits.game_name_zh": {
+      "source": "铁锈魔潮",
+      "context": "Game name Chinese. Max 15 chars."
+    },
+    "credits.game_name_en": {
+      "source": "RUST MAGIC TIDE",
+      "context": "Game name English. Max 20 chars."
+    },
+    "credits.website": {
+      "source": "www.example.com",
+      "context": "Developer website placeholder. Max 25 chars."
+    },
+    "credits.skip": {
+      "source": "跳过",
+      "context": "Skip credits button. Max 6 chars."
+    },
+
+    "achievement.unlocked_title": {
+      "source": "成就解锁！",
+      "context": "Achievement unlock notification title. Max 15 chars."
+    },
+    "achievement.progress_format": {
+      "source": "进度: {current}/{target}",
+      "context": "Achievement progress format. {current} and {target} are integers."
+    },
+    "achievement.category.exploration": {
+      "source": "探索",
+      "context": "Achievement category. Max 10 chars."
+    },
+    "achievement.category.combat": {
+      "source": "战斗",
+      "context": "Achievement category. Max 10 chars."
+    },
+    "achievement.category.building": {
+      "source": "建造",
+      "context": "Achievement category. Max 10 chars."
+    },
+    "achievement.category.resources": {
+      "source": "资源",
+      "context": "Achievement category. Max 10 chars."
+    },
+    "achievement.category.survival": {
+      "source": "生存",
+      "context": "Achievement category. Max 10 chars."
+    },
+    "achievement.category.special": {
+      "source": "特殊",
+      "context": "Achievement category. Max 10 chars."
+    },
+    "achievement.hidden": {
+      "source": "???",
+      "context": "Hidden achievement placeholder. Max 6 chars."
+    },
+
+    "audio.settings.master": {
+      "source": "主音量",
+      "context": "Audio settings label. Max 10 chars."
+    },
+    "audio.settings.bgm": {
+      "source": "背景音乐",
+      "context": "Audio settings label. Max 10 chars."
+    },
+    "audio.settings.sfx": {
+      "source": "音效",
+      "context": "Audio settings label. Max 10 chars."
+    }
+  }
+}

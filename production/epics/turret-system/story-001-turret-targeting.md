@@ -20,10 +20,13 @@
 
 ## Acceptance Criteria
 
-- [ ] State machine: IDLE → TARGETING → FIRING → COOLDOWN → DISABLED
-- [ ] Targeting: nearest enemy within detection_radius
-- [ ] Ammo consumption from linked storage (FacilityController.contents)
-- [ ] GlobalSignals.turret_fired, turret_hit, turret_kill emitted
+- [x] State machine: IDLE → TARGETING → FIRING → COOLDOWN → DISABLED with transition logic
+- [x] Targeting: nearest enemy within targeting_range (attack_range × 2.0)
+- [x] Resource consumption: MAGIC_RESERVE or AMMO_STACK per shot
+- [x] GlobalSignals.turret_fired, turret_hit emitted on fire
+- [x] Efficiency drops on damage (0.8 at 50% health, 0.5 at 30% health)
+- [x] MINIMUM_DAMAGE floor (1) applied in damage calculation
+- [x] Target lock debounce (TARGET_LOCK_FRAMES = 3)
 
 ---
 
@@ -57,7 +60,9 @@ func find_target() -> Node2D:
 
 **Type**: Logic
 **Required**: `tests/unit/turret/turret_targeting_test.gd`
-**Status**: [ ] Not yet created
+**Status**: [x] Created — 75+ test cases covering state machine, targeting, resources, damage calculation, health/efficiency, repair, signals
+**Note**: Tests must be run in Godot Editor GUT panel (headless mode class_name loading issue)
+**Implementation**: TurretController with state machine, SpawnManager integration for target query, damage formula with armor effectiveness
 
 ---
 

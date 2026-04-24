@@ -1,0 +1,55 @@
+[gd_scene load_steps=6 format=3 uid="uid://app_root_001"]
+
+[ext_resource type="Script" path="res://src/app_root.gd" id="1_root"]
+[ext_resource type="Script" path="res://src/game_entry.gd" id="1_entry"]
+[ext_resource type="PackedScene" path="res://src/ui/main_menu.tscn" id="2_menu"]
+[ext_resource type="PackedScene" path="res://src/ui/pause_menu.tscn" id="3_pause"]
+[ext_resource type="PackedScene" path="res://src/ui/credits_screen.tscn" id="4_credits"]
+
+[node name="AppRoot" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_root")
+
+[node name="GameEntry" type="Node" parent="."]
+script = ExtResource("1_entry")
+
+[node name="MainMenu" parent="." instance=ExtResource("2_menu")]
+layout_mode = 1
+
+[node name="PauseMenu" parent="." instance=ExtResource("3_pause")]
+visible = false
+layout_mode = 1
+
+[node name="CreditsScreen" parent="." instance=ExtResource("4_credits")]
+visible = false
+layout_mode = 1
+
+[node name="GameScene" type="Node" parent="."]
+visible = false
+
+[node name="GameWorld" type="Node2D" parent="GameScene"]
+
+[node name="TileMapWorld" type="Node2D" parent="GameScene/GameWorld"]
+
+[node name="Vehicle" type="Node2D" parent="GameScene/GameWorld"]
+
+[node name="Enemies" type="Node2D" parent="GameScene/GameWorld"]
+
+[node name="Drops" type="Node2D" parent="GameScene/GameWorld"]
+
+[node name="Facilities" type="Node2D" parent="GameScene/GameWorld"]
+
+[node name="HUD" type="CanvasLayer" parent="GameScene"]
+
+[node name="SimpleHUD" type="Control" parent="GameScene/HUD"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

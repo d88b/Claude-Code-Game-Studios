@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://src/test_movement_direct.gd" id="script_test"]
+[ext_resource type="Script" path="res://src/core/vehicle_attribute.gd" id="script_attribute"]
+
+[node name="TestVehicle" type="Node2D"]
+script = ExtResource("script_test")
+move_speed = 400.0
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+color = Color(0.3, 0.5, 0.8, 1)
+polygon = PackedVector2Array(-32, -32, 32, -32, 32, 32, -32, 32)
+
+[node name="VehicleAttribute" type="Node" parent="."]
+script = ExtResource("script_attribute")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(1, 1)
+position_smoothing_enabled = true
+position_smoothing_speed = 10.0

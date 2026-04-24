@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="GutTests" failures="15" tests="43" >
+  <testsuite name="tests/unit/facility/facility_lifecycle_test.gd" tests="43" failures="23" skipped="0" time="13.929415" >
+      <testcase name="test_facility_created_on_placement_storage" assertions="2" status="pass" classname="tests/unit/facility/facility_lifecycle_test.gd" time="0.093344" >
+      </testcase>
+      <testcase name="test_facility_created_on_placement_workbench" assertions="2" status="pass" classname="tests/unit/facility/facility_lifecycle_test.gd" time="0.082411" >
+      </testcase>
+      <testcase name="test_facility_binds_to_correct_cell" assertions="1" status="pass" classname="tests/unit/facility/facility_lifecycle_test.gd" time="0.062043" >
+      </testcase>
+      <testcase name="test_facility_initial_state_idle" assertions="1" status="pass" classname="tests/unit/facility/facility_lifecycle_test.gd" time="0.058631" >
+      </testcase>
+      <testcase name="test_storage_contents_initialized_empty" assertions="201" status="pass" classname="tests/unit/facility/facility_lifecycle_test.gd" time="6.256614" >
+      </testcase>
+      <testcase name="test_non_facility_placement_ignored" assertions="1" status="pass" classname="tests/unit/facility/facility_lifecycle_test.gd" time="0.042983" >
+      </testcase>
+      <testcase name="test_multiple_facilities_tracked_independently" assertions="4" status="pass" classname="tests/unit/facility/facility_lifecycle_test.gd" time="0.171857" >
+      </testcase>
+      <testcase name="test_facility_created_signal_emitted" assertions="2" status="fail" classname="tests/unit/facility/facility_lifecycle_test.gd" time="0.119072" >
+      <failure message="failed"><![CDATA[AC-06: facility_created signal should be emitted
+            at line 202]]></failure></testcase>
+      <testcase name="test_facility_destroyed_signal_emitted" assertions="1" status="fail" classname="tests/unit/facility/facility_lifecycle_test.gd" time="0.120311" >
+      <failure message="failed"><![CDATA[AC-06: facility_destroyed signal should be emitted
+            at line 212]]></failure></testcase>
+      <testcase name="test_storage_capacity_100_slots" assertions="1" status="pass" classname="tests/unit/facility/facility_lifecycle_test.gd" time="0.059182" >
+      </testcase>
+      <testcase name="test_deposit_to_empty_slot" assertions="3" status="pass" classname="tests/unit/facility/facility_lifecycle_test.gd" time="0.139775" >
+      </testcase>
+      <testcase name="test_deposit_to_existing_slot_stacks" assertions="2" status="pass" classname="tests/unit/facility/facility_lifecycle_test.gd" time="0.119839" >
+      </testcase>
+      <testcase name="test_deposit_rejects_when_full" assertions="1" status="pass" classname="tests/unit/facility/facility_lifecycle_test.gd" time="1.630223" >
+      </testcase>
+      <testcase name="test_deposit_caps_at_stack_limit" assertions="2" status="fail" classname="tests/unit/facility/facility_lifecycle_test.gd" time="0.136884" >
+      <failure message="failed"><![CDATA[[100] expected to equal [99]:  AC-10: Should cap at stack limit 999
+            at line 263]]></failure></testcase>
+      <testcase name="test_withdraw_exact_amount" assertions="2" status="pass" classname="tests/unit/facility/facility_lifecycle_test.gd" time="0.121187" >
+      </testcase>
+      <testcase name="test_withdraw_partial_when_insufficient" assertions="1" status="pass" classname="tests/unit/facility/facility_lifecycle_test.gd" time="0.088681" >
+      </testcase>
+      <testcase name="test_withdraw_zero_for_nonexistent" assertions="1" status="pass" classname="tests/unit/facility/facility_lifecycle_test.gd" time="0.079053" >
+      </testcase>
+      <testcase name="test_remaining_slots_correct" assertions="1" status="pass" classname="tests/unit/facility/facility_lifecycle_test.gd" time="1.29413" >
+      </testcase>
+      <testcase name="test_storage_locked_in_damaged_state" assertions="1" status="pass" classname="tests/unit/facility/facility_lifecycle_test.gd" time="0.134958" >
+      </testcase>
+      <testcase name="test_magic_connection_within_10_cells" assertions="2" status="fail" classname="tests/unit/facility/facility_lifecycle_test.gd" time="0.151339" >
+      <failure message="failed"><![CDATA[TK-047: Should be connected within 10 cells
+            at line 330]]></failure></testcase>
+      <testcase name="test_magic_connection_beyond_10_cells" assertions="2" status="fail" classname="tests/unit/facility/facility_lifecycle_test.gd" time="0.152894" >
+      <failure message="failed"><![CDATA[Unexpected Errors:
+      [1] <engine-2>Invalid assignment of property or key 'position' with value of type 'Vector2' on a base object of type 'Node'.
+            at line -1]]></failure></testcase>
+      <testcase name="test_workbench_has_4_mvp_recipes" assertions="1" status="pass" classname="tests/unit/facility/facility_lifecycle_test.gd" time="0.040955" >
+      </testcase>
+      <testcase name="test_recipe_r001_iron_ingot" assertions="5" status="pass" classname="tests/unit/facility/facility_lifecycle_test.gd" time="0.169307" >
+      </testcase>
+      <testcase name="test_crafting_starts_with_valid_conditions" assertions="2" status="fail" classname="tests/unit/facility/facility_lifecycle_test.gd" time="0.181327" >
+      <failure message="failed"><![CDATA[AC-17: Should start crafting with valid conditions
+            at line 370]]></failure></testcase>
+      <testcase name="test_crafting_fails_without_magic" assertions="2" status="fail" classname="tests/unit/facility/facility_lifecycle_test.gd" time="0.168714" >
+      <failure message="failed"><![CDATA[Unexpected Errors:
+      [1] <engine-2>Invalid assignment of property or key 'position' with value of type 'Vector2' on a base object of type 'Node'.
+            at line -1]]></failure></testcase>
+      <testcase name="test_crafting_fails_without_magic_connection" assertions="2" status="fail" classname="tests/unit/facility/facility_lifecycle_test.gd" time="0.168096" >
+      <failure message="failed"><![CDATA[Unexpected Errors:
+      [1] <engine-2>Invalid assignment of property or key 'position' with value of type 'Vector2' on a base object of type 'Node'.
+            at line -1]]></failure></testcase>
+      <testcase name="test_crafting_progress_updates" assertions="2" status="fail" classname="tests/unit/facility/facility_lifecycle_test.gd" time="0.17991" >
+      <failure message="failed"><![CDATA[[0.00000000000000000000] expected to equal [0.5] +/- [0.1]:  AC-21: Progress should be ~50% after 5s
+            at line 402]]></failure></testcase>
+      <testcase name="test_crafting_cancelled_with_refund" assertions="2" status="fail" classname="tests/unit/facility/facility_lifecycle_test.gd" time="0.167376" >
+      <failure message="failed"><![CDATA[[50.0] expected to equal [58.0]:  AC-23: Magic should be refunded
+            at line 415]]></failure></testcase>
+      <testcase name="test_crafting_cancelled_on_damaged" assertions="1" status="fail" classname="tests/unit/facility/facility_lifecycle_test.gd" time="0.216254" >
+      <failure message="failed"><![CDATA[Unexpected Errors:
+      [1] <engine-2>Invalid assignment of property or key 'position' with value of type 'Vector2' on a base object of type 'Node'.
+      [2] <engine-2>Invalid access to property or key 'current_recipe' on a base object of type 'Dictionary'.
+            at line -1]]></failure></testcase>
+      <testcase name="test_demolition_returns_50_percent" assertions="2" status="pass" classname="tests/unit/facility/facility_lifecycle_test.gd" time="0.104709" >
+      </testcase>
+      <testcase name="test_demolition_drops_storage_contents" assertions="3" status="fail" classname="tests/unit/facility/facility_lifecycle_test.gd" time="0.245971" >
+      <failure message="failed"><![CDATA[AC-34: Should emit drop signal
+            at line 451]]></failure></testcase>
+      <testcase name="test_demolition_signal_emitted" assertions="1" status="fail" classname="tests/unit/facility/facility_lifecycle_test.gd" time="0.090068" >
+      <failure message="failed"><![CDATA[Should emit facility_demolished signal
+            at line 462]]></failure></testcase>
+      <testcase name="test_facility_unregistered_after_demolish" assertions="1" status="pass" classname="tests/unit/facility/facility_lifecycle_test.gd" time="0.076798" >
+      </testcase>
+      <testcase name="test_facility_health_decreases_on_attack" assertions="1" status="pass" classname="tests/unit/facility/facility_lifecycle_test.gd" time="0.08997" >
+      </testcase>
+      <testcase name="test_damaged_state_at_30_percent" assertions="1" status="pass" classname="tests/unit/facility/facility_lifecycle_test.gd" time="0.092624" >
+      </testcase>
+      <testcase name="test_destroyed_state_at_0_percent" assertions="1" status="pass" classname="tests/unit/facility/facility_lifecycle_test.gd" time="0.106927" >
+      </testcase>
+      <testcase name="test_content_drops_on_destruction" assertions="1" status="fail" classname="tests/unit/facility/facility_lifecycle_test.gd" time="0.150184" >
+      <failure message="failed"><![CDATA[AC-29: Should drop contents on destruction
+            at line 510]]></failure></testcase>
+      <testcase name="test_find_empty_slot" assertions="1" status="pass" classname="tests/unit/facility/facility_lifecycle_test.gd" time="0.05912" >
+      </testcase>
+      <testcase name="test_find_slot_by_resource" assertions="1" status="pass" classname="tests/unit/facility/facility_lifecycle_test.gd" time="0.079388" >
+      </testcase>
+      <testcase name="test_has_facility_at" assertions="2" status="pass" classname="tests/unit/facility/facility_lifecycle_test.gd" time="0.088725" >
+      </testcase>
+      <testcase name="test_deposit_overflow_handling" assertions="1" status="pass" classname="tests/unit/facility/facility_lifecycle_test.gd" time="0.032083" >
+      </testcase>
+      <testcase name="test_withdraw_more_than_available" assertions="1" status="pass" classname="tests/unit/facility/facility_lifecycle_test.gd" time="0.085331" >
+      </testcase>
+      <testcase name="test_crafting_resume_after_reconnect" assertions="3" status="fail" classname="tests/unit/facility/facility_lifecycle_test.gd" time="0.220167" >
+      <failure message="failed"><![CDATA[[0.0] expected to be > than [0.0]:  AC-25: Progress should resume after reconnect
+            at line 582]]></failure></testcase>
+  </testsuite>
+</testsuites>

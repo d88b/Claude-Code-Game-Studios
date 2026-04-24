@@ -162,6 +162,35 @@
 
 ---
 
+## Animation Standards
+
+| Animation Type | Duration | Easing | Use Case |
+|----------------|----------|--------|----------|
+| Button Hover | 150ms | ease-out | Menu button focus |
+| Button Press | 100ms | ease-in | Click/confirm feedback |
+| Panel Slide-in | 300ms | ease-out | Modal/overlay entry |
+| Panel Fade-out | 200ms | ease-in | Modal/overlay exit |
+| Warning Pulse | 500ms (cycle) | linear loop | Retreat warning |
+| Bar Fill/Empty | 200ms | ease-out | Health/Magic change |
+| Toast Notification | 300ms in, 2s hold, 200ms out | ease-out | Item pickup text |
+
+---
+
+## Sound Standards
+
+| Sound Type | Volume | Duration | Use Case |
+|------------|--------|----------|----------|
+| Button Focus | 30% | 50ms | Menu navigation |
+| Button Confirm | 50% | 100ms | Click/confirm |
+| Panel Open | 40% | 150ms | Modal/overlay entry |
+| Panel Close | 30% | 100ms | Modal/overlay exit |
+| Warning Alert | 70% | 500ms (loop) | Retreat threshold |
+| Pickup | 50% | 150ms | Resource collected |
+| Damage | 60% | 200ms | Vehicle hit |
+| Phase Change | 40% | 300ms | Day/Night transition |
+
+---
+
 ## Validation
 
 - [x] Core gameplay patterns documented

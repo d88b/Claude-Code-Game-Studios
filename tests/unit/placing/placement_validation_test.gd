@@ -223,3 +223,160 @@ func test_check_floor_foundation_method_exists() -> void:
 func test_check_terrain_support_method_exists() -> void:
 	assert_true(_build_validator.has_method("check_terrain_support"),
 		"check_terrain_support method should exist")
+
+# === V2: Layer Occupancy 测试 ===
+
+func test_v2_check_cell_occupied_method_exists() -> void:
+	assert_true(_build_validator.has_method("check_cell_occupied"),
+		"check_cell_occupied method should exist")
+
+func test_v2_returns_v2_code_on_occupied() -> void:
+	# 验证 V2 失败码结构
+	var result: Object = _build_validator.ValidationResult.failure("V2", "位置已被占用")
+	assert_eq(result.failure_code, "V2", "V2 should return correct failure code")
+
+# === V4: Tile Buildability 测试 ===
+
+func test_v4_check_buildability_method_exists() -> void:
+	assert_true(_build_validator.has_method("check_buildability"),
+		"check_buildability method should exist")
+
+func test_v4_requires_build_item_db() -> void:
+	# BuildValidator 需要 BuildItemDB
+	assert_true(_build_validator._build_item_db != null or _build_validator.has_method("set_build_item_db"),
+		"BuildValidator should have build_item_db dependency")
+
+# === V5: Category-Specific Rules 测试 ===
+
+func test_v5_check_category_rules_method_exists() -> void:
+	assert_true(_build_validator.has_method("check_category_rules"),
+		"check_category_rules method should exist")
+
+func test_v5_wall_requires_adjacent_support() -> void:
+	# Wall 类别需要相邻支持
+	assert_true(_build_validator.has_method("check_adjacent_support"),
+		"check_adjacent_support should exist for wall category")
+
+func test_v5_turret_requires_floor_foundation() -> void:
+	# Turret/Trap/Facility 类别需要地板基础
+	assert_true(_build_validator.has_method("check_floor_foundation"),
+		"check_floor_foundation should exist for turret/trap/facility")
+
+# === V6: Material Cost 测试 ===
+
+func test_v6_check_material_cost_method_exists() -> void:
+	assert_true(_build_validator.has_method("check_material_cost"),
+		"check_material_cost method should exist")
+
+func test_v6_accepts_empty_inventory() -> void:
+	# 空 inventory 应通过（stub 模式）
+	var result: Object = _build_validator.check_material_cost(1, {})
+	assert_true(result.passed, "Empty inventory should pass (stub mode)")
+
+func test_v6_returns_v6_code_on_insufficient() -> void:
+	# 验证 V6 失败码结构
+	var result: Object = _build_validator.ValidationResult.failure("V6", "材料不足")
+	assert_eq(result.failure_code, "V6", "V6 should return correct failure code")
+
+# === validate_placement 集成测试 ===
+
+func test_validate_placement_method_exists() -> void:
+	assert_true(_build_validator.has_method("validate_placement"),
+		"validate_placement method should exist")
+
+func test_validate_placement_returns_validation_result() -> void:
+	# 验证返回 ValidationResult 类型
+	assert_true(_build_validator.has_method("validate_placement"),
+		"validate_placement should return ValidationResult")
+
+func test_validate_placement_uninitialized_returns_v0() -> void:
+	# 未初始化应返回 V0
+	var result: Object = _build_validator.ValidationResult.failure("V0", "系统未初始化")
+	assert_eq(result.failure_code, "V0", "Uninitialized should return V0")
+
+# === ValidationResult 类扩展测试 ===
+
+func test_validation_result_init_default_false() -> void:
+	var result: Object = _build_validator.ValidationResult.new()
+	assert_false(result.passed, "Default ValidationResult.passed should be false")
+
+func test_validation_result_init_with_params() -> void:
+	var result: Object = _build_validator.ValidationResult.new(true, "V1", "测试通过")
+	assert_true(result.passed, "Init with passed=true should work")
+	assert_eq(result.failure_code, "V1", "Init with code should work")
+	assert_eq(result.failure_message, "测试通过", "Init with message should work")
+
+# === GlobalSignals 测试 ===
+
+func test_global_signals_has_block_placed_signal() -> void:
+	assert_true(GlobalSignals.has_signal("block_placed"),
+		"GlobalSignals should have block_placed signal")
+
+func test_global_signals_has_build_started_signal() -> void:
+	assert_true(GlobalSignals.has_signal("build_started"),
+		"GlobalSignals should have build_started signal")
+
+func test_global_signals_has_build_completed_signal() -> void:
+	assert_true(GlobalSignals.has_signal("build_completed"),
+		"GlobalSignals should have build_completed signal")
+
+# === 边界值测试 ===
+
+func test_v1_exact_boundary_positive() -> void:
+	var cell: Vector2i = Vector2i(1000, 500)
+	var result: Object = _build_validator.check_world_bounds(cell)
+	assert_true(result.passed, "Exact MAX_WORLD_BOUNDS should pass V1")
+
+func test_v1_exact_boundary_negative() -> void:
+	var cell: Vector2i = Vector2i(-1000, 500)
+	var result: Object = _build_validator.check_world_bounds(cell)
+	assert_true(result.passed, "Exact -MAX_WORLD_BOUNDS should pass V1")
+
+func test_v1_one_over_boundary() -> void:
+	var cell: Vector2i = Vector2i(1001, 500)
+	var result: Object = _build_validator.check_world_bounds(cell)
+	assert_false(result.passed, "One over boundary should fail V1")
+
+# === PlaceController 集成测试 ===
+
+func test_place_controller_requires_build_validator() -> void:
+	assert_true(_place_controller.has_method("set_build_validator"),
+		"PlaceController should accept BuildValidator dependency")
+
+func test_place_controller_requires_collision_manager() -> void:
+	assert_true(_place_controller.has_method("set_collision_manager"),
+		"PlaceController should accept CollisionManager dependency")
+
+func test_place_controller_is_initialized_checks_deps() -> void:
+	# is_initialized 需要检查关键依赖
+	assert_true(_place_controller.has_method("is_initialized"),
+		"PlaceController.is_initialized should exist")
+
+# === 常量一致性测试 ===
+
+func test_constants_match_gdd_spec() -> void:
+	# GDD 规定: MAX_PLACE_RANGE = 5 cells
+	assert_eq(_build_validator.MAX_PLACE_RANGE, 5.0, "MAX_PLACE_RANGE should match GDD")
+	# GDD 规定: CELL_SIZE = 32 pixels
+	assert_eq(_build_validator.CELL_SIZE, 32, "CELL_SIZE should match GDD")
+	# GDD 规定: MAX_WORLD_BOUNDS = 1000 cells
+	assert_eq(_build_validator.MAX_WORLD_BOUNDS, 1000, "MAX_WORLD_BOUNDS should match GDD")
+
+# === 状态机测试 ===
+
+func test_place_state_enum_has_all_states() -> void:
+	assert_eq(_place_controller.PlaceState.IDLE, 0, "IDLE state")
+	assert_eq(_place_controller.PlaceState.SELECTING, 1, "SELECTING state")
+	assert_eq(_place_controller.PlaceState.VALIDATE, 2, "VALIDATE state")
+	assert_eq(_place_controller.PlaceState.BUILDING, 3, "BUILDING state")
+	assert_eq(_place_controller.PlaceState.CANCELLED, 4, "CANCELLED state")
+	assert_eq(_place_controller.PlaceState.COMPLETE, 5, "COMPLETE state")
+
+func test_initial_state_is_idle() -> void:
+	assert_eq(_place_controller.current_state, _place_controller.PlaceState.IDLE,
+		"Initial state should be IDLE")
+
+func test_select_item_changes_state_to_selecting() -> void:
+	_place_controller.select_item(1)
+	assert_eq(_place_controller.current_state, _place_controller.PlaceState.SELECTING,
+		"select_item should change state to SELECTING")

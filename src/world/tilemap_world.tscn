@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://tilemap_world"]
+[gd_scene load_steps=3 format=3 uid="uid://tilemap_world"]
 
 [ext_resource type="Script" path="res://src/world/tilemap_world.gd" id="script_tilemap_world"]
 [ext_resource type="TileSet" path="res://assets/tilesets/block_types.tres" id="tileset_block_types"]
@@ -6,44 +6,30 @@
 [node name="TileMapWorld" type="Node2D"]
 script = ExtResource("script_tilemap_world")
 
-# === BackgroundLayer (Layer 0) ===
-# 背景层 — 环境装饰，远景，无碰撞
 [node name="BackgroundLayer" type="TileMapLayer" parent="."]
 z_index = -10
 collision_layer = 0
 collision_mask = 0
 tile_set = ExtResource("tileset_block_types")
 
-# === TerrainBaseLayer (Layer 1) ===
-# 地形基层 — 自然地面、洞穴墙壁、基岩
-# 碰撞层 1 (COLLISION_TERRAIN)
 [node name="TerrainBaseLayer" type="TileMapLayer" parent="."]
 z_index = 0
 collision_layer = 1
 collision_mask = 0
 tile_set = ExtResource("tileset_block_types")
 
-# === StructuresLayer (Layer 2) ===
-# 建筑层 — 玩家建造的墙壁、设施、防御工事
-# 碰撞层 2 (COLLISION_STRUCTURE)
 [node name="StructuresLayer" type="TileMapLayer" parent="."]
 z_index = 5
 collision_layer = 2
 collision_mask = 0
 tile_set = ExtResource("tileset_block_types")
 
-# === PlatformsLayer (Layer 3) ===
-# 平台层 — 可行走平台、跳板
-# 碰撞层 4 (COLLISION_PLATFORM) — 单向碰撞
 [node name="PlatformsLayer" type="TileMapLayer" parent="."]
 z_index = 10
 collision_layer = 4
 collision_mask = 0
 tile_set = ExtResource("tileset_block_types")
-# One-way collision: 只检测从上方落下的碰撞
 
-# === OverlayLayer (Layer 4) ===
-# 覆盖层 — 临时标记、伤害指示、视觉效果
 [node name="OverlayLayer" type="TileMapLayer" parent="."]
 z_index = 20
 collision_layer = 0

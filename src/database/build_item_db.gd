@@ -43,7 +43,7 @@ func _create_mvp_build_items() -> void:
 	for i in range(1000, 1004):
 		var wall: BuildItemDefinition = BuildItemDefinition.new()
 		wall.item_id = i
-		wall.display_name = "墙体 " + str(i)
+		wall.display_name = LocalizationManager.tr("build.wall.display_name") + " " + str(i)
 		wall.category = "wall"
 		wall.base_cost = {151: 5, 152: 2}  # 铁锭5, 铜锭2
 		wall.terrain_support_required = ["solid"]
@@ -54,7 +54,7 @@ func _create_mvp_build_items() -> void:
 	for i in range(2000, 2003):
 		var turret: BuildItemDefinition = BuildItemDefinition.new()
 		turret.item_id = i
-		turret.display_name = "炮塔 " + str(i)
+		turret.display_name = LocalizationManager.tr("build.turret.display_name") + " " + str(i)
 		turret.category = "turret"
 		turret.base_cost = {151: 10, 160: 5}  # 铁锭10, 基础零件5
 		turret.terrain_support_required = ["solid"]
@@ -64,7 +64,7 @@ func _create_mvp_build_items() -> void:
 	# 陷阱 (3000)
 	var trap: BuildItemDefinition = BuildItemDefinition.new()
 	trap.item_id = 3000
-	trap.display_name = "陷阱"
+	trap.display_name = LocalizationManager.tr("build.trap.display_name")
 	trap.category = "trap"
 	trap.base_cost = {151: 3}
 	trap.terrain_support_required = ["solid", "passable"]
@@ -75,7 +75,7 @@ func _create_mvp_build_items() -> void:
 	for i in range(4000, 4003):
 		var facility: BuildItemDefinition = BuildItemDefinition.new()
 		facility.item_id = i
-		facility.display_name = "设施 " + str(i)
+		facility.display_name = LocalizationManager.tr("build.facility.display_name") + " " + str(i)
 		facility.category = "facility"
 		facility.base_cost = {151: 15, 160: 10}
 		facility.terrain_support_required = ["solid"]
@@ -85,7 +85,7 @@ func _create_mvp_build_items() -> void:
 	# 地板 (5000)
 	var floor: BuildItemDefinition = BuildItemDefinition.new()
 	floor.item_id = 5000
-	floor.display_name = "地板"
+	floor.display_name = LocalizationManager.tr("build.floor.display_name")
 	floor.category = "floor"
 	floor.base_cost = {151: 2}
 	floor.terrain_support_required = []  # 任何地形

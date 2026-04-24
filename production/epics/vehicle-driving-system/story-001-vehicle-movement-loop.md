@@ -1,7 +1,7 @@
 # Story 001: Vehicle Movement Loop
 
 > **Epic**: VehicleDrivingSystem
-> **Status**: Ready
+> **Status**: Complete
 > **Layer**: Core
 > **Type**: Logic
 > **Manifest Version**: 2026-04-24
@@ -63,7 +63,7 @@ func _physics_process(delta: float) -> void:
 
 **Type**: Logic
 **Required**: `tests/unit/driving/vehicle_movement_test.gd`
-**Status**: [ ] Not yet created
+**Status**: [x] Created — 38 test cases covering TR-driving-001/002/003
 
 ---
 
@@ -71,3 +71,15 @@ func _physics_process(delta: float) -> void:
 
 - Depends on: InputManager (⚠️ HIGH), CollisionManager, VehicleAttribute
 - Unlocks: ExplorationAreaSystem
+
+---
+
+## Completion Notes
+
+**Completed**: 2026-04-24
+**Criteria**: 4/5 passing (1 deferred — Dual-focus requires Godot 4.6 playtest)
+**Deviations**: 
+- ADVISORY: Base class `Node2D` instead of `CharacterBody2D` — ADR-006 compliant (swept collision instead of move_and_slide)
+- Extra files: `vehicle_attribute.gd` created as dependency prerequisite
+**Test Evidence**: Logic — `tests/unit/driving/vehicle_movement_test.gd` (38 test cases)
+**Code Review**: Complete — APPROVED WITH SUGGESTIONS (minor style issues, non-blocking)

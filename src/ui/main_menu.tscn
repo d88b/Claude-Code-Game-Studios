@@ -1,0 +1,204 @@
+[gd_scene load_steps=3 format=3 uid="uid://main_menu_001"]
+
+[ext_resource type="Script" path="res://src/ui/main_menu.gd" id="1_menu"]
+[ext_resource type="Script" path="res://src/ui/menu_button.gd" id="2_button"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_menu")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.1, 0.1, 0.15, 1)
+
+[node name="TitleContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 80
+offset_bottom = 180
+grow_horizontal = 2
+
+[node name="TitleLabel" type="Label" parent="TitleContainer"]
+layout_mode = 2
+text = "铁锈魔潮"
+horizontal_alignment = 1
+
+[node name="SubtitleLabel" type="Label" parent="TitleContainer"]
+layout_mode = 2
+text = "RUST MAGIC TIDE"
+horizontal_alignment = 1
+
+[node name="VersionLabel" type="Label" parent="TitleContainer"]
+layout_mode = 2
+text = "v0.1.0-alpha"
+horizontal_alignment = 1
+
+[node name="MenuButtons" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100
+offset_top = -100
+offset_right = 100
+offset_bottom = 100
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="PlayButton" type="Button" parent="MenuButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "开始游戏"
+script = ExtResource("2_button")
+
+[node name="ContinueButton" type="Button" parent="MenuButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "继续游戏"
+script = ExtResource("2_button")
+
+[node name="SettingsButton" type="Button" parent="MenuButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "设置"
+script = ExtResource("2_button")
+
+[node name="CreditsButton" type="Button" parent="MenuButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "制作名单"
+script = ExtResource("2_button")
+
+[node name="QuitButton" type="Button" parent="MenuButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "退出"
+script = ExtResource("2_button")
+
+[node name="TutorialPrompt" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PromptPanel" type="PanelContainer" parent="TutorialPrompt"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150
+offset_top = -75
+offset_right = 150
+offset_bottom = 75
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PromptContent" type="VBoxContainer" parent="TutorialPrompt/PromptPanel"]
+layout_mode = 2
+
+[node name="PromptLabel" type="Label" parent="TutorialPrompt/PromptPanel/PromptContent"]
+layout_mode = 2
+text = "是否需要新手教程?"
+horizontal_alignment = 1
+
+[node name="PromptButtons" type="HBoxContainer" parent="TutorialPrompt/PromptPanel/PromptContent"]
+layout_mode = 2
+alignment = 1
+
+[node name="YesButton" type="Button" parent="TutorialPrompt/PromptPanel/PromptContent/PromptButtons"]
+layout_mode = 2
+text = "开始教程"
+
+[node name="SkipButton" type="Button" parent="TutorialPrompt/PromptPanel/PromptContent/PromptButtons"]
+layout_mode = 2
+text = "跳过"
+
+[node name="SettingsPanel" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SettingsContainer" type="PanelContainer" parent="SettingsPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200
+offset_top = -150
+offset_right = 200
+offset_bottom = 150
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SettingsVBox" type="VBoxContainer" parent="SettingsPanel/SettingsContainer"]
+layout_mode = 2
+
+[node name="SettingsTitle" type="Label" parent="SettingsPanel/SettingsContainer/SettingsVBox"]
+layout_mode = 2
+text = "设置"
+horizontal_alignment = 1
+
+[node name="AudioSection" type="VBoxContainer" parent="SettingsPanel/SettingsContainer/SettingsVBox"]
+layout_mode = 2
+
+[node name="MasterVolumeLabel" type="Label" parent="SettingsPanel/SettingsContainer/SettingsVBox/AudioSection"]
+layout_mode = 2
+text = "主音量"
+
+[node name="MasterVolumeSlider" type="HSlider" parent="SettingsPanel/SettingsContainer/SettingsVBox/AudioSection"]
+layout_mode = 2
+min_value = 0.0
+max_value = 1.0
+step = 0.1
+value = 1.0
+
+[node name="BGMVolumeLabel" type="Label" parent="SettingsPanel/SettingsContainer/SettingsVBox/AudioSection"]
+layout_mode = 2
+text = "背景音乐"
+
+[node name="BGMVolumeSlider" type="HSlider" parent="SettingsPanel/SettingsContainer/SettingsVBox/AudioSection"]
+layout_mode = 2
+min_value = 0.0
+max_value = 1.0
+step = 0.1
+value = 0.8
+
+[node name="SFXVolumeLabel" type="Label" parent="SettingsPanel/SettingsContainer/SettingsVBox/AudioSection"]
+layout_mode = 2
+text = "音效"
+
+[node name="SFXVolumeSlider" type="HSlider" parent="SettingsPanel/SettingsContainer/SettingsVBox/AudioSection"]
+layout_mode = 2
+min_value = 0.0
+max_value = 1.0
+step = 0.1
+value = 1.0
+
+[node name="CloseSettingsButton" type="Button" parent="SettingsPanel/SettingsContainer/SettingsVBox"]
+layout_mode = 2
+text = "关闭"

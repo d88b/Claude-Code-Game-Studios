@@ -25,15 +25,15 @@ func test_world_to_cell_basic_conversion() -> void:
 
 func test_world_to_cell_fractional_positions() -> void:
 	# 测试小数位置
-	var cases: Array = [
-		{input: Vector2(31.9, 31.9), expected: Vector2i(0, 0)},
-		{input: Vector2(32.0, 32.0), expected: Vector2i(1, 1)},
-		{input: Vector2(63.9, 63.9), expected: Vector2i(1, 1)},
-		{input: Vector2(64.0, 64.0), expected: Vector2i(2, 2)},
+	var cases: Array[Dictionary] = [
+		{"input": Vector2(31.9, 31.9), "expected": Vector2i(0, 0)},
+		{"input": Vector2(32.0, 32.0), "expected": Vector2i(1, 1)},
+		{"input": Vector2(63.9, 63.9), "expected": Vector2i(1, 1)},
+		{"input": Vector2(64.0, 64.0), "expected": Vector2i(2, 2)},
 	]
 	for case in cases:
-		var result: Vector2i = _tilemap_world.world_to_cell(case.input)
-		assert_eq(result, case.expected, str(case.input) + " → " + str(case.expected))
+		var result: Vector2i = _tilemap_world.world_to_cell(case["input"])
+		assert_eq(result, case["expected"], str(case["input"]) + " → " + str(case["expected"]))
 
 func test_world_to_cell_zero_position() -> void:
 	# Given: world_pos = Vector2(0, 0)

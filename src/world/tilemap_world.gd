@@ -211,7 +211,8 @@ func _unload_chunk(chunk_id: Vector2i) -> void:
 
 ## 持久化区块修改
 func _persist_chunk_modifications(chunk_data: ChunkData) -> void:
-	# 将修改数据写入 modified_cells (stub)
+	# 将修改数据写入 modified_cells (stub - 未实现)
+	return
 
 ## 清除层级上的区块数据
 func _clear_chunk_from_layers(chunk_data: ChunkData) -> void:
@@ -363,6 +364,8 @@ func _get_layer_by_index(layer_index: int) -> TileMapLayer:
 # === 生命周期 ===
 
 func _ready() -> void:
+	# 加入 tilemap_world group (供 CollisionManager 等系统查找)
+	add_to_group("tilemap_world")
 	# 验证层级节点
 	_validate_layers()
 	print("[TileMapWorld] initialized with CELL_SIZE=", CELL_SIZE, " CHUNK_SIZE=", CHUNK_SIZE)

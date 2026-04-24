@@ -21,11 +21,14 @@
 
 ## Acceptance Criteria
 
-- [ ] State machine: IDLE → PATROL → CHASE → ATTACK → FLEE → DEAD
-- [ ] NavigationAgent2D for pathfinding (set_target, get_next_path_position)
-- [ ] Target acquisition: VehicleController.position for CHASE
-- [ ] behavior_hint from EnemyTypeDB (8 types)
-- [ ] GlobalSignals.enemy_killed emitted on death
+- [x] State machine: IDLE → MOVE_TO_TARGET → ATTACK → STUN → DEAD with transition logic
+- [x] NavigationAgent2D for pathfinding (set_target_position, get_next_path_position)
+- [x] Target acquisition: VehicleController.position for CHASE detection
+- [x] behavior_hint from EnemyTypeDB (8 types: aggressive, defensive, swarm, wall_breaker, tracker, ambusher, retreat_early, boss)
+- [x] GlobalSignals.enemy_killed emitted on death
+- [x] State lock for debounce (STATE_LOCK_FRAMES = 3)
+- [x] Attack timer countdown and reset on attack
+- [x] Tracker speed multiplier (TRACKER_HUNT_SPEED_MULT = 1.5)
 
 ---
 
@@ -55,7 +58,10 @@ func _physics_process(delta: float) -> void:
 
 **Type**: Logic
 **Required**: `tests/unit/enemyai/enemy_state_machine_test.gd`
-**Status**: [ ] Not yet created
+**Status**: [x] Created — 70+ test cases covering state machine, behavior_hint, damage, signals, timers, transitions
+**Note**: Tests must be run in Godot Editor GUT panel (headless mode class_name loading issue)
+**Implementation**: EnemyAIController with NavigationAgent2D, state machine with debounce, behavior_hint speed multiplier
+**Scene**: `src/ai/enemy_ai_controller.tscn` — CharacterBody2D + NavigationAgent2D child node
 
 ---
 

@@ -20,12 +20,12 @@
 
 ## Acceptance Criteria
 
-- [ ] Current health tracking (max_health from VehicleTypeDB)
-- [ ] Current magic pool tracking (magic_pool from VehicleTypeDB)
-- [ ] get_durability_ratio() returns health/max_health (0.0-1.0)
-- [ ] get_magic_energy_ratio() returns magic_pool/max_magic_pool
-- [ ] GlobalSignals.vehicle_damaged emitted on damage
-- [ ] State transitions: DISABLED (health<20%), DESTROYED (health<=0)
+- [x] Current health tracking (max_health from VehicleTypeDB) — test_initialization_from_vehicle_type
+- [x] Current magic pool tracking (magic_pool from VehicleTypeDB) — test_initialization_from_vehicle_type
+- [x] get_durability_ratio() returns health/max_health (0.0-1.0) — test_durability_ratio_*
+- [x] get_magic_energy_ratio() returns magic_pool/max_magic_pool — test_magic_ratio_*
+- [x] GlobalSignals.vehicle_damaged emitted on damage — test_take_damage_emits_global_signal
+- [x] State transitions: DISABLED (health<20%), DESTROYED (health<=0) — test_disabled_threshold_transition, test_destroyed_threshold_transition
 
 ---
 
@@ -55,7 +55,8 @@ func take_damage(amount: float) -> void:
 
 **Type**: Logic
 **Required**: `tests/unit/vehicleattr/vehicle_attribute_test.gd`
-**Status**: [ ] Not yet created
+**Status**: [x] Created — 58 test cases covering all acceptance criteria + edge cases
+**Note**: Tests must be run in Godot Editor GUT panel (headless mode class_name loading issue)
 
 ---
 

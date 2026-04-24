@@ -69,12 +69,16 @@ func _update_joystick_direction() -> void:
 	# 获取手柄输入
 	var x: float = Input.get_axis("move_left", "move_right")
 	var y: float = Input.get_axis("move_up", "move_down")
-	# 应用死区
-	if absf(x) < JOYSTICK_DEAD_ZONE:
-		x = 0.0
-	if absf(y) < JOYSTICK_DEAD_ZONE:
-		y = 0.0
-	joystick_direction = Vector2(x, y).normalized()
+
+	# 原始值
+	var raw_direction: Vector2 = Vector2(x, y)
+
+	# 应用死区判断是否有有效输入
+	var length: float = raw_direction.length()
+	if length < JOYSTICK_DEAD_ZONE:
+		joystick_direction = Vector2.ZERO
+	else:
+		joystick_direction = raw_direction
 
 func _update_focus_mode() -> void:
 	# ⚠️ HIGH RISK: Dual-focus 是 Godot 4.6 新特性

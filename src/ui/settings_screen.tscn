@@ -1,0 +1,108 @@
+[gd_scene load_steps=2 format=3 uid="uid://settings_screen_001"]
+
+[ext_resource type="Script" path="res://src/ui/settings_screen.gd" id="1_settings"]
+
+[node name="SettingsScreen" type="Control"]
+process_mode = 2
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_settings")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.6)
+
+[node name="SettingsContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250
+offset_top = -200
+offset_right = 250
+offset_bottom = 200
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SettingsContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="TitleLabel" type="Label" parent="SettingsContainer/VBoxContainer"]
+layout_mode = 2
+text = "设置"
+horizontal_alignment = 1
+
+[node name="AudioSection" type="VBoxContainer" parent="SettingsContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="AudioTitle" type="Label" parent="SettingsContainer/VBoxContainer/AudioSection"]
+layout_mode = 2
+text = "音频设置"
+
+[node name="MasterLabel" type="Label" parent="SettingsContainer/VBoxContainer/AudioSection"]
+layout_mode = 2
+text = "主音量"
+
+[node name="MasterSlider" type="HSlider" parent="SettingsContainer/VBoxContainer/AudioSection"]
+layout_mode = 2
+min_value = 0.0
+max_value = 1.0
+step = 0.1
+value = 1.0
+
+[node name="BGMLabel" type="Label" parent="SettingsContainer/VBoxContainer/AudioSection"]
+layout_mode = 2
+text = "背景音乐"
+
+[node name="BGMSlider" type="HSlider" parent="SettingsContainer/VBoxContainer/AudioSection"]
+layout_mode = 2
+min_value = 0.0
+max_value = 1.0
+step = 0.1
+value = 0.8
+
+[node name="SFXLabel" type="Label" parent="SettingsContainer/VBoxContainer/AudioSection"]
+layout_mode = 2
+text = "音效"
+
+[node name="SFXSlider" type="HSlider" parent="SettingsContainer/VBoxContainer/AudioSection"]
+layout_mode = 2
+min_value = 0.0
+max_value = 1.0
+step = 0.1
+value = 1.0
+
+[node name="PrivacySection" type="VBoxContainer" parent="SettingsContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="PrivacyTitle" type="Label" parent="SettingsContainer/VBoxContainer/PrivacySection"]
+layout_mode = 2
+text = "隐私设置"
+
+[node name="AnalyticsCheckBox" type="CheckBox" parent="SettingsContainer/VBoxContainer/PrivacySection"]
+layout_mode = 2
+text = "启用遥测数据收集"
+
+[node name="AnalyticsNote" type="Label" parent="SettingsContainer/VBoxContainer/PrivacySection"]
+layout_mode = 2
+text = "用于改进游戏体验，不收集个人信息"
+autowrap_mode = 2
+
+[node name="CloseButton" type="Button" parent="SettingsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "关闭"

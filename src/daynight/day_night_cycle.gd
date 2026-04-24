@@ -13,10 +13,10 @@ enum Phase {
 }
 
 # === 常量定义 (来自 GDD) ===
-## 过渡时长 (游戏秒)
-const TRANSITION_DURATION: float = 30.0
-## 全局危险倍率调优参数 (TK-006)
-const DANGER_GLOBAL_MULT: float = 1.0
+## 过渡时长 (游戏秒) — 45 for smoother visual transitions (TK-007 updated)
+const TRANSITION_DURATION: float = 45.0
+## 全局危险倍率调优参数 (TK-006) — 1.1 from playtest feedback (10% increase)
+const DANGER_GLOBAL_MULT: float = 1.1
 
 # === 阶段危险基准倍率 ===
 ## 黎明危险倍率

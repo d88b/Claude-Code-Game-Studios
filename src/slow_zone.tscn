@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://src/slow_zone.gd" id="script_slow"]
+
+[sub_resource type="RectangleShape2D" id="shape_slow"]
+size = Vector2(64, 64)
+
+[node name="SlowZone" type="Area2D"]
+script = ExtResource("script_slow")
+collision_layer = 4
+collision_mask = 0
+
+[node name="Body" type="Polygon2D" parent="."]
+color = Color(1.0, 0.8, 0.3, 0.7)
+polygon = PackedVector2Array(-32, -32, 32, -32, 32, 32, -32, 32)
+z_index = 5
+
+[node name="Outline" type="Polygon2D" parent="."]
+color = Color(0.6, 0.5, 0.2, 1)
+polygon = PackedVector2Array(-36, -36, 36, -36, 36, 36, -36, 36)
+z_index = 4
+
+[node name="CollisionShape" type="CollisionShape2D" parent="."]
+shape = SubResource("shape_slow")

@@ -8,8 +8,8 @@ extends Node
 ## 或在场景树中查找名为 "TileMapWorld" 的节点
 
 # === 常量定义 (来自 entities.yaml) ===
-## Swept collision 最大步数 (TK-018)
-const MAX_SWEPT_STEPS: int = 64
+## Swept collision 最大步数 (TK-018) — 32 for performance optimization
+const MAX_SWEPT_STEPS: int = 32
 ## Raycast 最大步数
 const MAX_RAYCAST_STEPS: int = 128
 ## 碰撞检测最小阈值
@@ -522,12 +522,20 @@ func _ready() -> void:
 
 ## 自动查找场景中的依赖节点
 func _auto_find_dependencies() -> void:
-	# 查找 TileMapWorld 节点
+	# 查找 TileMapWorld 节点 (多种方式)
 	if _tilemap_world == null:
+		# 方式 1: 通过 group 查找
 		var tilemap := get_tree().get_first_node_in_group("tilemap_world")
 		if tilemap != null:
 			_tilemap_world = tilemap
-		elif get_parent().has_node("TileMapWorld"):
+		# 方式 2: 当前场景的子节点查找
+		elif get_tree().current_scene != null:
+			for child in get_tree().current_scene.get_children():
+				if child.name == "TileMapWorld" or child.is_in_group("tilemap_world"):
+					_tilemap_world = child
+					break
+		# 方式 3: 父节点查找 (非 autoload 模式)
+		elif get_parent() != null and get_parent().has_node("TileMapWorld"):
 			_tilemap_world = get_parent().get_node("TileMapWorld")
 
 	# 获取 BlockTypeDB autoload (通过场景树)

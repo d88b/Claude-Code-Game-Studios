@@ -39,6 +39,8 @@ class EnemyStats:
 	var speed: float = 100.0
 	## 行为提示
 	var behavior_hint: String = "aggressive"
+	## 敌人 tier (0=Basic, 1=Enhanced, 2=Elite, 3=Boss)
+	var tier: int = 0
 
 # === 初始化 ===
 
@@ -54,7 +56,7 @@ func _create_mvp_enemies() -> void:
 	for i in range(1, 4):
 		var zombie: EnemyStats = EnemyStats.new()
 		zombie.enemy_id = i
-		zombie.display_name = "普通僵尸 " + str(i)
+		zombie.display_name = LocalizationManager.tr("enemy.zombie_basic.display_name") + " " + str(i)
 		zombie.health = 50.0 + i * 10.0
 		zombie.damage = 5.0 + i * 2.0
 		zombie.armor = 0.0
@@ -65,7 +67,7 @@ func _create_mvp_enemies() -> void:
 	# 集群僵尸 (4)
 	var swarm: EnemyStats = EnemyStats.new()
 	swarm.enemy_id = 4
-	swarm.display_name = "集群僵尸"
+	swarm.display_name = LocalizationManager.tr("enemy.swarm.display_name")
 	swarm.health = 30.0
 	swarm.damage = 3.0
 	swarm.armor = 0.0
@@ -76,7 +78,7 @@ func _create_mvp_enemies() -> void:
 	# 拆墙僵尸 (5)
 	var breaker: EnemyStats = EnemyStats.new()
 	breaker.enemy_id = 5
-	breaker.display_name = "拆墙僵尸"
+	breaker.display_name = LocalizationManager.tr("enemy.breaker.display_name")
 	breaker.health = 100.0
 	breaker.damage = 20.0
 	breaker.armor = 5.0
@@ -87,7 +89,7 @@ func _create_mvp_enemies() -> void:
 	# 追踪僵尸 (6)
 	var tracker: EnemyStats = EnemyStats.new()
 	tracker.enemy_id = 6
-	tracker.display_name = "追踪僵尸"
+	tracker.display_name = LocalizationManager.tr("enemy.tracker.display_name")
 	tracker.health = 80.0
 	tracker.damage = 15.0
 	tracker.armor = 2.0
@@ -98,7 +100,7 @@ func _create_mvp_enemies() -> void:
 	# 伏击僵尸 (7)
 	var ambusher: EnemyStats = EnemyStats.new()
 	ambusher.enemy_id = 7
-	ambusher.display_name = "伏击僵尸"
+	ambusher.display_name = LocalizationManager.tr("enemy.ambusher.display_name")
 	ambusher.health = 60.0
 	ambusher.damage = 25.0
 	ambusher.armor = 0.0
@@ -106,15 +108,28 @@ func _create_mvp_enemies() -> void:
 	ambusher.behavior_hint = "ambusher"
 	_enemies[7] = ambusher
 
+	# Elite 敌人 (101)
+	var elite: EnemyStats = EnemyStats.new()
+	elite.enemy_id = 101
+	elite.display_name = LocalizationManager.tr("enemy.elite.display_name")
+	elite.health = 300.0
+	elite.damage = 30.0
+	elite.armor = 10.0
+	elite.speed = 90.0
+	elite.behavior_hint = "aggressive"
+	elite.tier = 2  # Elite tier
+	_enemies[101] = elite
+
 	# Boss (100)
 	var boss: EnemyStats = EnemyStats.new()
 	boss.enemy_id = 100
-	boss.display_name = "尸潮首领"
+	boss.display_name = LocalizationManager.tr("enemy.boss.display_name")
 	boss.health = 500.0
 	boss.damage = 50.0
 	boss.armor = 20.0
 	boss.speed = 70.0
 	boss.behavior_hint = "boss"
+	boss.tier = 3  # Boss tier
 	_enemies[100] = boss
 
 	enemy_count = _enemies.size()
@@ -138,6 +153,13 @@ func get_display_name(enemy_id: int) -> String:
 	if stats == null:
 		return ""
 	return stats.display_name
+
+## 获取敌人 tier
+func get_enemy_tier(enemy_id: int) -> int:
+	var stats: EnemyStats = get_enemy_stats(enemy_id)
+	if stats == null:
+		return 0
+	return stats.tier
 
 ## 检查行为提示是否有效
 func is_valid_behavior_hint(hint: String) -> bool:

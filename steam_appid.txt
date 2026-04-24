@@ -1,0 +1,8 @@
+0
+# Steam App ID placeholder
+# Replace '0' with actual Steam App ID after Steamworks registration
+# Example: 12345678 for your assigned App ID
+#
+# This file is required for Steam SDK initialization
+# Place in project root directory for local testing
+# Will be packaged with release build

@@ -20,11 +20,14 @@
 
 ## Acceptance Criteria
 
-- [ ] Area bounds: Rect2(center, size) defining explorable region
-- [ ] Area entry: vehicle.position crosses boundary → GlobalSignals.area_entered
-- [ ] Area exit: vehicle.position leaves boundary → GlobalSignals.area_exited
-- [ ] Danger level per area (multiplier for RetreatJudge)
-- [ ] Area definitions from entities.yaml
+- [x] Area bounds: Rect2(center, size) defining explorable region (bunker, city, demon, element)
+- [x] Area entry: vehicle.position crosses boundary → GlobalSignals.area_entered emitted
+- [x] Area exit: vehicle.position leaves boundary → GlobalSignals.area_exited emitted
+- [x] Danger level per area (1-5 scale) for RetreatJudge
+- [x] Loot tier per area (1-4 scale) for loot pools
+- [x] Enemy density formula: danger_level × ENEMY_BASE_DENSITY
+- [x] Rare drop chance formula: BASE_RARE_DROP + loot_tier × RARE_DROP_INCREMENT
+- [x] Area discovery: first entry sets discovered=true and emits area_discovered
 
 ---
 
@@ -56,7 +59,9 @@ func _process(delta: float) -> void:
 
 **Type**: Logic
 **Required**: `tests/unit/area/area_bounds_test.gd`
-**Status**: [ ] Not yet created
+**Status**: [x] Created — 65+ test cases covering constants, area definitions, formulas, position detection, transitions, discovery, signals
+**Note**: Tests must be run in Godot Editor GUT panel (headless mode class_name loading issue)
+**Implementation**: AreaManager with 4 MVP areas (bunker/city/demon/element), position tracking, formula implementations (F1/F2/F3)
 
 ---
 

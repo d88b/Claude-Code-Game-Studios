@@ -1,0 +1,370 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "generated": "2026-04-25",
+    "description": "Achievement definitions for Rust Magic Tide",
+    "steam_sync": true
+  },
+  "achievements": {
+    "exploration": {
+      "explore_first": {
+        "name": "初次探索",
+        "name_en": "First Exploration",
+        "description": "第一次离开地堡",
+        "description_en": "Leave the bunker for the first time",
+        "icon": "achievement_explore",
+        "hidden": false,
+        "type": "one_time",
+        "trigger": "explore_complete",
+        "condition": { "count": 1 }
+      },
+      "explore_10": {
+        "name": "熟悉地形",
+        "name_en": "Terrain Familiar",
+        "description": "完成 10 次探索",
+        "description_en": "Complete 10 exploration runs",
+        "icon": "achievement_explore",
+        "hidden": false,
+        "type": "cumulative",
+        "trigger": "explore_complete",
+        "condition": { "count": 10 },
+        "show_progress": true
+      },
+      "explore_50": {
+        "name": "探索大师",
+        "name_en": "Explorer Master",
+        "description": "完成 50 次探索",
+        "description_en": "Complete 50 exploration runs",
+        "icon": "achievement_explore_master",
+        "hidden": false,
+        "type": "cumulative",
+        "trigger": "explore_complete",
+        "condition": { "count": 50 },
+        "show_progress": true
+      },
+      "explore_night": {
+        "name": "夜行者",
+        "name_en": "Night Walker",
+        "description": "在夜晚返回地堡",
+        "description_en": "Return to bunker during night",
+        "icon": "achievement_night",
+        "hidden": false,
+        "type": "one_time",
+        "trigger": "retreat",
+        "condition": { "phase": "night" }
+      },
+      "explore_full_day": {
+        "name": "全天候",
+        "name_en": "All Day Long",
+        "description": "从早到晚连续探索",
+        "description_en": "Explore continuously for 10+ minutes",
+        "icon": "achievement_endurance",
+        "hidden": true,
+        "type": "one_time",
+        "trigger": "explore_end",
+        "condition": { "duration_min": 10 }
+      }
+    },
+    "combat": {
+      "kill_first": {
+        "name": "初次击杀",
+        "name_en": "First Kill",
+        "description": "击杀第一个敌人",
+        "description_en": "Kill your first enemy",
+        "icon": "achievement_kill",
+        "hidden": false,
+        "type": "one_time",
+        "trigger": "enemy_killed",
+        "condition": { "count": 1 }
+      },
+      "kill_100": {
+        "name": "战斗新手",
+        "name_en": "Combat Novice",
+        "description": "累计击杀 100 敌人",
+        "description_en": "Kill 100 enemies total",
+        "icon": "achievement_kill",
+        "hidden": false,
+        "type": "cumulative",
+        "trigger": "enemy_killed",
+        "condition": { "count": 100 },
+        "show_progress": true
+      },
+      "kill_500": {
+        "name": "战斗老兵",
+        "name_en": "Combat Veteran",
+        "description": "累计击杀 500 敌人",
+        "description_en": "Kill 500 enemies total",
+        "icon": "achievement_veteran",
+        "hidden": false,
+        "type": "cumulative",
+        "trigger": "enemy_killed",
+        "condition": { "count": 500 },
+        "show_progress": true
+      },
+      "kill_boss": {
+        "name": "Boss 猎人",
+        "name_en": "Boss Hunter",
+        "description": "击杀 Boss",
+        "description_en": "Kill a boss enemy",
+        "icon": "achievement_boss",
+        "hidden": false,
+        "type": "one_time",
+        "trigger": "enemy_killed",
+        "condition": { "enemy_type": "boss" }
+      },
+      "kill_wave": {
+        "name": "波次清零",
+        "name_en": "Wave Clear",
+        "description": "单波次零敌人剩余",
+        "description_en": "Clear a wave with zero enemies remaining",
+        "icon": "achievement_wave",
+        "hidden": false,
+        "type": "one_time",
+        "trigger": "wave_end",
+        "condition": { "enemies_remaining": 0 }
+      },
+      "no_damage_wave": {
+        "name": "完美防守",
+        "name_en": "Perfect Defense",
+        "description": "单波次战车零伤害",
+        "description_en": "Defend a wave with zero damage taken",
+        "icon": "achievement_perfect",
+        "hidden": false,
+        "type": "one_time",
+        "trigger": "wave_end",
+        "condition": { "hp_lost": 0 }
+      }
+    },
+    "building": {
+      "build_first": {
+        "name": "初次建造",
+        "name_en": "First Build",
+        "description": "建造第一个设施",
+        "description_en": "Build your first facility",
+        "icon": "achievement_build",
+        "hidden": false,
+        "type": "one_time",
+        "trigger": "facility_build",
+        "condition": { "count": 1 }
+      },
+      "build_10": {
+        "name": "建筑工",
+        "name_en": "Builder",
+        "description": "建造 10 个设施",
+        "description_en": "Build 10 facilities",
+        "icon": "achievement_build",
+        "hidden": false,
+        "type": "cumulative",
+        "trigger": "facility_build",
+        "condition": { "count": 10 },
+        "show_progress": true
+      },
+      "build_50": {
+        "name": "建筑大师",
+        "name_en": "Master Builder",
+        "description": "建造 50 个设施",
+        "description_en": "Build 50 facilities",
+        "icon": "achievement_master",
+        "hidden": false,
+        "type": "cumulative",
+        "trigger": "facility_build",
+        "condition": { "count": 50 },
+        "show_progress": true
+      },
+      "turret_master": {
+        "name": "炮塔专家",
+        "name_en": "Turret Expert",
+        "description": "同时激活 5 炮塔",
+        "description_en": "Have 5 turrets active at once",
+        "icon": "achievement_turret",
+        "hidden": false,
+        "type": "one_time",
+        "trigger": "turret_count",
+        "condition": { "active": 5 }
+      },
+      "all_facilities": {
+        "name": "设施全集",
+        "name_en": "Facility Collector",
+        "description": "使用所有设施类型",
+        "description_en": "Use every facility type at least once",
+        "icon": "achievement_collection",
+        "hidden": true,
+        "type": "collection",
+        "trigger": "facility_build",
+        "condition": { "all_types": ["turret", "workshop", "storage", "generator", "barrier"] }
+      }
+    },
+    "resources": {
+      "resource_1000": {
+        "name": "收集者",
+        "name_en": "Collector",
+        "description": "累计收集 1000 单位资源",
+        "description_en": "Collect 1000 resource units total",
+        "icon": "achievement_resource",
+        "hidden": false,
+        "type": "cumulative",
+        "trigger": "resource_pickup",
+        "condition": { "total": 1000 },
+        "show_progress": true
+      },
+      "resource_10000": {
+        "name": "资源大亨",
+        "name_en": "Resource Tycoon",
+        "description": "累计收集 10000 单位资源",
+        "description_en": "Collect 10000 resource units total",
+        "icon": "achievement_tycoon",
+        "hidden": false,
+        "type": "cumulative",
+        "trigger": "resource_pickup",
+        "condition": { "total": 10000 },
+        "show_progress": true
+      },
+      "rare_pickup": {
+        "name": "稀有发现",
+        "name_en": "Rare Find",
+        "description": "拾取稀有物品",
+        "description_en": "Pick up a rare item",
+        "icon": "achievement_rare",
+        "hidden": false,
+        "type": "one_time",
+        "trigger": "resource_pickup",
+        "condition": { "type": "rare" }
+      },
+      "rare_10": {
+        "name": "稀有猎人",
+        "name_en": "Rare Hunter",
+        "description": "拾取 10 个稀有物品",
+        "description_en": "Pick up 10 rare items",
+        "icon": "achievement_rare",
+        "hidden": false,
+        "type": "cumulative",
+        "trigger": "resource_pickup",
+        "condition": { "type": "rare", "count": 10 },
+        "show_progress": true
+      }
+    },
+    "survival": {
+      "survive_day_1": {
+        "name": "第一天",
+        "name_en": "Day One",
+        "description": "完成第一天",
+        "description_en": "Survive day 1",
+        "icon": "achievement_day",
+        "hidden": false,
+        "type": "one_time",
+        "trigger": "day_complete",
+        "condition": { "day": 1 }
+      },
+      "survive_day_5": {
+        "name": "五日生存",
+        "name_en": "Five Days",
+        "description": "完成第五天",
+        "description_en": "Survive day 5",
+        "icon": "achievement_day",
+        "hidden": false,
+        "type": "one_time",
+        "trigger": "day_complete",
+        "condition": { "day": 5 }
+      },
+      "survive_day_10": {
+        "name": "十日老兵",
+        "name_en": "Ten Days",
+        "description": "完成第十天",
+        "description_en": "Survive day 10",
+        "icon": "achievement_veteran",
+        "hidden": false,
+        "type": "one_time",
+        "trigger": "day_complete",
+        "condition": { "day": 10 }
+      },
+      "survive_day_30": {
+        "name": "月度冠军",
+        "name_en": "Monthly Champion",
+        "description": "完成第三十天",
+        "description_en": "Survive day 30",
+        "icon": "achievement_champion",
+        "hidden": true,
+        "type": "one_time",
+        "trigger": "day_complete",
+        "condition": { "day": 30 }
+      },
+      "low_hp_return": {
+        "name": "险境逃生",
+        "name_en": "Close Escape",
+        "description": "HP<10 时成功返回",
+        "description_en": "Return with HP below 10",
+        "icon": "achievement_escape",
+        "hidden": false,
+        "type": "one_time",
+        "trigger": "retreat",
+        "condition": { "hp_max": 10 }
+      }
+    },
+    "special": {
+      "tutorial_complete": {
+        "name": "教程完成",
+        "name_en": "Tutorial Complete",
+        "description": "完成新手教程",
+        "description_en": "Complete the tutorial",
+        "icon": "achievement_tutorial",
+        "hidden": false,
+        "type": "one_time",
+        "trigger": "tutorial_end",
+        "condition": { "skipped": false }
+      },
+      "skip_tutorial": {
+        "name": "自学者",
+        "name_en": "Self-Taught",
+        "description": "跳过教程完成第一天",
+        "description_en": "Skip tutorial and survive day 1",
+        "icon": "achievement_special",
+        "hidden": true,
+        "type": "compound",
+        "triggers": ["tutorial_skip", "day_complete"],
+        "condition": { "skipped": true, "day": 1 }
+      },
+      "death_10": {
+        "name": "持之以恒",
+        "name_en": "Persistent",
+        "description": "死亡 10 次后继续游戏",
+        "description_en": "Continue after 10 deaths",
+        "icon": "achievement_persistent",
+        "hidden": true,
+        "type": "one_time",
+        "trigger": "death",
+        "condition": { "count": 10, "continue": true }
+      },
+      "perfect_day": {
+        "name": "完美一天",
+        "name_en": "Perfect Day",
+        "description": "单天: 零死亡、零失败、收集>500",
+        "description_en": "A perfect day: no deaths, no failures, 500+ resources",
+        "icon": "achievement_perfect",
+        "hidden": true,
+        "type": "compound",
+        "trigger": "day_complete",
+        "condition": { "deaths": 0, "failures": 0, "resources_min": 500 }
+      }
+    }
+  },
+  "summary": {
+    "total_achievements": 31,
+    "categories": {
+      "exploration": 5,
+      "combat": 6,
+      "building": 5,
+      "resources": 4,
+      "survival": 5,
+      "special": 4
+    },
+    "hidden_count": 7,
+    "cumulative_count": 10,
+    "steam_achievement_ids": {
+      "explore_first": "EXPLORE_FIRST",
+      "kill_first": "KILL_FIRST",
+      "build_first": "BUILD_FIRST",
+      "survive_day_1": "DAY_ONE",
+      "tutorial_complete": "TUTORIAL_COMPLETE"
+    }
+  }
+}

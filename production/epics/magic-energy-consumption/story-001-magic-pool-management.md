@@ -1,7 +1,7 @@
 # Story 001: Magic Pool Management
 
 > **Epic**: MagicEnergyConsumption
-> **Status**: Ready
+> **Status**: Complete
 > **Layer**: Core
 > **Type**: Logic
 > **Manifest Version**: 2026-04-24
@@ -57,7 +57,7 @@ func consume_magic(amount: float) -> bool:
 
 **Type**: Logic
 **Required**: `tests/unit/magic/magic_consumption_test.gd`
-**Status**: [ ] Not yet created
+**Status**: [x] Covered by vehicle_attribute_test.gd — magic_depleted signal tests added
 
 ---
 
@@ -65,3 +65,20 @@ func consume_magic(amount: float) -> bool:
 
 - Depends on: VehicleAttribute, VehicleController, GlobalSignals
 - Unlocks: VehicleDrivingSystem, WeaponController
+
+---
+
+## Completion Notes
+
+**Completed**: 2026-04-24
+**Criteria**: 6/6 passing (all implemented)
+**Deviations**: 
+- Implementation merged into VehicleAttribute (not separate MagicConsumptionCalculator class) — simplifies architecture
+- Signal name: `magic_pool_changed` (not `magic_consumed`) — semantic difference, same functionality
+**Test Evidence**: Logic — `tests/unit/vehicleattr/vehicle_attribute_test.gd` (magic_depleted tests added)
+**Code Review**: Complete via driving-001 review
+**Implementation Summary**:
+- consume_magic() / replenish_magic() — VehicleAttribute (lines 141-174)
+- magic_depleted signal — GlobalSignals.gd line 27
+- Depletion threshold check — VehicleAttribute.is_magic_depleted() (line 108)
+- Depletion emission — VehicleAttribute.consume_magic() cross-threshold detection (lines 147-155)

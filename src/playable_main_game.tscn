@@ -1,0 +1,97 @@
+[gd_scene load_steps=10 format=3 uid="uid://playable_main"]
+
+[ext_resource type="Script" path="res://src/game/game_state.gd" id="script_game_state"]
+[ext_resource type="Script" path="res://src/ui/simple_hud.gd" id="script_simple_hud"]
+[ext_resource type="Script" path="res://src/daynight/day_night_cycle.gd" id="script_daynight"]
+[ext_resource type="Script" path="res://src/daynight/daynight_visual.gd" id="script_daynight_visual"]
+[ext_resource type="Script" path="res://src/grid_background.gd" id="script_grid"]
+[ext_resource type="PackedScene" path="res://src/physics_vehicle.tscn" id="scene_vehicle"]
+[ext_resource type="PackedScene" path="res://src/block_obstacle.tscn" id="scene_block"]
+[ext_resource type="PackedScene" path="res://src/slow_zone.tscn" id="scene_slow"]
+[ext_resource type="PackedScene" path="res://src/resource_drop.tscn" id="scene_resource"]
+
+[node name="PlayableMainGame" type="Node2D"]
+
+[node name="DayNightVisual" type="CanvasLayer" parent="."]
+layer = 100
+script = ExtResource("script_daynight_visual")
+
+[node name="GridBackground" type="Node2D" parent="."]
+script = ExtResource("script_grid")
+
+[node name="Obstacles" type="Node2D" parent="."]
+
+[node name="BlockObstacle1" parent="Obstacles" instance=ExtResource("scene_block")]
+position = Vector2(512, 320)
+
+[node name="BlockObstacle2" parent="Obstacles" instance=ExtResource("scene_block")]
+position = Vector2(640, 448)
+
+[node name="BlockObstacle3" parent="Obstacles" instance=ExtResource("scene_block")]
+position = Vector2(768, 320)
+
+[node name="BlockObstacle4" parent="Obstacles" instance=ExtResource("scene_block")]
+position = Vector2(896, 256)
+
+[node name="BlockObstacle5" parent="Obstacles" instance=ExtResource("scene_block")]
+position = Vector2(1024, 384)
+
+[node name="SlowZone1" parent="Obstacles" instance=ExtResource("scene_slow")]
+position = Vector2(512, 512)
+
+[node name="SlowZone2" parent="Obstacles" instance=ExtResource("scene_slow")]
+position = Vector2(704, 576)
+
+[node name="SlowZone3" parent="Obstacles" instance=ExtResource("scene_slow")]
+position = Vector2(896, 448)
+
+[node name="SlowZone4" parent="Obstacles" instance=ExtResource("scene_slow")]
+position = Vector2(1024, 512)
+
+[node name="SlowZone5" parent="Obstacles" instance=ExtResource("scene_slow")]
+position = Vector2(1152, 320)
+
+[node name="Resources" type="Node2D" parent="."]
+
+[node name="ResourceDrop1" parent="Resources" instance=ExtResource("scene_resource")]
+position = Vector2(448, 448)
+resource_type = 0
+quantity = 15.0
+
+[node name="ResourceDrop2" parent="Resources" instance=ExtResource("scene_resource")]
+position = Vector2(576, 256)
+resource_type = 1
+quantity = 20.0
+
+[node name="ResourceDrop3" parent="Resources" instance=ExtResource("scene_resource")]
+position = Vector2(832, 384)
+resource_type = 2
+quantity = 10.0
+
+[node name="ResourceDrop4" parent="Resources" instance=ExtResource("scene_resource")]
+position = Vector2(960, 320)
+resource_type = 3
+quantity = 5.0
+
+[node name="ResourceDrop5" parent="Resources" instance=ExtResource("scene_resource")]
+position = Vector2(1088, 256)
+resource_type = 4
+quantity = 8.0
+
+[node name="ResourceDrop6" parent="Resources" instance=ExtResource("scene_resource")]
+position = Vector2(1200, 400)
+resource_type = 0
+quantity = 12.0
+
+[node name="GameState" type="Node" parent="."]
+script = ExtResource("script_game_state")
+_vehicle_spawn_position = Vector2(320, 320)
+
+[node name="DayNightCycle" type="Node" parent="."]
+script = ExtResource("script_daynight")
+
+[node name="HUD" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="SimpleHUD" type="CanvasLayer" parent="HUD"]
+script = ExtResource("script_simple_hud")
