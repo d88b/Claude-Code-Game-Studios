@@ -43,10 +43,11 @@ stories:
     name: "Day-Night Phase Manager"
     file: "production/epics/day-night-cycle-system/story-001-day-night-phase-manager.md"
     priority: must-have
-    status: ready-for-dev
+    status: done
     owner: "gameplay-programmer"
     estimate_days: 1
     blocker: ""
+    completed: "2026-04-24"
 
   - id: "driving-001"
     name: "Vehicle Movement Loop"
