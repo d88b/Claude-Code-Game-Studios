@@ -4,94 +4,44 @@
 
 ## Current Phase
 
-**Stage**: Sprint 1 — Foundation Layer Core (VERIFIED ON GODOT 4.6)
+**Stage**: Sprint 2 — Core Layer Systems (IMPLEMENTING)
 
 ## Current Task
 
-- **Phase**: Sprint 1 Verification Complete
-- **Task**: Godot 4.6 Compatibility Verified
-- **Status**: ✅ PASSED
+- **Phase**: Sprint 2 Implementation
+- **Task**: collision-001 — Collision Query API
+- **Status**: IN-PROGRESS
 
 ---
 
 <!-- STATUS -->
-Epic: Sprint 1 Complete
-Feature: Foundation Layer
-Task: Godot 4.6 Verification Passed
+Epic: Block Collision System
+Feature: Collision Query API
+Task: Implementing CollisionManager
 <!-- /STATUS -->
 
 ## Session Progress
 
-### Sprint 1 Implementation Complete
+### Sprint 2 Implementation Started
 
-**Stories Completed**: 13/13 (100%)
+**Current Story**: collision-001 (Collision Query API)
 
-| Priority | Stories | Status |
-|----------|---------|--------|
-| Must Have | 6 | ✅ ALL DONE |
-| Should Have | 4 | ✅ ALL DONE |
-| Nice to Have | 3 | ✅ ALL DONE |
+| File Created | Purpose |
+|--------------|---------|
+| `src/collision/collision_manager.gd` | CollisionManager implementation with swept collision, raycast, severity calculation |
+| `tests/unit/collision/collision_query_test.gd` | Unit tests for CollisionManager |
+| `production/qa/qa-plan-sprint-2-2026-04-24.md` | QA plan for Sprint 2 |
 
-### Godot 4.6 Verification Summary
+### CollisionManager Implementation Summary
 
-**Date**: 2026-04-24
-**Engine**: Godot 4.6.1.stable.official
+- **Constants**: MAX_SWEPT_STEPS=64, MAX_RAYCAST_STEPS=128, CELL_SIZE=32
+- **Collision Layers**: COLLISION_TERRAIN=1, COLLISION_STRUCTURE=2, COLLISION_PLATFORM=4
+- **API Methods**: is_cell_solid, raycast_tile_collision, check_swept_collision, get_nearest_collision, calculate_severity
+- **Dependency Injection**: set_tilemap_world(), set_block_type_db(), set_global_signals()
+- **Script Compiles**: ✅ PASS on Godot 4.6 headless check
 
-| Test | Result | Notes |
-|------|--------|-------|
-| Autoload Loading | ✅ PASS | All 8 autoloads initialized |
-| class_name Conflict Fix | ✅ PASS | Removed class_name from autoload scripts |
-| Node Inheritance Fix | ✅ PASS | Changed RefCounted → Node for autoloads |
-| InputManager Dual-Focus | ✅ PASS | HIGH RISK item verified on Godot 4.6 |
-| GlobalSignals Event Bus | ✅ PASS | 20+ signals defined |
-| BlockTypeDB Query API | ✅ PASS | Functional, tile_count=18 ⚠️ |
-| TimeSystem | ✅ PASS | hour=7, phase=DAY |
+### Next Steps
 
-### Code Changes for Godot 4.6 Compatibility
-
-| File | Change | Reason |
-|------|--------|--------|
-| `src/events/global_signals.gd` | Removed `class_name GlobalSignals` | Godot 4.6: autoload cannot have matching class_name |
-| `src/database/block_type_db.gd` | Removed class_name, changed to `extends Node`, `_init→_ready` | Autoload must extend Node in 4.6 |
-| `src/database/resource_db.gd` | Same as above | Autoload must extend Node |
-| `src/database/enemy_type_db.gd` | Same as above | Autoload must extend Node |
-| `src/database/vehicle_type_db.gd` | Same as above | Autoload must extend Node |
-| `src/database/build_item_db.gd` | Same as above | Autoload must extend Node |
-| `src/time/time_system.gd` | Removed `class_name TimeSystem` | Autoload cannot have matching class_name |
-| `src/input/input_manager.gd` | Removed `class_name InputManager` | Autoload cannot have matching class_name |
-| `tests/unit/*.gd` | Updated to use `preload()` instead of class_name | Class references unavailable without class_name |
-
-### HIGH RISK Items Resolution
-
-| Item | Status | Verification |
-|------|--------|--------------|
-| ADR-003 Dual-focus Input | ✅ VERIFIED | InputManager initialized successfully on Godot 4.6 |
-
-### Remaining Warnings
-
-| Warning | Priority | Action |
-|---------|----------|--------|
-| BlockTypeDB tile_count=18 < 25 MVP minimum | LOW | Add more block definitions to entities.yaml |
-
----
-
-## Definition of Done — Sprint 1
-
-- [x] All Must Have stories completed
-- [x] All Should Have stories completed
-- [x] All Nice to Have stories completed
-- [x] Test files created at specified paths
-- [x] Test functions cover acceptance criteria
-- [x] Smoke check passed
-- [x] QA plan exists
-- [x] QA sign-off report: APPROVED WITH CONDITIONS
-- [x] Code follows control manifest rules
-- [x] HIGH RISK items verified on target engine ✅
-
----
-
-## Next Steps
-
-1. **Commit Changes** — Save Godot 4.6 compatibility fixes to git
-2. **Sprint 2** — `/sprint-plan new` for Core layer systems
-3. **Core layer stories** — collision, digging, placing, driving, combat
+1. Run GUT tests to verify implementation
+2. Mark collision-001 as done (via `/story-done`)
+3. Continue to digging-001 (Damage Accumulation)
