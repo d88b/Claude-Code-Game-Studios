@@ -286,7 +286,9 @@ func _collect_game_state() -> Dictionary:
 
 	# 从 GameState 获取状态（如果有实例）
 	if _game_state != null:
-		state_data["state"] = _game_state.get("_current_state_name", "BUNKER")
+		state_data["state"] = _game_state.get("_current_state_name") if _game_state.has_method("get") else "BUNKER"
+if state_data["state"] == null:
+	state_data["state"] = "BUNKER"
 
 	return state_data
 
