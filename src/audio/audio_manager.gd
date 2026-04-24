@@ -2,7 +2,7 @@
 # 负责背景音乐和音效播放，音量控制，Audio Bus 管理
 # Design: production/store/AUDIO_DESIGN.md
 
-class_name AudioManager extends Node
+extends Node
 
 # === 配置 ===
 const MASTER_VOLUME_KEY: String = "audio/master_volume"

@@ -2,7 +2,7 @@
 # SaveManager — 存档系统管理器
 ## SaveManager — 自动存档、手动存档、存档加载管理
 
-class_name SaveManager extends Node
+extends Node
 
 # === 配置常量 ===
 const SAVE_DIR: String = "user://saves/"

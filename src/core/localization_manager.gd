@@ -2,7 +2,7 @@
 # 本地化管理器 — 加载翻译文件并提供 tr() 功能
 ## LocalizationManager — Translation file loader and tr() wrapper
 
-class_name LocalizationManager extends Node
+extends Node
 
 # === 配置 ===
 const DEFAULT_LOCALE: String = "zh"  # 默认中文

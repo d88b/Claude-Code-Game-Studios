@@ -2,7 +2,7 @@
 # 捕获崩溃信息，生成报告，下次启动上传
 # Design: integration/crash-reporting/CRASH_DESIGN.md
 
-class_name CrashManager extends Node
+extends Node
 
 # === 配置 ===
 const CRASH_CACHE_DIR: String = "user://crash_reports/"

@@ -2,7 +2,7 @@
 # 收集玩家行为数据，批量上传，支持离线缓存
 # Design: integration/analytics/ANALYTICS_DESIGN.md
 
-class_name AnalyticsManager extends Node
+extends Node
 
 # === 配置 ===
 const UPLOAD_INTERVAL: int = 300  # 5 分钟

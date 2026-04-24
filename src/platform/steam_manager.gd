@@ -3,7 +3,7 @@
 # Design: production/store/STEAM_SDK_GUIDE.md
 # 注意: 完整实现需要 GodotSteam GDExtension
 
-class_name SteamManager extends Node
+extends Node
 
 # === 配置 ===
 # 替换为实际 App ID

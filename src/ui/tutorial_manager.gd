@@ -2,7 +2,7 @@
 # 引导新玩家理解核心玩法：战车驾驶、挖掘建造、尸潮防守
 # Design: production/store/TUTORIAL_DESIGN.md
 
-class_name TutorialManager extends Node
+extends Node
 
 # === 信号 ===
 signal tutorial_step_completed(step_id: int)

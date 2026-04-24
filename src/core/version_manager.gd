@@ -2,7 +2,7 @@
 # 读取版本号、构建号、发布日期等信息
 # Design: assets/data/version.json schema
 
-class_name VersionManager extends Node
+extends Node
 
 # === 配置 ===
 const VERSION_FILE: String = "res://assets/data/version.json"

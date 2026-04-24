@@ -2,7 +2,7 @@
 # 管理成绩解锁、进度追踪、Steam 同步
 # Design: integration/achievements/ACHIEVEMENT_DESIGN.md
 
-class_name AchievementManager extends Node
+extends Node
 
 # === 配置 ===
 const ACHIEVEMENT_FILE: String = "user://achievements.json"
