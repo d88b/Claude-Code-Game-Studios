@@ -1,104 +1,93 @@
 class_name Enemy
-extends Entity	
+extends Entity
 
-@export var speed: float = 10.0
-@export var stop_distance: float = 10.0
-@export var aggresive = false
-@export var memory = 0.0
+## 敌人基类 — 支持水面/水下两种模式，通用攻击系统
+
+@export var use_gravity: bool = true
+@export var speed: float = 60.0
+@export var stop_distance: float = 30.0
+@export var aggro_range: float = 300.0
+@export var attack_damage: float = 10.0
+@export var attack_range: float = 40.0
+@export var attack_cooldown: float = 1.5
 @export var hit_particles: CPUParticles2D
 
-var player: Player
-var velocity: Vector2
-var current_speed: float
-var last_position
-var chasing = false
-var memory_timer = 0.0
+## 掉落配置
+@export var drop_chance: float = 0.5
+@export var drop_item: ItemData
+@export var drop_amount: int = 1
 
-@onready var ability_controller: AbilityController = $AbilityController
-@onready var collision_shape: CollisionShape2D = $Area2D/CollisionShape2D
-@onready var pathfinding: Pathfinding = $Pathfinding
+var target: Node2D = null
+var is_chasing: bool = false
+var attack_timer: float = 0.0
+var memory_timer: float = 0.0
+var patrol_direction: float = 1.0
+var last_position: Vector2
+var current_speed: float = 0.0
 
 func _ready():
 	super._ready()
 	add_to_group("enemy")
 	last_position = position
-	player =  get_tree().get_first_node_in_group("player")
-	
-	if aggresive: chasing = true
-	
-	
+
 func _process(delta: float):
 	if is_dead: return
 
-	_apply_physics(delta)  # 应用重力 + 地面检测
+	attack_timer = max(0, attack_timer - delta)
 
-	var distance = position.distance_to(player.position)
+	if use_gravity:
+		_apply_physics(delta)
 
-	if not aggresive:
-		if distance <= 60: chasing = true
+func _find_target() -> Node2D:
+	var player = get_tree().get_first_node_in_group("player")
+	var ship = get_tree().get_first_node_in_group("ship")
 
-	if chasing and player != null:
-		var movement_dir = Vector2.ZERO
+	# 优先找玩家，如果没有就找船
+	if player and not player.is_dead and not player.in_submarine:
+		return player
+	if ship:
+		return ship
 
-		if pathfinding != null:
-			movement_dir = pathfinding.find_path(player.global_position).normalized()
-		else:
-			movement_dir = (player.position - self.position).normalized()
+	return null
 
-		if position.distance_to(player.position) > stop_distance:
-			position += movement_dir * speed * delta
-		else:
-			ability_controller.trigger_ability_by_idx(0)
+func _move_towards_target(delta: float):
+	if not target: return
 
-		_face_target(player.position - position)
+	var direction = (target.global_position - global_position).normalized()
+	position += direction * speed * delta
 
-	velocity = (position - last_position) / delta
-	current_speed = velocity.length()
+	if direction.x != 0:
+		if animated_sprite:
+			animated_sprite.flip_h = direction.x < 0
 
-	last_position = position
-	_handle_animations()
+func _attack_target():
+	if not target or attack_timer > 0: return
 
-	if not aggresive and chasing and distance >= 100:
-		memory_timer += delta
+	var distance = global_position.distance_to(target.global_position)
+	if distance <= attack_range:
+		if target.has_method("apply_damage"):
+			target.apply_damage(attack_damage)
+			attack_timer = attack_cooldown
 
-		if memory_timer >= memory:
-			memory_timer = 0.0
-			chasing = false
-
-
-func _handle_animations():
-	if current_speed <= 0:
-		play_animation(AnimationWrapper.new("idle"))
-	else:
-		play_animation(AnimationWrapper.new("walk"))
-		
-func _face_target(dir: Vector2):
-	if not animated_sprite.flip_h and dir.x < 0:
-		animated_sprite.flip_h = true
-	elif animated_sprite.flip_h and dir.x > 0:
-		animated_sprite.flip_h = false
-		
-func get_height() -> float:
-	if collision_shape != null:
-		var shape = collision_shape.shape
-		if shape is  CapsuleShape2D:
-			return shape.height * scale.y
-		elif shape is CircleShape2D:
-			return shape.radius * scale.y
-		else:
-			return super.get_height()
-	else:
-		return super.get_height()
-	
-	
 func _show_damage_taken_effect():
-	super._show_damage_taken_effect()	
-	
+	super._show_damage_taken_effect()
+
 	if hit_particles != null:
 		hit_particles.emitting = true
-	
+
+func _on_death():
+	# 掉落资源
+	if drop_item and randf() < drop_chance:
+		var pickup_scene = load("res://scenes/item_pickup.tscn")
+		if pickup_scene:
+			var pickup = pickup_scene.instantiate() as ItemPickup
+			pickup.item_data = drop_item
+			pickup.amount = drop_amount
+			pickup.position = position
+			get_parent().add_child(pickup)
+
+	queue_free()
 
 func _on_animated_sprite_2d_animation_finished():
-	if current_anim.name == "die":
-		queue_free()
-	
+	if current_anim and current_anim.name == "die":
+		_on_death()

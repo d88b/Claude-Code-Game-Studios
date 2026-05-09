@@ -21,6 +21,7 @@ func _ready():
 	_place_turret()
 	_place_submarine()
 	_spawn_resources()
+	_setup_enemy_spawner()
 
 	await get_tree().process_frame
 
@@ -191,6 +192,31 @@ func _spawn_resources():
 	spawner.pickup_scene = pickup_scene
 
 	spawner.spawn_resources(600, submarine.surface_y, submarine.max_depth)
+
+## 设置敌人生成器
+func _setup_enemy_spawner():
+	var chaser_scene = load("res://scenes/enemies/chaser_enemy.tscn")
+	var patrol_scene = load("res://scenes/enemies/patrol_enemy.tscn")
+	if not chaser_scene or not patrol_scene:
+		print("[PlayScene] 警告：敌人场景未找到")
+		return
+
+	var spawner = EnemySpawner.new()
+	spawner.name = "EnemySpawner"
+	spawner.packed_enemies = [chaser_scene, patrol_scene]
+	spawner.spawn_interval = 4.0
+	spawner.max_active_enemies = 6
+	spawner.min_spawn_radius = 350
+	spawner.max_spawn_radius = 550
+
+	# 跟随船移动
+	add_child(spawner)
+
+	await get_tree().process_frame
+	if ship:
+		spawner.follow_target = ship
+
+	print("[PlayScene] 敌人生成器已配置")
 
 func _on_submarine_state_changed(is_inside: bool):
 	# 切换相机跟随目标

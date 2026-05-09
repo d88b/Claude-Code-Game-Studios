@@ -1,0 +1,15 @@
+[gd_scene format=4 uid="uid://01f39846758c4f2a"]
+
+[ext_resource type="Script" path="res://scripts/entity/chaser_enemy.gd" id="1_chaser"]
+
+[node name="ChaserEnemy" type="Node2D"]
+script = ExtResource("1_chaser")
+aggro_range = 400.0
+attack_damage = 15.0
+attack_range = 50.0
+attack_cooldown = 2.0
+speed = 50.0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0.9, 0.2, 0.2, 1)
+scale = Vector2(0.6, 0.6)

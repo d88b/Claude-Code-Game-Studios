@@ -1,0 +1,16 @@
+[gd_scene format=4 uid="uid://3b9ca67342234ca8"]
+
+[ext_resource type="Script" path="res://scripts/entity/patrol_enemy.gd" id="1_patrol"]
+
+[node name="PatrolEnemy" type="Node2D"]
+script = ExtResource("1_patrol")
+aggro_range = 200.0
+attack_damage = 10.0
+attack_range = 40.0
+attack_cooldown = 3.0
+speed = 30.0
+patrol_distance = 200.0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0.6, 0.2, 0.8, 1)
+scale = Vector2(0.5, 0.5)

@@ -17,6 +17,7 @@ signal ship_destroyed
 
 func _ready():
 	current_speed = base_speed
+	add_to_group("ship")
 	EventBus.ship_speed_changed.emit(current_speed, min_speed, max_speed)
 
 func _process(delta: float):
