@@ -30,6 +30,6 @@ func _process(delta: float):
 
 	# 动画
 	if is_chasing:
-		play_animation(AnimationWrapper.new("walk"))
+		_play_animation("walk")
 	else:
-		play_animation(AnimationWrapper.new("idle"))
+		_play_animation("idle")

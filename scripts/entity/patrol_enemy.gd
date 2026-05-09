@@ -43,6 +43,6 @@ func _process(delta: float):
 		animated_sprite.flip_h = false
 
 	if abs(patrol_direction) > 0:
-		play_animation(AnimationWrapper.new("walk"))
+		_play_animation("walk")
 	else:
-		play_animation(AnimationWrapper.new("idle"))
+		_play_animation("idle")
