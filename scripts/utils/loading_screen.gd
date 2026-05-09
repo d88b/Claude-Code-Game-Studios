@@ -3,9 +3,9 @@ extends Control
 
 ## Loading 场景 — 场景切换时的过渡画面
 
-@export var progress_bar: ProgressBar
-@export var label: Label
-@export var title_label: Label
+@onready var progress_bar: ProgressBar = $ProgressBar
+@onready var label: Label = $LoadLabel
+@onready var title_label: Label = $TitleLabel
 
 func _ready():
 	progress_bar.value = 0.0
@@ -13,7 +13,9 @@ func _ready():
 	title_label.text = "深海堡垒"
 
 	# 从 root 元数据获取目标场景
-	var target = get_tree().root.get_meta("loading_target") if get_tree().root.has_meta("loading_target") else ""
+	var target = ""
+	if get_tree().root.has_meta("loading_target"):
+		target = get_tree().root.get_meta("loading_target")
 
 	if target == "play_scene":
 		label.text = "正在进入海域..."

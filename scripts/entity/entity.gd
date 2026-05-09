@@ -25,13 +25,17 @@ var vertical_velocity: float = 0.0
 var is_on_ground: bool = false
 var _ground_y: float = 0.0
 
-@onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
+# 兼容 AnimatedSprite2D 和 Sprite2D
+var animated_sprite: Node2D
 
 func _ready():
 	current_health = max_health
 	current_energy = max_energy
-	animated_sprite.material = animated_sprite.material.duplicate()
-	animated_sprite.animation_finished.connect(on_animation_finished)
+	animated_sprite = $AnimatedSprite2D if has_node("AnimatedSprite2D") else $Sprite2D
+	if animated_sprite is AnimatedSprite2D and animated_sprite.material != null:
+		animated_sprite.material = animated_sprite.material.duplicate()
+	if animated_sprite is AnimatedSprite2D:
+		animated_sprite.animation_finished.connect(on_animation_finished)
 	
 func _exit_tree():
 	animated_sprite.animation_finished.disconnect(on_animation_finished)
@@ -120,13 +124,19 @@ func _check_ground() -> void:
 			return
 	
 func get_height() -> float:
+	if animated_sprite is Sprite2D:
+		var tex = (animated_sprite as Sprite2D).texture
+		if tex: return tex.get_height() * scale.y
+		return 32.0 * scale.y
 	var anim = animated_sprite.animation
-	var frame_tex = animated_sprite.sprite_frames.get_frame_texture(anim, 0)
+	var frame_tex = (animated_sprite as AnimatedSprite2D).sprite_frames.get_frame_texture(anim, 0)
 	var height = frame_tex.get_height()
 	return height * scale.y
-	
+
 func get_current_texture() -> Texture2D:
-	return animated_sprite.sprite_frames.get_frame_texture(animated_sprite.animation, animated_sprite.frame)
+	if animated_sprite is Sprite2D:
+		return (animated_sprite as Sprite2D).texture
+	return (animated_sprite as AnimatedSprite2D).sprite_frames.get_frame_texture(animated_sprite.animation, animated_sprite.frame)
 	
 func spend_energy(energy: float): pass
 
@@ -136,7 +146,7 @@ func _show_damage_popup(damage: float):
 	FloatText.show_damage_text(str(int(damage)), spawn_position, damage_text_color)
 	
 func _show_damage_taken_effect():
-	if animated_sprite.material != null:
+	if animated_sprite is AnimatedSprite2D and animated_sprite.material != null:
 		for i in 2:
 			animated_sprite.material.set_shader_parameter("is_hurt", true)
 			await get_tree().create_timer(0.05).timeout

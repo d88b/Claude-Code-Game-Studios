@@ -27,7 +27,11 @@ func _ready():
 	await get_tree().process_frame
 
 	var player = get_tree().get_first_node_in_group("player") as Player
-	player.player_died.connect(_handle_game_over)
+	if player:
+		player.player_died.connect(_handle_game_over)
+		# 将玩家放在甲板中央
+		player.position = Vector2(0, sea_floor_y - 80)
+
 	AudioController.play_bg_music("play_scene")
 	EventBus.game_paused.connect(_handle_paused)
 
@@ -40,10 +44,6 @@ func _ready():
 
 	# 监听阶段切换
 	GameManager.phase_changed.connect(_on_phase_changed)
-
-	# 将玩家放在甲板中央
-	if player:
-		player.position = Vector2(0, sea_floor_y - 80)
 
 ## 创建船体容器（包含甲板、炮台等）
 func _build_ship():
@@ -320,28 +320,24 @@ func _show_phase_banner(text: String):
 	label.text = text
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	label.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	label.set_anchors_preset(Control.PRESET_CENTER)
+	label.offset_left = -250
+	label.offset_top = -25
+	label.offset_right = 250
+	label.offset_bottom = 25
 	label.add_theme_font_size_override("font_size", 28)
 	label.add_theme_color_override("font_color", Color(1, 1, 1, 1))
 
-	var container = ColorRect.new()
-	container.color = Color(0, 0, 0, 0.7)
-	container.layout_mode = Control.LAYOUT_MODE_FULL_RECT
-	container.set_anchors_preset(Control.PRESET_CENTER)
-	container.offset_left = -200
-	container.offset_top = -30
-	container.offset_right = 200
-	container.offset_bottom = 30
-	container.add_child(label)
-
-	add_child(container)
+	add_child(label)
 
 	# 淡入淡出动画
+	label.modulate = Color(1, 1, 1, 0)
 	var tween = create_tween()
-	tween.tween_property(container, "modulate:a", 0.0, 0.5).set_delay(2.0)
+	tween.tween_property(label, "modulate:a", 1.0, 0.3).set_ease(Tween.EASE_OUT)
+	tween.parallel()
+	tween.tween_property(label, "modulate:a", 0.0, 0.5).set_delay(2.5)
 	await tween.finished
-	container.queue_free()
+	label.queue_free()
 
 
 func fade_out_overlay():
