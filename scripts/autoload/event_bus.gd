@@ -18,3 +18,9 @@ signal submarine_dive_started()
 signal submarine_depth_changed(current_depth: float, max_depth: float)
 signal submarine_returned_to_surface()
 signal player_in_submarine(is_inside: bool)
+
+## 波次信号
+signal wave_started(wave_number: int, enemy_count: int)
+signal wave_warning(wave_number: int, countdown: float)
+signal wave_completed(wave_number: int, reward_text: String)
+signal wave_state_changed(state: String)

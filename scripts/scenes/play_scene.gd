@@ -5,6 +5,7 @@ extends Node
 @export var player_health_bar: PlayerHealthBar
 @export var pause_menu: PauseMenu
 @export var resource_hud: ResourceHUD
+@export var wave_hud: WaveHUD
 
 var water_particles: GPUParticles2D
 var deck_layer: TileMapLayer
@@ -200,7 +201,7 @@ func _spawn_resources():
 
 	spawner.spawn_resources(600, submarine.surface_y, submarine.max_depth)
 
-## 设置敌人生成器
+## 设置敌人生成器 + 波次管理
 func _setup_enemy_spawner():
 	var chaser_scene = load("res://scenes/enemies/chaser_enemy.tscn")
 	var patrol_scene = load("res://scenes/enemies/patrol_enemy.tscn")
@@ -215,13 +216,10 @@ func _setup_enemy_spawner():
 	spawner.max_active_enemies = 6
 	spawner.min_spawn_radius = 350
 	spawner.max_spawn_radius = 550
+	spawner.auto_spawn = false  # 由波次系统控制
 
 	# 跟随船移动
 	add_child(spawner)
-
-	await get_tree().process_frame
-	if ship:
-		spawner.follow_target = ship
 
 	# 水下敌人（巡逻型为主，深海区域）
 	var underwater_spawner = EnemySpawner.new()
@@ -231,11 +229,26 @@ func _setup_enemy_spawner():
 	underwater_spawner.max_active_enemies = 4
 	underwater_spawner.min_spawn_radius = 400
 	underwater_spawner.max_spawn_radius = 600
-	underwater_spawner.spawn_depth_offset = 200.0  # 在海底深度生成
+	underwater_spawner.spawn_depth_offset = 200.0
 
 	add_child(underwater_spawner)
 
-	print("[PlayScene] 敌人生成器已配置")
+	await get_tree().process_frame
+	if ship:
+		spawner.follow_target = ship
+
+	# 创建波次管理器
+	var wave_mgr = WaveManager.new()
+	wave_mgr.name = "WaveManager"
+	wave_mgr.chaser_enemy_scene = chaser_scene
+	wave_mgr.patrol_enemy_scene = patrol_scene
+	wave_mgr.iron_ore_reward = load("res://resources/item_data/iron_ore.tres") as ItemData
+	wave_mgr.initial_wave_delay = 8.0
+	add_child(wave_mgr)
+
+	wave_mgr.setup(spawner, underwater_spawner)
+
+	print("[PlayScene] 敌人生成器 + 波次系统已配置")
 
 func _on_submarine_state_changed(is_inside: bool):
 	# 切换相机跟随目标
