@@ -29,10 +29,9 @@ func set_damage(dmg: float):
 	damage = dmg
 
 func _on_area_entered(area: Area2D):
-	if area is Enemy or area.get_parent() is Enemy:
-		var enemy = area as Enemy if area is Enemy else area.get_parent() as Enemy
-		if enemy:
-			enemy.apply_damage(damage)
+	var parent = area.get_parent()
+	if parent is Enemy:
+		parent.apply_damage(damage)
 		queue_free()
 
 func _on_body_entered(body: Node2D):
