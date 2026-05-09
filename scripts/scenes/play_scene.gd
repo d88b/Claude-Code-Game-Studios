@@ -141,16 +141,23 @@ func _fill_ocean():
 ## 放置基础炮台
 func _place_turret():
 	var turret_scene = load("res://scenes/turret.tscn")
+	var cannon_scene = load("res://scenes/cannon.tscn")
 	if not turret_scene: return
 
+	# 主炮台（射程远，射速快）
 	var turret = turret_scene.instantiate() as Turret
 	turret.position = Vector2(100, sea_floor_y - 50)
-
-	# 等 Ship 创建后放置
 	var ship_node = get_node_or_null("Ship")
 	if ship_node:
 		ship_node.add_child(turret)
 		print("[PlayScene] 炮台已放置在船上")
+
+	# 侧炮（伤害高，射速慢）
+	if cannon_scene and ship_node:
+		var cannon = cannon_scene.instantiate() as Cannon
+		cannon.position = Vector2(-80, sea_floor_y - 30)
+		ship_node.add_child(cannon)
+		print("[PlayScene] 侧炮已放置在船上")
 
 ## 放置潜艇（船体底部）
 func _place_submarine():
@@ -215,6 +222,18 @@ func _setup_enemy_spawner():
 	await get_tree().process_frame
 	if ship:
 		spawner.follow_target = ship
+
+	# 水下敌人（巡逻型为主，深海区域）
+	var underwater_spawner = EnemySpawner.new()
+	underwater_spawner.name = "UnderwaterEnemySpawner"
+	underwater_spawner.packed_enemies = [patrol_scene]
+	underwater_spawner.spawn_interval = 6.0
+	underwater_spawner.max_active_enemies = 4
+	underwater_spawner.min_spawn_radius = 400
+	underwater_spawner.max_spawn_radius = 600
+	underwater_spawner.spawn_depth_offset = 200.0  # 在海底深度生成
+
+	add_child(underwater_spawner)
 
 	print("[PlayScene] 敌人生成器已配置")
 

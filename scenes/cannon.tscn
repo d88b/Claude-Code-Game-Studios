@@ -1,0 +1,15 @@
+[gd_scene format=4 uid="uid://c058aab09d64424d"]
+
+[ext_resource type="Script" path="res://scripts/entity/cannon.gd" id="1_cannon"]
+[ext_resource type="PackedScene" path="res://scenes/projectile.tscn" id="2_proj"]
+
+[node name="Cannon" type="Node2D"]
+fire_rate = 2.0
+range = 350.0
+damage = 40.0
+projectile_scene = ExtResource("2_proj")
+script = ExtResource("1_cannon")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0.5, 0.5, 0.5, 1)
+scale = Vector2(0.7, 0.4)
