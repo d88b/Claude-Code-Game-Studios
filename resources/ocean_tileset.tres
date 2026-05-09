@@ -1,0 +1,9 @@
+[gd_resource type="TileSet" format=4 uid="uid://ocean1tilese"]
+
+[ext_resource type="Texture2D" path="res://assets/generated_tiles/ocean_tile.png" id="1_ocean"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ocean"]
+texture = ExtResource("1_ocean")
+0:0/0 = 0
+
+[resource]

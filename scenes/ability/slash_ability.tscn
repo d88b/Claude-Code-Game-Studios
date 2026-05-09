@@ -1,0 +1,79 @@
+[gd_scene load_steps=20 format=3 uid="uid://bao2nasbado03"]
+
+[ext_resource type="Script" uid="uid://d4bdrosfafb2i" path="res://scripts/ability/core/ability.gd" id="1_wqbl1"]
+[ext_resource type="Texture2D" uid="uid://c6qj883ysbv4a" path="res://assets/Free - Raven Fantasy Icons/Free - Raven Fantasy Icons/Separated Files/64x64/fc728.png" id="2_4h87d"]
+[ext_resource type="Script" uid="uid://cm7em3ljx2ckn" path="res://scripts/ability/component/ability_spawn_manifest.gd" id="2_6scyu"]
+[ext_resource type="PackedScene" uid="uid://4pyr8i3tu5v3" path="res://scenes/ability/slash_ability_manifest.tscn" id="3_jabok"]
+[ext_resource type="Script" uid="uid://c8htvbdy2nj8o" path="res://scripts/ability/component/ability_push_back.gd" id="4_wqbl1"]
+[ext_resource type="Script" uid="uid://dlv7h3h01wgu3" path="res://scripts/ability/component/ability_turn_to_mouse.gd" id="5_6scyu"]
+[ext_resource type="Script" uid="uid://dvjvp0xh7qb55" path="res://scripts/ability/component/ability_play_sound.gd" id="6_7jqjq"]
+[ext_resource type="Script" uid="uid://bxhrr65oe5mo4" path="res://scripts/ability/component/ability_component_group.gd" id="6_dv1fb"]
+[ext_resource type="Script" uid="uid://b8xa52gceh2ci" path="res://scripts/ability/component/ability_get_targets.gd" id="6_jabok"]
+[ext_resource type="AudioStream" uid="uid://drqsvmrnjxom7" path="res://assets/Sounds/Sword Attack 1.wav" id="7_jbik4"]
+[ext_resource type="Script" uid="uid://bgc4ieq2gc1ey" path="res://scripts/ability/component/ability_deal_damage.gd" id="7_ny4m0"]
+[ext_resource type="AudioStream" uid="uid://c1oabhilhfnrc" path="res://assets/Sounds/Sword Attack 2.wav" id="8_b7vmg"]
+[ext_resource type="AudioStream" uid="uid://ceuvysyg7l8w3" path="res://assets/Sounds/Sword Attack 3.wav" id="9_p68t7"]
+[ext_resource type="Script" uid="uid://xt6qkn18p131" path="res://scripts/resources/audio_config.gd" id="10_p68t7"]
+[ext_resource type="AudioStream" uid="uid://cd18ujo5b4of" path="res://assets/Sounds/Sword Impact Hit 1.wav" id="14_ycrjt"]
+[ext_resource type="AudioStream" uid="uid://d1y75fs1hc4o0" path="res://assets/Sounds/Sword Impact Hit 2.wav" id="15_4h87d"]
+[ext_resource type="AudioStream" uid="uid://dflvnjrr68e48" path="res://assets/Sounds/Sword Impact Hit 3.wav" id="16_alros"]
+
+[sub_resource type="Resource" id="Resource_gw6mj"]
+script = ExtResource("10_p68t7")
+audio_streams = Array[AudioStream]([ExtResource("7_jbik4"), ExtResource("8_b7vmg"), ExtResource("9_p68t7")])
+volume_db = 0.0
+max_distance = 2000.0
+autoplay = false
+bus = &"sfx"
+metadata/_custom_type_script = "uid://xt6qkn18p131"
+
+[sub_resource type="Resource" id="Resource_ycrjt"]
+script = ExtResource("10_p68t7")
+audio_streams = Array[AudioStream]([ExtResource("14_ycrjt"), ExtResource("15_4h87d"), ExtResource("16_alros")])
+volume_db = 10.0
+max_distance = 2000.0
+autoplay = false
+bus = &"sfx"
+metadata/_custom_type_script = "uid://xt6qkn18p131"
+
+[node name="SlashAbility" type="Node"]
+script = ExtResource("1_wqbl1")
+icon_texture = ExtResource("2_4h87d")
+cooldown = 0.5
+
+[node name="SpawnManifest" type="Node" parent="."]
+script = ExtResource("2_6scyu")
+manifest_scene = ExtResource("3_jabok")
+set_as_child = true
+
+[node name="Pushback" type="Node" parent="."]
+script = ExtResource("4_wqbl1")
+duration = 0.1
+frequency = 2
+
+[node name="TurnToMouse" type="Node" parent="."]
+script = ExtResource("5_6scyu")
+metadata/_custom_type_script = "uid://dlv7h3h01wgu3"
+
+[node name="PlaySound" type="Node" parent="."]
+script = ExtResource("6_7jqjq")
+audio_config = SubResource("Resource_gw6mj")
+
+[node name="DealDamageGroup" type="Node" parent="."]
+script = ExtResource("6_dv1fb")
+exec_delay = 0.2
+
+[node name="AbilityGetTargets" type="Node" parent="DealDamageGroup"]
+script = ExtResource("6_jabok")
+radius = 25.0
+metadata/_custom_type_script = "uid://b8xa52gceh2ci"
+
+[node name="AbilityDealDamage" type="Node" parent="DealDamageGroup"]
+script = ExtResource("7_ny4m0")
+damage = 14.0
+metadata/_custom_type_script = "uid://bgc4ieq2gc1ey"
+
+[node name="PlayImpactSound" type="Node" parent="DealDamageGroup/AbilityDealDamage"]
+script = ExtResource("6_7jqjq")
+audio_config = SubResource("Resource_ycrjt")
+metadata/_custom_type_script = "uid://dvjvp0xh7qb55"

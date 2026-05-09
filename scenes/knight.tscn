@@ -1,0 +1,200 @@
+[gd_scene load_steps=36 format=3 uid="uid://knight_00001"]
+
+[ext_resource type="Script" uid="uid://c287ibr3ofedg" path="res://scripts/entity/enemy.gd" id="1_enemy"]
+[ext_resource type="Shader" uid="uid://c3s58l24phxjo" path="res://shaders/entity.gdshader" id="2_shader"]
+[ext_resource type="Script" uid="uid://e0cjvd4lswu2" path="res://scripts/ability/core/ability_controller.gd" id="9_ctrl"]
+[ext_resource type="PackedScene" uid="uid://ls38l45jp8fo" path="res://scenes/ability/skeleton_slash.tscn" id="10_slash"]
+[ext_resource type="Script" uid="uid://dp5ye87d8482t" path="res://scripts/entity/pathfinding.gd" id="11_path"]
+
+[ext_resource type="Texture2D" path="res://assets/knight/frames/idle_0.png" id="idle_0"]
+[ext_resource type="Texture2D" path="res://assets/knight/frames/idle_1.png" id="idle_1"]
+[ext_resource type="Texture2D" path="res://assets/knight/frames/idle_2.png" id="idle_2"]
+[ext_resource type="Texture2D" path="res://assets/knight/frames/idle_3.png" id="idle_3"]
+[ext_resource type="Texture2D" path="res://assets/knight/frames/idle_4.png" id="idle_4"]
+[ext_resource type="Texture2D" path="res://assets/knight/frames/idle_5.png" id="idle_5"]
+
+[ext_resource type="Texture2D" path="res://assets/knight/frames/walk_0.png" id="walk_0"]
+[ext_resource type="Texture2D" path="res://assets/knight/frames/walk_1.png" id="walk_1"]
+[ext_resource type="Texture2D" path="res://assets/knight/frames/walk_2.png" id="walk_2"]
+[ext_resource type="Texture2D" path="res://assets/knight/frames/walk_3.png" id="walk_3"]
+
+[ext_resource type="Texture2D" path="res://assets/knight/frames/attack_0.png" id="atk_0"]
+[ext_resource type="Texture2D" path="res://assets/knight/frames/attack_1.png" id="atk_1"]
+[ext_resource type="Texture2D" path="res://assets/knight/frames/attack_2.png" id="atk_2"]
+[ext_resource type="Texture2D" path="res://assets/knight/frames/attack_3.png" id="atk_3"]
+
+[ext_resource type="Texture2D" path="res://assets/knight/frames/hurt_0.png" id="hrt_0"]
+[ext_resource type="Texture2D" path="res://assets/knight/frames/hurt_1.png" id="hrt_1"]
+[ext_resource type="Texture2D" path="res://assets/knight/frames/hurt_2.png" id="hrt_2"]
+
+[ext_resource type="Texture2D" path="res://assets/knight/frames/jump_0.png" id="jmp_0"]
+[ext_resource type="Texture2D" path="res://assets/knight/frames/jump_1.png" id="jmp_1"]
+[ext_resource type="Texture2D" path="res://assets/knight/frames/jump_2.png" id="jmp_2"]
+[ext_resource type="Texture2D" path="res://assets/knight/frames/jump_3.png" id="jmp_3"]
+
+[ext_resource type="Texture2D" path="res://assets/knight/frames/death_0.png" id="dth_0"]
+[ext_resource type="Texture2D" path="res://assets/knight/frames/death_1.png" id="dth_1"]
+[ext_resource type="Texture2D" path="res://assets/knight/frames/death_2.png" id="dth_2"]
+[ext_resource type="Texture2D" path="res://assets/knight/frames/death_3.png" id="dth_3"]
+[ext_resource type="Texture2D" path="res://assets/knight/frames/death_4.png" id="dth_4"]
+[ext_resource type="Texture2D" path="res://assets/knight/frames/death_5.png" id="dth_5"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMat_knight"]
+shader = ExtResource("2_shader")
+shader_parameter/hurt_color = Vector4(1, 0, 0, 1)
+shader_parameter/is_hurt = false
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_knight"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("atk_0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("atk_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("atk_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("atk_3")
+}],
+"loop": false,
+"name": &"cast",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("dth_0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("dth_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("dth_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("dth_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("dth_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("dth_5")
+}],
+"loop": false,
+"name": &"die",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("hrt_0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("hrt_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("hrt_2")
+}],
+"loop": true,
+"name": &"hurt",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("idle_0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_5")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("jmp_0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("jmp_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("jmp_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("jmp_3")
+}],
+"loop": true,
+"name": &"jump",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("walk_0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("walk_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("walk_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("walk_3")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 10.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape_knight"]
+radius = 120.0
+
+[node name="Knight" type="Node2D"]
+z_index = 100
+scale = Vector2(0.4, 0.4)
+script = ExtResource("1_enemy")
+speed = 15.0
+stop_distance = 60.0
+aggresive = true
+memory = 5.0
+max_health = 200.0
+damage_text_color = Color(1, 1, 1, 1)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+material = SubResource("ShaderMat_knight")
+sprite_frames = SubResource("SpriteFrames_knight")
+animation = &"idle"
+autoplay = "idle"
+frame = 0
+frame_progress = 1.0
+
+[node name="AbilityController" type="Node" parent="."]
+script = ExtResource("9_ctrl")
+metadata/_custom_type_script = "uid://e0cjvd4lswu2"
+
+[node name="KnightSlash" parent="AbilityController" instance=ExtResource("10_slash")]
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(0, 20)
+shape = SubResource("CircleShape_knight")
+
+[node name="Pathfinding" type="Node2D" parent="."]
+script = ExtResource("11_path")
+separation_force = 150
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

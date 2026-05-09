@@ -1,0 +1,10 @@
+[gd_resource type="TileSet" format=4 uid="uid://wxvkuxuegw20"]
+
+[ext_resource type="Texture2D" path="res://assets/generated_tiles/road_tile.png" id="1_road"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_road"]
+texture = ExtResource("1_road")
+tile_size = Vector2i(16, 16)
+0:0/0 = 0
+
+[resource]

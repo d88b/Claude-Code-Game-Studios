@@ -1,0 +1,8 @@
+# 在Godot编辑器中：
+# 1. 点击顶部菜单 "Scene" -> "Reload Current Scene"
+# 2. 或者关闭并重新打开 play_scene.tscn
+# 3. 如果还不行，关闭Godot编辑器，删除 .godot/editor 目录，重新打开项目
+# 4. 运行游戏看效果
+
+# 或者用命令行验证：
+# godot --headless --path d:\ai\Claude-Code-Game-Studios --scene-file res://scenes/play_scene.tscn
