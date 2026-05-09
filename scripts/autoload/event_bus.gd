@@ -12,3 +12,9 @@ signal ship_speed_changed(current_speed: float, min_speed: float, max_speed: flo
 signal ship_destroyed
 signal turret_fired(turret: Turret)
 signal target_locked(target: Enemy)
+
+## 潜艇信号
+signal submarine_dive_started()
+signal submarine_depth_changed(current_depth: float, max_depth: float)
+signal submarine_returned_to_surface()
+signal player_in_submarine(is_inside: bool)

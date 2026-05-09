@@ -9,6 +9,7 @@ var water_particles: GPUParticles2D
 var deck_layer: TileMapLayer
 var sea_floor_y = 0.0
 var ship: Ship
+var submarine: Submarine
 
 func _ready():
 	_build_ship()
@@ -17,6 +18,7 @@ func _ready():
 	_fill_ocean()
 	_create_water_particles()
 	_place_turret()
+	_place_submarine()
 
 	await get_tree().process_frame
 
@@ -146,6 +148,37 @@ func _place_turret():
 	if ship_node:
 		ship_node.add_child(turret)
 		print("[PlayScene] 炮台已放置在船上")
+
+## 放置潜艇（船体底部）
+func _place_submarine():
+	var sub_scene_file = load("res://scenes/submarine.tscn")
+	if not sub_scene_file:
+		print("[PlayScene] 警告：潜艇场景未找到")
+		return
+
+	submarine = sub_scene_file.instantiate() as Submarine
+
+	# 等 Ship 创建后放置
+	var ship_node = get_node_or_null("Ship")
+	if ship_node:
+		submarine.surface_y = ship_node.position.y + 80
+		submarine.position = Vector2(0, submarine.surface_y)
+		add_child(submarine)
+		print("[PlayScene] 潜艇已放置在船底")
+
+	EventBus.player_in_submarine.connect(_on_submarine_state_changed)
+
+func _on_submarine_state_changed(is_inside: bool):
+	# 切换相机跟随目标
+	var camera = get_node_or_null("Camera2D") as Camera2D
+	if not camera: return
+
+	if is_inside and submarine:
+		camera.make_current()
+		camera.global_position = submarine.global_position
+	elif ship:
+		camera.make_current()
+		camera.global_position = ship.global_position + Vector2(0, 100)
 
 func _create_water_particles():
 	water_particles = GPUParticles2D.new()

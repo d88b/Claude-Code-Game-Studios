@@ -15,6 +15,9 @@ var footstep_timer = 0.0
 
 ## 船体跟随：玩家在船上时随船移动
 var ship_parent: Ship = null
+## 潜艇交互
+var current_submarine: Submarine = null
+var in_submarine: bool = false
 
 @onready var ability_controller: AbilityController = $AbilityController
 @onready var footstep_effect: FootstepEffect = $FootstepEffect
@@ -44,16 +47,47 @@ func _ready():
 		if child is Ship:
 			ship_parent = child as Ship
 			break
+
+	EventBus.player_in_submarine.connect(_on_submarine_state_changed)
 	
 	
 func _process(delta: float):
 	if is_dead: return
 
+	if in_submarine:
+		return  # 潜艇内不处理玩家逻辑
+
+	_handle_submarine_interaction(delta)
 	_handle_movemment(delta)
 	_apply_physics(delta)  # 应用重力
 	_handle_footstep_sound(delta)
 	_handle_regen_energy(delta)
 	_handle_animation()
+
+## 检测附近潜艇并处理进入/离开
+func _handle_submarine_interaction(delta: float):
+	if in_submarine: return
+
+	var submarines = get_tree().get_nodes_in_group("submarine")
+	current_submarine = null
+
+	for node in submarines:
+		var sub = node as Submarine
+		if sub and not sub.is_dead:
+			var dist = global_position.distance_to(sub.global_position)
+			if dist < 60.0:
+				current_submarine = sub
+				break
+
+	if current_submarine and Input.is_action_just_pressed("interact"):
+		current_submarine.enter_submarine(self)
+
+func _on_submarine_state_changed(is_inside: bool):
+	in_submarine = is_inside
+
+	if not is_inside:
+		current_submarine = null
+		position = Vector2.ZERO  # 重置到默认位置
 	
 func _handle_regen_energy(delta: float):
 	if current_energy >= max_energy:
