@@ -2,9 +2,6 @@
 # Claude Code PreToolUse hook: Validates git commit commands
 # Receives JSON on stdin with tool_input.command
 # Exit 0 = allow, Exit 2 = block (stderr shown to Claude)
-#
-# Input schema (PreToolUse for Bash):
-# { "tool_name": "Bash", "tool_input": { "command": "git commit -m ..." } }
 
 INPUT=$(cat)
 
@@ -42,10 +39,9 @@ if [ -n "$DESIGN_FILES" ]; then
     done <<< "$DESIGN_FILES"
 fi
 
-# Validate JSON data files -- block invalid JSON
+# Validate JSON data files
 DATA_FILES=$(echo "$STAGED" | grep -E '^assets/data/.*\.json$')
 if [ -n "$DATA_FILES" ]; then
-    # Find a working Python command
     PYTHON_CMD=""
     for cmd in python python3 py; do
         if command -v "$cmd" >/dev/null 2>&1; then
@@ -53,11 +49,10 @@ if [ -n "$DATA_FILES" ]; then
             break
         fi
     done
-
     while IFS= read -r file; do
         if [ -f "$file" ]; then
             if [ -n "$PYTHON_CMD" ]; then
-                if ! "$PYTHON_CMD" -m json.tool "$file" > /dev/null 2>&1; then
+                if ! "$PYTHON_CMD" -m json.tool "$file" >/dev/null 2>&1; then
                     echo "BLOCKED: $file is not valid JSON" >&2
                     exit 2
                 fi
@@ -68,8 +63,7 @@ if [ -n "$DATA_FILES" ]; then
     done <<< "$DATA_FILES"
 fi
 
-# Check for hardcoded gameplay values in gameplay code
-# Uses grep -E (POSIX extended) instead of grep -P (Perl) for cross-platform compatibility
+# Check for hardcoded gameplay values
 CODE_FILES=$(echo "$STAGED" | grep -E '^src/gameplay/')
 if [ -n "$CODE_FILES" ]; then
     while IFS= read -r file; do
@@ -81,7 +75,7 @@ if [ -n "$CODE_FILES" ]; then
     done <<< "$CODE_FILES"
 fi
 
-# Check for TODO/FIXME without assignee -- uses grep -E instead of grep -P
+# Check for TODO/FIXME without assignee
 SRC_FILES=$(echo "$STAGED" | grep -E '^src/')
 if [ -n "$SRC_FILES" ]; then
     while IFS= read -r file; do

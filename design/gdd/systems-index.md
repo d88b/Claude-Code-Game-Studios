@@ -1,31 +1,23 @@
-# Systems Index: 铁锈魔潮 (Rust Magic Tide)
+# Systems Index: 深海堡垒 (Deep Sea Fortress)
 
-> **Status**: Approved
-> **Created**: 2026-04-22
-> **Last Updated**: 2026-04-22
+> **Status**: In Design
+> **Created**: 2026-05-08
+> **Last Updated**: 2026-05-08
 > **Source Concept**: design/gdd/game-concept.md
+> **Engine**: Godot 4.6
+> **Perspective**: 横向2D (Terraria-style)
 
 ---
 
 ## Overview
 
-铁锈魔潮是一款融合了战车探索、挖掘建造、堡垒生态、尸潮防守的2D横版末世生存游戏。核心循环为：**搜打撤 → 返回建设 → 种田生产 → 尸潮防守 → 继续探索**。这是一个完美的生态闭环：
+深海堡垒是一款移动海上堡垒生存游戏。核心循环为：**航行 → 探索 → 建造 → 防守 → 下一海域**。独特卖点：移动基地、四层立体防线、船+潜艇双载体、搜打撤闭环。
 
-1. **外出探索**：驾驶战车搜刮资源（魔力晶石、秘银、食物）
-2. **返回建设**：挖掘扩展地堡、建造防御设施、建造生态设施
-3. **种田生产**：雨水收集灌溉、作物种植、食物储备
-4. **尸潮防守**：所有建设成果的考验
-5. **继续循环**：防守成功 → 更强探索 → 更好建设
-
-**游戏支柱约束**：
-- Pillar 1: 战车即生命 — 所有探索系统必须强化战车的必要性
-- Pillar 2: 搜打撤节奏 — 所有时间/撤退系统必须创造紧张决策
-- Pillar 3: 尸潮即高潮 — 所有防守系统必须有真实压力和后果
-- Pillar 4: 魔导科技美学 — 所有科技系统必须融合赛博朋克魔导风格
-
-**堡垒生态闭环设计**：
-- 天气系统 → 雨水收集 → 种田灌溉 → 作物生产 → 食物储备 → 探索动力
-- 搜刮资源 → 建造扩建 → 防御设施 → 尸潮防守 → 成功奖励 → 继续探索
+**游戏支柱**：
+- Pillar 1: 移动基地 — 堡垒本身在航行，不是固定点位
+- Pillar 2: 立体防守 — 天空+水面+水下+内部四层防线
+- Pillar 3: 搜打撤闭环 — 潜艇下潜探索海底，收集资源回船建造
+- Pillar 4: 动态世界 — 海域持续移动，每次探索新地图
 
 ---
 
@@ -33,231 +25,95 @@
 
 | # | System Name | Category | Priority | Status | Design Doc | Depends On |
 |---|-------------|----------|----------|--------|------------|------------|
-| 1 | TileMap世界系统 | World | MVP | Designed | design/gdd/tilemap-world-system.md | 无 |
-| 2 | 方块类型数据库 | World | MVP | Designed | design/gdd/block-type-database.md | 无 |
-| 3 | 资源数据库 | Economy | MVP | Designed | design/gdd/resource-database.md | 无 |
-| 4 | 敌人类型数据库 | Combat | MVP | Designed | design/gdd/enemy-type-database.md | 无 |
-| 5 | 建造物品数据库 | Build | MVP | Designed | design/gdd/build-item-database.md | 无 |
-| 6 | 战车类型数据库 | Vehicle | MVP | Designed | design/gdd/vehicle-type-database.md | 无 |
-| 7 | 搜刮容器数据库 | Explore | MVP | Designed | design/gdd/scavenge-container-database.md | 无 |
-| 8 | 时间系统 | World | MVP | Designed | design/gdd/time-system.md | 无 |
-| 9 | 输入控制系统 | Core | MVP | Designed | design/gdd/input-control-system.md | 无 |
-| 10 | 摄像机系统 | Core | Full Vision | Not Started | — | 无 |
-| 11 | 方块碰撞系统 | World | MVP | Approved | design/gdd/block-collision-system.md | TileMap世界系统 |
-| 12 | 方块挖掘系统 | Build | MVP | Approved | design/gdd/block-digging-system.md | TileMap世界 + 方块类型数据库 + 输入控制 |
-| 13 | 方块放置系统 | Build | MVP | Approved | design/gdd/block-placing-system.md | TileMap世界 + 建造物品数据库 + 建造验证 + 方块碰撞 |
-| 14 | 资源掉落系统 | Economy | MVP | Designed | design/gdd/resource-drop-system.md | 方块类型数据库 + 资源数据库 |
-| 15 | 日夜循环系统 | World | MVP | Designed | design/gdd/day-night-cycle-system.md | 时间系统 |
-| 16 | 天气系统 | World | Vertical Slice | Not Started | — | 时间系统 |
-| 17 | 战车属性系统 | Vehicle | MVP | Designed | design/gdd/vehicle-attribute-system.md | 战车类型数据库 |
-| 18 | 战车驾驶系统 | Vehicle | MVP | Designed | design/gdd/vehicle-driving-system.md | 战车属性 + 输入控制 + TileMap世界 |
-| 19 | 魔能消耗计算 | Vehicle | MVP | Designed | design/gdd/magic-energy-consumption.md | 战车属性系统 |
-| 20 | 战车武器系统 | Vehicle | MVP | Designed | design/gdd/vehicle-weapon-system.md | 战车属性 + 资源数据库 |
-| 21 | 战车损坏系统 | Vehicle | MVP | Designed | design/gdd/vehicle-damage-system.md | 战车属性系统 |
-| 22 | 战车维修系统 | Vehicle | Vertical Slice | Not Started | — | 战车属性 + 资源数据库 + 战车仓库 |
-| 23 | 战车改装系统 | Vehicle | Vertical Slice | Not Started | — | 战车属性系统 |
-| 24 | 战车瘫痪处理 | Vehicle | Vertical Slice | Not Started | — | 战车属性 + 战车损坏 + 魔能消耗 |
-| 25 | 战车回收系统 | Vehicle | Alpha | Not Started | — | 撤退后果 + 多战车管理 + 战车仓库 |
-| 26 | 多战车管理 | Vehicle | Alpha | Not Started | — | 战车属性 + 战车瘫痪处理 + 战车仓库 |
-| 27 | 探索区域系统 | Explore | MVP | Designed | design/gdd/exploration-area-system.md | TileMap世界系统 |
-| 28 | 玩家背包系统 | Explore | Vertical Slice | Not Started | — | 资源数据库 |
-| 29 | 战车仓库系统 | Explore | Vertical Slice | Not Started | — | 资源数据库 |
-| 30 | 下车状态系统 | Explore | Vertical Slice | Not Started | — | 玩家背包系统 |
-| 31 | 搜刮交互系统 | Explore | Vertical Slice | Not Started | — | 搜刮容器数据库 + 玩家背包 |
-| 32 | 撤退判定系统 | Explore | MVP | Designed | design/gdd/retreat-judgment-system.md | 时间系统 + 日夜循环 + 战车属性 + 魔能消耗 + 战车损坏 |
-| 33 | 撤退后果系统 | Explore | Vertical Slice | Not Started | — | 撤退判定 + 战车瘫痪处理 |
-| 34 | 尸潮周期系统 | Defense | Alpha | Not Started | — | 时间系统 |
-| 35 | 尸潮规模预估 | Defense | Alpha | Not Started | — | 尸潮周期 + 敌人类型数据库 |
-| 36 | 敌人AI系统 | Combat | MVP | Designed | design/gdd/enemy-ai-system.md | 敌人类型数据库 |
-| 37 | 敌人生成系统 | Combat | MVP | Designed | design/gdd/enemy-spawn-system.md | 敌人类型数据库 + TileMap世界 + 敌人AI |
-| 38 | 炮塔系统 | Defense | MVP | Designed | design/gdd/turret-system.md | 资源数据库 + 建造物品数据库 + TileMap世界 + 敌人AI |
-| 39 | 陷阱系统 | Defense | Vertical Slice | Not Started | — | 资源数据库 + 建造物品数据库 + TileMap世界 + 敌人AI |
-| 40 | 防守失败梯度 | Defense | Alpha | Not Started | — | 炮塔 + 陷阱 + 地堡设施 + 闸门 |
-| 41 | 战斗反馈系统 | Combat | Alpha | Not Started | — | 敌人AI + 炮塔 + 战车武器 |
-| 42 | 科技解锁系统 | Progression | Vertical Slice | Not Started | — | 资源数据库 + 阵营科技 |
-| 43 | 阵营科技系统 | Progression | Vertical Slice | Not Started | — | 科技解锁系统 |
-| 44 | 资源合成系统 | Economy | Vertical Slice | Not Started | — | 资源数据库 + 阵营科技 |
-| 45 | 建造验证系统 | Build | MVP | Designed | design/gdd/build-validation-system.md | 方块类型数据库 + 建造物品数据库 + TileMap世界 |
-| 46 | 地堡设施系统 | Build | MVP | Designed | design/gdd/bunker-facility-system.md | 建造物品数据库 + 方块放置 + 建造验证 |
-| 47 | 闸门系统 | Defense | Alpha | Not Started | — | 建造物品数据库 + 方块放置 + 建造验证 |
-| 48 | 地图/废墟生成 | Explore | Alpha | Not Started | — | TileMap世界 + 探索区域 + 搜刮容器数据库 |
-| 49 | HUD系统 | UI | Full Vision | Not Started | — | 战车属性 + 战车仓库 + 资源存储 + 时间 + 天气 |
-| 50 | 撤退警告UI | UI | Full Vision | Not Started | — | 撤退判定系统 |
-| 51 | 天气状态UI | UI | Full Vision | Not Started | — | 天气系统 |
-| 52 | 音效系统 | Audio | Full Vision | Not Started | — | 战车驾驶 + 战车武器 + 方块挖掘 + 炮塔 + 敌人AI + 尸潮周期 |
-| 53 | Roguelite继承系统 | Persistence | Full Vision | Not Started | — | 科技解锁 + 战车改装 |
-| 54 | 存档系统 | Persistence | Full Vision | Not Started | — | Roguelite继承 + 资源存储 + 科技解锁 + 战车改装 |
-| 55 | 进度追踪系统 | Meta | Full Vision | Not Started | — | 存档系统 + 科技解锁 |
-| 56 | 雨水收集系统 | Eco | MVP | Not Started | — | 天气系统 + 地堡设施 |
-| 57 | 种田系统 | Eco | MVP | Not Started | — | 雨水收集系统 + 地堡设施 |
-| 58 | 食物/生存系统 | Eco | MVP | Not Started | — | 种田系统 + 资源数据库 |
-| 59 | 魔力农场系统 | Eco | MVP | Not Started | — | 种田系统 + 资源数据库 |
+| 1 | 操控系统 | Core | P0 | Designed | design/gdd/深海堡垒-操控系统.md | 无 |
+| 2 | 战斗系统 | Core | P0 | Designed | design/gdd/深海堡垒-战斗系统.md | 操控系统 |
+| 3 | 波次防守系统 | Gameplay | P0 | Designed | design/gdd/深海堡垒-波次防守系统.md | 战斗系统 + 敌人AI |
+| 4 | 资源采集系统 | Gameplay | P0 | Designed | design/gdd/深海堡垒-资源采集系统.md | 操控系统 |
+| 5 | 关卡布局系统 | Gameplay | P0 | Designed | design/gdd/深海堡垒-关卡布局系统.md | 无 |
+| 6 | 敌人AI系统 | Gameplay | P0 | Designed | design/gdd/深海堡垒-敌人AI系统.md | 无 |
+| 7 | 氧气能源系统 | Gameplay | P1 | Designed | design/gdd/深海堡垒-氧气能源系统.md | 资源采集系统 |
+| 8 | 船只损伤修复系统 | Gameplay | P1 | Designed | design/gdd/深海堡垒-船只损伤修复系统.md | 战斗系统 |
+| 9 | 物品系统 | Gameplay | P1 | Designed | design/gdd/深海堡垒-物品系统.md | 资源采集系统 |
+| 10 | Boss战斗详细设计 | Feature | P1 | Designed | design/gdd/深海堡垒-Boss战斗详细设计.md | 战斗系统 + 敌人AI |
+| 11 | 难度曲线设计 | Feature | P1 | Designed | design/gdd/深海堡垒-难度曲线设计.md | 波次防守 + Boss战斗 |
+| 12 | 玩家成长系统 | Meta | P1 | Designed | design/gdd/深海堡垒-玩家成长系统.md | 资源采集 + 战斗系统 |
+| 13 | 存档系统 | Meta | P1 | Designed | design/gdd/深海堡垒-存档系统.md | 无 |
+| 14 | UI系统 | Presentation | P1 | Designed | design/gdd/深海堡垒-UI系统.md | 无 |
+| 15 | 新手教程系统 | Presentation | P1 | Designed | design/gdd/深海堡垒-新手教程系统.md | 操控 + 战斗 + 资源采集 |
+| 16 | 主菜单与Loading界面 | Presentation | P1 | Designed | design/gdd/深海堡垒-主菜单与Loading界面.md | UI系统 |
+| 17 | 日夜循环系统 | Feature | P2 | Designed | design/gdd/深海堡垒-日夜循环系统.md | 时间系统 |
+| 18 | 导航地图系统 | Feature | P2 | Designed | design/gdd/深海堡垒-导航地图系统.md | 关卡布局系统 |
+| 19 | 怪物进化系统 | Feature | P2 | Designed | design/gdd/深海堡垒-怪物进化系统.md | 敌人AI系统 |
+| 20 | 门锁系统 | Gameplay | P2 | Designed | design/gdd/深海堡垒-门锁系统.md | 关卡布局系统 |
+| 21 | 船员系统(极简版) | Feature | P1 | Designed | design/gdd/深海堡垒-船员系统(极简版).md | 氧气能源系统 |
+| 22 | 任务系统 | Feature | P2 | Designed | design/gdd/深海堡垒-任务系统.md | 玩家成长系统 |
+| 23 | NPC系统 | Feature | P2 | Designed | design/gdd/深海堡垒-NPC系统.md | 经济系统 |
+| 24 | 经济系统 | Meta | P2 | Designed | design/gdd/深海堡垒-经济系统.md | 物品系统 |
+| 25 | 剧情系统设计 | Meta | P2 | Designed | design/gdd/深海堡垒-剧情系统设计.md | 任务系统 |
+| 26 | 结局系统设计 | Meta | P2 | Designed | design/gdd/深海堡垒-结局系统设计.md | 剧情系统 |
+| 27 | 音效系统 | Presentation | P2 | Designed | design/gdd/深海堡垒-音效系统.md | 战斗系统 |
+| 28 | 设置菜单系统 | Presentation | P2 | Designed | design/gdd/深海堡垒-设置菜单系统.md | UI系统 |
+| 29 | 实现补充内容 | Core | P1 | Designed | design/gdd/深海堡垒-实现补充内容.md | 无 |
+| 30 | 发布准备 | Meta | P3 | Designed | design/gdd/深海堡垒-发布准备.md | 所有系统 |
+
+## Balance & Reference Docs
+
+| Document | Location | Purpose |
+|----------|----------|---------|
+| 怪物百科 | design/balance/深海堡垒-怪物百科.md | 敌人数据表 |
+| 怪物百科-生化魔幻类 | design/balance/深海堡垒-怪物百科-生化魔幻类.md | 生化魔幻类敌人 |
+| 怪物AI映射表 | docs/references/深海堡垒-怪物AI映射表.md | AI到怪物映射 |
+| 物品经济属性表 | docs/references/深海堡垒-物品经济属性表.md | 物品经济数值 |
+| NPC船员衔接规则 | docs/references/深海堡垒-NPC船员衔接规则.md | NPC与船员衔接 |
+
+## Level & Scene Docs
+
+| Document | Location | Purpose |
+|----------|----------|---------|
+| 关卡场景设计 | design/levels/深海堡垒-关卡场景设计.md | 关卡布局与房间 |
+| 场景开发详细方案 | design/levels/深海堡垒-场景开发详细方案.md | 场景开发指南 |
+| 素材制作指南 | design/levels/深海堡垒-素材制作指南.md | 美术素材规范 |
+
+## Review Reports
+
+| Report | Location |
+|--------|----------|
+| 第1-5轮审查 | design/reviews/ (5份审查报告) |
 
 ---
 
 ## Categories
 
-| Category | Description | Typical Systems |
-|----------|-------------|-----------------|
-| **World** | 地图、方块、时间、天气系统 | TileMap世界、方块类型、时间系统、天气系统 |
-| **Vehicle** | 战车相关系统 | 战车属性、战车驾驶、战车损坏、战车改装、多战车管理 |
-| **Explore** | 探索、搜刮、撤退系统 | 探索区域、搜刮交互、撤退判定、撤退后果 |
-| **Combat** | 敌人、战斗系统 | 敌人AI、敌人生成、战斗反馈 |
-| **Defense** | 防守系统 | 炮塔、陷阱、尸潮周期、防守失败梯度 |
-| **Build** | 挖掘、建造系统 | 方块挖掘、方块放置、地堡设施、闸门 |
-| **Economy** | 资源、合成系统 | 资源数据库、资源掉落、资源合成 |
-| **Eco** | 堡垒生态、生存系统 | 雨水收集、种田系统、食物/生存、魔力农场 |
-| **Progression** | 科技、解锁系统 | 科技解锁、阵营科技 |
-| **Persistence** | 存档、继承系统 | Roguelite继承、存档系统 |
-| **UI** | HUD、警告UI系统 | HUD系统、撤退警告UI、天气状态UI |
-| **Audio** | 音效系统 | 音效系统 |
-| **Meta** | 进度追踪等元系统 | 进度追踪系统 |
-| **Core** | 输入、摄像机等基础系统 | 输入控制、摄像机系统 |
+| Category | Description | Systems |
+|----------|-------------|---------|
+| **Core** | 操控、战斗、输入基础 | 操控系统、战斗系统、实现补充内容 |
+| **Gameplay** | 核心玩法循环系统 | 波次防守、资源采集、关卡布局、敌人AI、氧气能源、船只损伤、物品、门锁 |
+| **Feature** | 扩展功能系统 | Boss战斗、难度曲线、日夜循环、导航地图、怪物进化、船员、任务、NPC |
+| **Presentation** | UI、音效、菜单 | UI系统、音效系统、设置菜单、新手教程、主菜单 |
+| **Meta** | 进度、存档、经济、叙事 | 玩家成长、经济系统、存档系统、剧情、结局、发布准备 |
 
 ---
 
-## Priority Tiers
+## Recommended Design Order (for GDD format migration)
 
-| Tier | Definition | Target Milestone | Design Urgency |
-|------|------------|------------------|----------------|
-| **MVP** | 核心循环验证必需。没有这些，无法测试"是否有乐趣？" | 第一可玩原型（12天） | Design FIRST |
-| **Vertical Slice** | 完整体验扩展。一个区域的完整演示。 | 垂直切片（28天） | Design SECOND |
-| **Alpha** | 所有玩法系统。完整机械范围，占位符内容可接受。 | Alpha里程碑（42天） | Design THIRD |
-| **Full Vision** | 打磨、UI、存档等元系统。发布版本。 | Beta / Release | Design as needed |
-
----
-
-## Dependency Map
-
-### Foundation Layer (no dependencies)
-
-1. **TileMap世界系统** — 所有空间操作的基础，方块位置存储、层级管理
-2. **方块类型数据库** — 方块属性定义（硬度、资源产出、可建造）
-3. **资源数据库** — 资源类型定义（魔力晶石、秘银、奥术碎片等）
-4. **敌人类型数据库** — 敌人属性定义（血量、伤害、护甲、速度、阵营）
-5. **建造物品数据库** — 建造物品定义（墙体、炮塔、陷阱、设施）
-6. **战车类型数据库** — 战车基础属性定义（耐久、护甲、魔能、速度）
-7. **搜刮容器数据库** — 容器类型定义（宝箱、废墟、敌人掉落）
-8. **时间系统** — 基础时间流逝，是日夜循环、尸潮周期的基础
-9. **输入控制系统** — 基础输入，战车驾驶、挖掘、下车行动的桥梁
-10. **摄像机系统** — 基础视觉跟随（叶子系统，可延迟）
-
-### Core Layer (depends on foundation)
-
-1. **方块碰撞系统** — depends on: TileMap世界系统
-2. **方块挖掘系统** — depends on: TileMap世界 + 方块类型数据库 + 输入控制
-3. **方块放置系统** — depends on: TileMap世界 + 建造物品数据库 + 建造验证
-4. **资源掉落系统** — depends on: 方块类型数据库 + 资源数据库
-5. **日夜循环系统** — depends on: 时间系统
-6. **战车属性系统** — depends on: 战车类型数据库
-7. **战车驾驶系统** — depends on: 战车属性 + 输入控制 + TileMap世界
-8. **魔能消耗计算** — depends on: 战车属性系统
-9. **战车武器系统** — depends on: 战车属性 + 资源数据库
-10. **战车损坏系统** — depends on: 战车属性系统
-11. **探索区域系统** — depends on: TileMap世界系统
-12. **敌人AI系统** — depends on: 敌人类型数据库
-13. **敌人生成系统** — depends on: 敌人类型数据库 + TileMap世界 + 敌人AI
-14. **炮塔系统** — depends on: 资源数据库 + 建造物品数据库 + TileMap世界 + 敌人AI
-15. **撤退判定系统** — depends on: 时间系统 + 日夜循环 + 战车属性 + 魔能消耗 + 战车损坏
-
-### Feature Layer (depends on core)
-
-1. **建造验证系统** — depends on: 方块类型数据库 + 建造物品数据库 + TileMap世界
-2. **地堡设施系统** — depends on: 建造物品数据库 + 方块放置 + 建造验证
-3. **玩家背包系统** — depends on: 资源数据库
-4. **战车仓库系统** — depends on: 资源数据库
-5. **下车状态系统** — depends on: 玩家背包系统
-6. **搜刮交互系统** — depends on: 搜刮容器数据库 + 玩家背包
-7. **撤退后果系统** — depends on: 撤退判定 + 战车瘫痪处理
-8. **战车瘫痪处理** — depends on: 战车属性 + 战车损坏 + 魔能消耗
-9. **战车维修系统** — depends on: 战车属性 + 资源数据库 + 战车仓库
-10. **战车改装系统** — depends on: 战车属性系统
-11. **陷阱系统** — depends on: 资源数据库 + 建造物品数据库 + TileMap世界 + 敌人AI
-12. **天气系统** — depends on: 时间系统
-13. **科技解锁系统** — depends on: 资源数据库 + 阵营科技
-14. **阵营科技系统** — depends on: 科技解锁系统
-15. **资源合成系统** — depends on: 资源数据库 + 阵营科技
-16. **多战车管理** — depends on: 战车属性 + 战车瘫痪处理 + 战车仓库
-17. **地图/废墟生成** — depends on: TileMap世界 + 探索区域 + 搜刮容器数据库
-18. **闸门系统** — depends on: 建造物品数据库 + 方块放置 + 建造验证
-19. **雨水收集系统** — depends on: 天气系统 + 地堡设施系统
-20. **种田系统** — depends on: 雨水收集系统 + 地堡设施系统
-21. **食物/生存系统** — depends on: 种田系统 + 资源数据库
-22. **魔力农场系统** — depends on: 种田系统 + 资源数据库
-
-### Presentation Layer (depends on features)
-
-1. **HUD系统** — depends on: 战车属性 + 战车仓库 + 资源存储 + 时间 + 天气
-2. **撤退警告UI** — depends on: 撤退判定系统
-3. **天气状态UI** — depends on: 天气系统
-4. **音效系统** — depends on: 战车驾驶 + 战车武器 + 方块挖掘 + 炮塔 + 敌人AI + 尸潮周期
-5. **战斗反馈系统** — depends on: 敌人AI + 炮塔 + 战车武器
-
-### Polish Layer (depends on everything)
-
-1. **尸潮周期系统** — depends on: 时间系统
-2. **尸潮规模预估** — depends on: 尸潮周期 + 敌人类型数据库
-3. **防守失败梯度** — depends on: 炮塔 + 陷阱 + 地堡设施 + 闸门
-4. **战车回收系统** — depends on: 撤退后果 + 多战车管理 + 战车仓库
-5. **Roguelite继承系统** — depends on: 科技解锁 + 战车改装
-6. **存档系统** — depends on: Roguelite继承 + 资源存储 + 科技解锁 + 战车改装
-7. **进度追踪系统** — depends on: 存档系统 + 科技解锁
-
----
-
-## Recommended Design Order
-
-| Order | System | Priority | Layer | Agent(s) | Est. Effort |
-|-------|--------|----------|-------|----------|-------------|
-| 1 | TileMap世界系统 | MVP | Foundation | game-designer + technical-director | M |
-| 2 | 方块类型数据库 | MVP | Foundation | game-designer | S |
-| 3 | 资源数据库 | MVP | Foundation | game-designer | S |
-| 4 | 敌人类型数据库 | MVP | Foundation | game-designer | S |
-| 5 | 建造物品数据库 | MVP | Foundation | game-designer | S |
-| 6 | 战车类型数据库 | MVP | Foundation | game-designer | S |
-| 7 | 搜刮容器数据库 | MVP | Foundation | game-designer | S |
-| 8 | 时间系统 | MVP | Foundation | game-designer | S |
-| 9 | 输入控制系统 | MVP | Foundation | game-designer | S |
-| 10 | 方块碰撞系统 | MVP | Core | game-designer + technical-director | S |
-| 11 | 方块挖掘系统 | MVP | Core | game-designer | M |
-| 12 | 建造验证系统 | MVP | Feature | game-designer | S |
-| 13 | 方块放置系统 | MVP | Core | game-designer | M |
-| 14 | 资源掉落系统 | MVP | Core | game-designer | S |
-| 15 | 日夜循环系统 | MVP | Core | game-designer | S |
-| 16 | 战车属性系统 | MVP | Core | game-designer | S |
-| 17 | 战车驾驶系统 | MVP | Core | game-designer + technical-director | L |
-| 18 | 魔能消耗计算 | MVP | Core | game-designer | S |
-| 19 | 战车武器系统 | MVP | Core | game-designer | M |
-| 20 | 战车损坏系统 | MVP | Core | game-designer | M |
-| 21 | 敌人AI系统 | MVP | Core | game-designer + ai-programmer | L |
-| 22 | 敌人生成系统 | MVP | Core | game-designer + ai-programmer | M |
-| 23 | 炮塔系统 | MVP | Core | game-designer | M |
-| 24 | 撤退判定系统 | MVP | Core | game-designer | M |
-| 25 | 地堡设施系统 | MVP | Feature | game-designer | M |
-| 26 | 雨水收集系统 | MVP | Feature | game-designer | S |
-| 27 | 种田系统 | MVP | Feature | game-designer | M |
-| 28 | 食物/生存系统 | MVP | Feature | game-designer | M |
-| 29 | 魔力农场系统 | MVP | Feature | game-designer | M |
+| Order | System | Priority | Category |
+|-------|--------|----------|----------|
+| 1 | 操控系统 | P0 | Core |
+| 2 | 战斗系统 | P0 | Core |
+| 3 | 资源采集系统 | P0 | Gameplay |
+| 4 | 敌人AI系统 | P0 | Gameplay |
+| 5 | 波次防守系统 | P0 | Gameplay |
+| 6 | 关卡布局系统 | P0 | Gameplay |
+| 7 | 氧气能源系统 | P1 | Gameplay |
+| 8 | 船只损伤修复系统 | P1 | Gameplay |
+| 9 | 物品系统 | P1 | Gameplay |
+| 10 | UI系统 | P1 | Presentation |
 
 ---
 
 ## Circular Dependencies
 
-- **None found** — 所有依赖关系都是单向的（Foundation → Core → Feature → Presentation → Polish）
-
----
-
-## High-Risk Systems
-
-| System | Risk Type | Risk Description | Mitigation |
-|--------|-----------|-----------------|------------|
-| **TileMap世界系统** | Technical | 大规模方块系统性能未验证 | 原型验证性能，使用Godot TileMap内置优化 |
-| **战车驾驶系统** | Design | 战车重量感是否传达正确 | 原型验证手感，调整速度/加速度/碰撞反馈 |
-| **敌人AI系统** | Technical + Design | 多种AI行为（集群冲锋/拆墙攻城/追踪伏击）复杂度高 | 分阶段实现，先实现集群冲锋，其他AI后续 |
-| **炮塔系统** | Design | 炮塔是否让防守有乐趣 | 原型验证炮塔攻击感，调整伤害/射速/视觉反馈 |
-| **撤退判定系统** | Design | 撤退警告是否抢夺焦点且不扰人 | UX原型测试，调整警告时机/强度 |
-| **天气系统** | Design + Technical | 天气与战车交互是否平衡 | 分阶段实现，先实现视觉效果，再实现gameplay影响 |
-| **尸潮周期系统** | Design | 尸潮频率是否合适 | 原型验证节奏，调整基础周期和噪音积累系数 |
+- **None found** — 所有依赖关系均为单向（Core → Gameplay → Feature → Presentation → Meta）
 
 ---
 
@@ -265,32 +121,20 @@
 
 | Metric | Count |
 |-------|-------|
-| Total systems identified | 59 |
-| Design docs started | 23 |
-| Design docs reviewed | 4 |
-| Design docs approved | 4 |
-| MVP systems designed | 26/26 |
-| Vertical Slice systems designed | 0/12 |
-| Alpha systems designed | 0/9 |
-| Full Vision systems designed | 0/8 |
+| Total systems identified | 30 |
+| Design docs migrated | 30/30 |
+| Format-compliant (8 sections) | 0/30 (需格式转换) |
+| Balance docs | 2 |
+| Reference docs | 3 |
+| Level docs | 3 |
+| Review reports | 5 |
 
 ---
 
 ## Next Steps
 
-- [x] Review and approve this systems enumeration
-- [x] Design TileMap世界系统 GDD
-- [x] Design 方块类型数据库 GDD
-- [x] Design 资源数据库 GDD
-- [x] Design 敌人类型数据库 GDD
-- [x] Design 建造物品数据库 GDD
-- [x] Design 战车类型数据库 GDD
-- [x] Design 搜刮容器数据库 GDD
-- [x] Design 时间系统 GDD
-- [x] Design 输入控制系统 GDD
-- [ ] Run `/design-review` on completed GDDs (fresh session)
-- [ ] Run `/consistency-check` to verify all database ID alignments
-- [ ] Design MVP-tier systems next (use `/design-system [system-name]`)
-  - Next system: `/design-system 方块碰撞系统` (#11)
-- [ ] Run `/gate-check pre-production` when MVP systems are designed
-- [ ] Prototype the highest-risk system early (`/prototype 战车驾驶系统`)
+- [ ] Run `/adopt full` — audit GDD format compliance (all 30 docs need 8-section format)
+- [ ] Migrate GDDs to standard format using `/design-system retrofit`
+- [ ] Run `/create-architecture` — bootstrap architecture from existing design docs
+- [ ] Run `/map-systems` — if systems-index needs refinement
+- [ ] Set review mode in `production/review-mode.txt`

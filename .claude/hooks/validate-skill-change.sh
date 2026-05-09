@@ -1,12 +1,5 @@
 #!/bin/bash
 # Claude Code PostToolUse hook: Advises running skill-test after skill file changes
-# Fires when any file inside .claude/skills/ is written or edited.
-#
-# Exit behavior:
-#   exit 0 = advisory only (non-blocking)
-#
-# Input schema (PostToolUse for Write|Edit):
-# { "tool_name": "Write", "tool_input": { "file_path": "...", "content": "..." } }
 
 INPUT=$(cat)
 
@@ -17,7 +10,7 @@ else
     FILE_PATH=$(echo "$INPUT" | grep -oE '"file_path"[[:space:]]*:[[:space:]]*"[^"]*"' | sed 's/"file_path"[[:space:]]*:[[:space:]]*"//;s/"$//')
 fi
 
-# Normalize path separators (Windows backslash to forward slash)
+# Normalize path separators
 FILE_PATH=$(echo "$FILE_PATH" | sed 's|\\|/|g')
 
 # Only act on files inside .claude/skills/
@@ -25,7 +18,7 @@ if ! echo "$FILE_PATH" | grep -qE '(^|/)\.claude/skills/'; then
     exit 0
 fi
 
-# Extract skill name from path (.claude/skills/[skill-name]/SKILL.md)
+# Extract skill name from path
 SKILL_NAME=$(echo "$FILE_PATH" | grep -oE '\.claude/skills/[^/]+' | sed 's|\.claude/skills/||')
 
 if [ -z "$SKILL_NAME" ]; then
