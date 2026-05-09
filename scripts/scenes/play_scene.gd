@@ -8,13 +8,15 @@ extends Node
 var water_particles: GPUParticles2D
 var deck_layer: TileMapLayer
 var sea_floor_y = 0.0
+var ship: Ship
 
 func _ready():
+	_build_ship()
 	_register_deck_group()
 	_build_sea_bed()
-	_build_deck()
 	_fill_ocean()
 	_create_water_particles()
+	_place_turret()
 
 	await get_tree().process_frame
 
@@ -27,28 +29,35 @@ func _ready():
 	if player:
 		player.position = Vector2(0, sea_floor_y - 80)
 
-func _create_water_particles():
-	water_particles = GPUParticles2D.new()
-	water_particles.name = "WaterParticles"
-	water_particles.position = Vector2(0, 64)
-	water_particles.z_index = 20
-	water_particles.amount = 200
-	water_particles.lifetime = 3.0
-	water_particles.one_shot = false
-	water_particles.preprocess = 1.0
-	water_particles.emitting = true
-
-	var mat = ParticleProcessMaterial.new()
-
-	water_particles.process_material = mat
-	add_child(water_particles)
-
-## 把 Deck 层注册到 tilemap_layer 组供碰撞检测
-func _register_deck_group():
+## 创建船体容器（包含甲板、炮台等）
+func _build_ship():
 	var map_node = get_node_or_null("Map")
 	if not map_node: return
 
+	ship = Ship.new()
+	ship.name = "Ship"
+
+	# 将 Map 下的所有 TileMapLayer 移到 Ship 下
+	var layers_to_move = []
 	for child in map_node.get_children():
+		if child is TileMapLayer:
+			layers_to_move.append(child)
+
+	for layer in layers_to_move:
+		layer.reparent(ship)
+
+	add_child(ship)
+	print("[PlayScene] 船体容器已创建")
+
+## 把 Deck 层注册到 tilemap_layer 组供碰撞检测
+func _register_deck_group():
+	# 等待 Ship 节点创建后再查找
+	await get_tree().process_frame
+
+	var ship_node = get_node_or_null("Ship")
+	if not ship_node: return
+
+	for child in ship_node.get_children():
 		if child is TileMapLayer and child.name == "Deck":
 			child.add_to_group("tilemap_layer")
 			deck_layer = child
@@ -71,7 +80,6 @@ func _build_sea_bed():
 	var tile_set = TileSet.new()
 	var source = TileSetAtlasSource.new()
 
-	# 用深色瓦片做海底
 	var sea_texture = load("res://assets/generated_tiles/ocean_tile.png")
 	if sea_texture:
 		source.texture = sea_texture
@@ -81,56 +89,11 @@ func _build_sea_bed():
 
 		seabed_layer.tile_set = tile_set
 
-		# 生成海底瓦片
 		for x in range(-200, 200):
 			for y in range(-20, 280):
 				seabed_layer.set_cell(Vector2i(x, y), 0, Vector2i(0, 0))
 
 	print("[PlayScene] 海底已生成: ", seabed_layer.get_used_cells().size(), " 个瓦片")
-
-## 生成矩形船甲板（漂浮在海面上）
-func _build_deck():
-	var map_node = get_node_or_null("Map")
-	if not map_node: return
-
-	var deck = map_node.get_node_or_null("Deck") as TileMapLayer
-	if not deck: return
-
-	if deck.tile_set != null and deck.get_used_cells().size() > 0:
-		return
-
-	print("[PlayScene] 生成船甲板...")
-
-	var tile_set = TileSet.new()
-	var source = TileSetAtlasSource.new()
-
-	# 用木板纹理做甲板
-	var deck_texture = load("res://assets/generated_tiles/road_tile.png")
-	if not deck_texture:
-		deck_texture = load("res://assets/generated_tiles/grass_tile.png")
-	if not deck_texture:
-		return
-
-	source.texture = deck_texture
-	source.create_tile(Vector2i(0, 0))
-	tile_set.add_source(source)
-	tile_set.tile_size = Vector2i(16, 16)
-
-	deck.tile_set = tile_set
-
-	# 甲板：宽 80 瓦片，高 3 瓦片（约 1280x48 像素）
-	var deck_width = 80
-	var deck_height = 3
-	var deck_center_x = 0
-	var deck_y = -4  # 甲板在海面上的高度
-
-	for x in range(deck_width):
-		for y in range(deck_height):
-			deck.set_cell(Vector2i(deck_center_x - deck_width / 2 + x, deck_y + y), 0, Vector2i(0, 0))
-
-	sea_floor_y = deck_y * 16
-	var used = deck.get_used_cells()
-	print("[PlayScene] 船甲板已生成: ", used.size(), " 个瓦片，海底 Y 坐标: ", sea_floor_y)
 
 ## 填充海面层 + 应用水波 shader
 func _fill_ocean():
@@ -169,6 +132,36 @@ func _fill_ocean():
 		ocean_layer.material = shader_mat
 
 	print("[PlayScene] 海面已填充")
+
+## 放置基础炮台
+func _place_turret():
+	var turret_scene = load("res://scenes/turret.tscn")
+	if not turret_scene: return
+
+	var turret = turret_scene.instantiate() as Turret
+	turret.position = Vector2(100, sea_floor_y - 50)
+
+	# 等 Ship 创建后放置
+	var ship_node = get_node_or_null("Ship")
+	if ship_node:
+		ship_node.add_child(turret)
+		print("[PlayScene] 炮台已放置在船上")
+
+func _create_water_particles():
+	water_particles = GPUParticles2D.new()
+	water_particles.name = "WaterParticles"
+	water_particles.position = Vector2(0, 64)
+	water_particles.z_index = 20
+	water_particles.amount = 200
+	water_particles.lifetime = 3.0
+	water_particles.one_shot = false
+	water_particles.preprocess = 1.0
+	water_particles.emitting = true
+
+	var mat = ParticleProcessMaterial.new()
+
+	water_particles.process_material = mat
+	add_child(water_particles)
 
 func _handle_game_over(player: Player):
 	var tween = fade_in_overlay()

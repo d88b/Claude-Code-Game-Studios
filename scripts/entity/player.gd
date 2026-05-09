@@ -13,6 +13,9 @@ var weapon_left: Vector2
 var spawn_location: Vector2
 var footstep_timer = 0.0
 
+## 船体跟随：玩家在船上时随船移动
+var ship_parent: Ship = null
+
 @onready var ability_controller: AbilityController = $AbilityController
 @onready var footstep_effect: FootstepEffect = $FootstepEffect
 
@@ -34,6 +37,13 @@ func _ready():
 	EventBus.play_cast_ability.connect(_handle_ability)
 	EventBus.player_health_changed.emit(current_health, max_health)
 	EventBus.player_energy_changed.emit(current_energy, max_energy)
+
+	## 查找船体父节点 — 在 PlayScene 根节点下查找 Ship
+	await get_tree().process_frame
+	for child in get_tree().current_scene.get_children():
+		if child is Ship:
+			ship_parent = child as Ship
+			break
 	
 	
 func _process(delta: float):
@@ -66,7 +76,11 @@ func _handle_movemment(delta: float):
 	turning_cooldown = max(0, turning_cooldown - delta)
 	var horizontal = Input.get_axis("left", "right")
 
-	# 水平移动
+	# 船体跟随：玩家随船移动
+	if ship_parent:
+		position.x += ship_parent.current_speed * delta
+
+	# 水平移动（相对于船）
 	var n_movement = Vector2(horizontal, 0)
 	self.position += n_movement * speed * delta
 
