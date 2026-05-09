@@ -1,8 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://resource_drop"]
-
-[ext_resource type="Script" path="res://src/drop/resource_drop.gd" id="script_resource_drop"]
-
-[node name="ResourceDrop" type="Area2D"]
-script = ExtResource("script_resource_drop")
-resource_id = 1
-quantity = 1.0
