@@ -21,6 +21,7 @@ ResourceLocator="*res://scripts/autoload/resource_locator.gd"
 EventBus="*res://scripts/autoload/event_bus.gd"
 FloatText="*res://scripts/autoload/float_text.gd"
 ResourceManager="*res://scripts/autoload/resource_manager.gd"
+GameManager="*res://scripts/autoload/game_manager.gd"
 
 [input]
 

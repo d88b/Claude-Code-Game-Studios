@@ -31,6 +31,16 @@ func _ready():
 	AudioController.play_bg_music("play_scene")
 	EventBus.game_paused.connect(_handle_paused)
 
+	# 设置游戏状态
+	GameManager.set_state(GameManager.GameState.PLAYING)
+	GameManager.set_phase(GameManager.GamePhase.NAVIGATION)
+
+	# 显示阶段提示
+	_show_phase_banner("海域 %d — 航行中" % GameManager.current_sea_area)
+
+	# 监听阶段切换
+	GameManager.phase_changed.connect(_on_phase_changed)
+
 	# 将玩家放在甲板中央
 	if player:
 		player.position = Vector2(0, sea_floor_y - 80)
@@ -293,6 +303,45 @@ func _handle_game_over(player: Player):
 
 	EventBus.player_health_changed.emit(player.current_health, player.max_health)
 	EventBus.player_energy_changed.emit(player.current_energy, player.max_energy)
+
+func _on_phase_changed(new_phase: GameManager.GamePhase):
+	var phase_names = {
+		GameManager.GamePhase.NAVIGATION: "海域 %d — 航行中" % GameManager.current_sea_area,
+		GameManager.GamePhase.EXPLORATION: "探索阶段",
+		GameManager.GamePhase.DEFENSE: "第 %d 波 — 防守！" % GameManager.current_sea_area,
+		GameManager.GamePhase.REWARD: "防守完成 — 奖励阶段"
+	}
+	var text = phase_names.get(new_phase, "")
+	if text:
+		_show_phase_banner(text)
+
+func _show_phase_banner(text: String):
+	var label = Label.new()
+	label.text = text
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	label.add_theme_font_size_override("font_size", 28)
+	label.add_theme_color_override("font_color", Color(1, 1, 1, 1))
+
+	var container = ColorRect.new()
+	container.color = Color(0, 0, 0, 0.7)
+	container.layout_mode = Control.LAYOUT_MODE_FULL_RECT
+	container.set_anchors_preset(Control.PRESET_CENTER)
+	container.offset_left = -200
+	container.offset_top = -30
+	container.offset_right = 200
+	container.offset_bottom = 30
+	container.add_child(label)
+
+	add_child(container)
+
+	# 淡入淡出动画
+	var tween = create_tween()
+	tween.tween_property(container, "modulate:a", 0.0, 0.5).set_delay(2.0)
+	await tween.finished
+	container.queue_free()
 
 
 func fade_out_overlay():

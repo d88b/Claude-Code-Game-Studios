@@ -79,6 +79,7 @@ func _handle_reward(delta: float):
 	wave_delay += delta
 	EventBus.wave_completed.emit(current_wave, _get_reward_text())
 	if wave_delay >= reward_duration:
+		GameManager.next_sea_area()
 		_reset_for_next_wave()
 
 func _start_next_wave():
@@ -86,6 +87,7 @@ func _start_next_wave():
 	enemies_to_spawn = _get_wave_enemy_count()
 	state = WaveState.WARNING
 	wave_delay = 0
+	GameManager.set_phase(GameManager.GamePhase.DEFENSE)
 	EventBus.wave_state_changed.emit("WARNING")
 	EventBus.wave_warning.emit(current_wave, warning_duration)
 	print("[WaveManager] 第 %d 波预警" % current_wave)
