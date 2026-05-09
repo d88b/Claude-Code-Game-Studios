@@ -221,7 +221,7 @@ func _setup_enemy_spawner():
 
 	var spawner = EnemySpawner.new()
 	spawner.name = "EnemySpawner"
-	spawner.packed_enemies = [chaser_scene, patrol_scene]
+	spawner.packed_enemies = [chaser_scene, patrol_scene] as Array[PackedScene]
 	spawner.spawn_interval = 4.0
 	spawner.max_active_enemies = 6
 	spawner.min_spawn_radius = 350
@@ -234,7 +234,7 @@ func _setup_enemy_spawner():
 	# 水下敌人（巡逻型为主，深海区域）
 	var underwater_spawner = EnemySpawner.new()
 	underwater_spawner.name = "UnderwaterEnemySpawner"
-	underwater_spawner.packed_enemies = [patrol_scene]
+	underwater_spawner.packed_enemies = [patrol_scene] as Array[PackedScene]
 	underwater_spawner.spawn_interval = 6.0
 	underwater_spawner.max_active_enemies = 4
 	underwater_spawner.min_spawn_radius = 400
