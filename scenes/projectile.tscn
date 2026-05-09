@@ -2,6 +2,9 @@
 
 [ext_resource type="Script" path="res://scripts/entity/projectile.gd" id="1_proj"]
 
+[sub_resource type="CircleShape2D" id="shape_proj"]
+radius = 4.0
+
 [node name="Projectile" type="Area2D"]
 collision_layer = 1
 collision_mask = 1
@@ -13,5 +16,4 @@ modulate = Color(1, 0.9, 0.3, 1)
 scale = Vector2(0.3, 0.3)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = CircleShape2D.new("shape")
-shape_radius = 4.0
+shape = SubResource("shape_proj")

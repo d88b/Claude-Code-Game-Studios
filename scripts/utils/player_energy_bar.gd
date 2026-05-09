@@ -1,5 +1,9 @@
 class_name PlayerEnergyBar
-extends UAProgressBar
+extends TextureProgressBar
 
-func _enter_tree():
-	EventBus.player_energy_changed.connect(update_value)
+func _ready():
+	EventBus.player_energy_changed.connect(_on_energy_changed)
+
+func _on_energy_changed(current: float, max_val: float):
+	value = current
+	max_value = max_val

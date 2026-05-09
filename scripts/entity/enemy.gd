@@ -89,5 +89,5 @@ func _on_death():
 	queue_free()
 
 func _on_animated_sprite_2d_animation_finished():
-	if current_anim and current_anim.name == "die":
+	if current_anim_name == "die":
 		_on_death()

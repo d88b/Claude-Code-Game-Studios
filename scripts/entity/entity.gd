@@ -9,11 +9,12 @@ extends Node2D
 @export var energy_regen_tick_value = 3
 
 ## 物理参数
-@export var gravity: float = 800.0       ## 重力加速度
-@export var jump_force: float = 350.0     ## 跳跃力度
-@export var fall_max_speed: float = 600.0 ## 最大下落速度
+@export var gravity: float = 800.0
+@export var jump_force: float = 350.0
+@export var fall_max_speed: float = 600.0
 
-var current_anim: AnimationWrapper
+var current_anim_name: String = ""
+var current_anim_high_priority: bool = false
 var current_health: float
 var current_energy: float
 var is_dead: bool = false
@@ -36,58 +37,54 @@ func _ready():
 		animated_sprite.material = animated_sprite.material.duplicate()
 	if animated_sprite is AnimatedSprite2D:
 		animated_sprite.animation_finished.connect(on_animation_finished)
-	
+
 func _exit_tree():
-	animated_sprite.animation_finished.disconnect(on_animation_finished)
-	
+	if animated_sprite is AnimatedSprite2D:
+		animated_sprite.animation_finished.disconnect(on_animation_finished)
+
 func apply_damage(damage: float) -> bool:
 	if is_dead: return false
-	
-	current_health -=damage
+
+	current_health -= damage
 	current_health = max(0, current_health)
 	_show_damage_taken_effect()
 	_show_damage_popup(damage)
-	
+
 	if current_health == 0:
 		print(name, " is dead!")
 		is_dead = true
-		play_animation(AnimationWrapper.new("die", true))
-	
+		_play_animation("die", true)
+
 	return true
-			
-func play_animation(anim: AnimationWrapper):
-	if animated_sprite.animation == anim.name: return
-	
-	if (
-		current_anim != null and current_anim.is_high_priority
-		and not anim.is_high_priority
-	): return
-	
-	current_anim = anim
-	animated_sprite.play(anim.name)
-	
+
+func _play_animation(anim_name: String, high_priority: bool = false):
+	if animated_sprite is not AnimatedSprite2D: return
+	if animated_sprite.animation == anim_name: return
+	if current_anim_high_priority and not high_priority: return
+	current_anim_name = anim_name
+	current_anim_high_priority = high_priority
+	(animated_sprite as AnimatedSprite2D).play(anim_name)
+
 func turn_to_position(pos: Vector2):
 	if position.x > pos.x and not animated_sprite.flip_h:
 		animated_sprite.flip_h = true
 	elif position.x < pos.x and animated_sprite.flip_h:
 		animated_sprite.flip_h = false
-	
+
 func on_animation_finished():
-	current_anim = null
+	current_anim_name = ""
+	current_anim_high_priority = false
 
 ## 物理更新：应用重力 + 地面检测
 func _apply_physics(delta: float) -> void:
 	if is_dead: return
 
-	# 应用重力
 	vertical_velocity += gravity * delta
 	vertical_velocity = min(vertical_velocity, fall_max_speed)
 	position.y += vertical_velocity * delta
 
-	# 地面检测
 	_check_ground()
 
-	# 落地时重置速度
 	if is_on_ground and vertical_velocity > 0:
 		vertical_velocity = 0.0
 
@@ -99,7 +96,7 @@ func _try_jump() -> bool:
 		return true
 	return false
 
-## 检测是否在地面上（使用多点检测 + 精确对齐）
+## 检测是否在地面上
 func _check_ground() -> void:
 	is_on_ground = false
 	var tree = get_tree()
@@ -122,7 +119,7 @@ func _check_ground() -> void:
 			if position.y > _ground_y:
 				position.y = _ground_y
 			return
-	
+
 func get_height() -> float:
 	if animated_sprite is Sprite2D:
 		var tex = (animated_sprite as Sprite2D).texture
@@ -137,14 +134,14 @@ func get_current_texture() -> Texture2D:
 	if animated_sprite is Sprite2D:
 		return (animated_sprite as Sprite2D).texture
 	return (animated_sprite as AnimatedSprite2D).sprite_frames.get_frame_texture(animated_sprite.animation, animated_sprite.frame)
-	
+
 func spend_energy(energy: float): pass
 
 func _show_damage_popup(damage: float):
 	var height = get_height()
 	var spawn_position = Vector2(position.x, position.y - (height * 0.5))
 	FloatText.show_damage_text(str(int(damage)), spawn_position, damage_text_color)
-	
+
 func _show_damage_taken_effect():
 	if animated_sprite is AnimatedSprite2D and animated_sprite.material != null:
 		for i in 2:
@@ -152,26 +149,3 @@ func _show_damage_taken_effect():
 			await get_tree().create_timer(0.05).timeout
 			animated_sprite.material.set_shader_parameter("is_hurt", false)
 			await get_tree().create_timer(0.05).timeout
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	

@@ -1,17 +1,22 @@
-[gd_scene format=4 uid="uid://9b11d6b9ebf34e64"]
+[gd_scene load_steps=4 format=4 uid="uid://9b11d6b9ebf34e64"]
 
-[ext_resource type="Script" path="res://scripts/entity/submarine.gd" id="1_sub"]
+[ext_resource type="Script" path="res://scripts/entity/submarine.gd" id="scr_sub"]
+[ext_resource type="Texture2D" path="res://assets/generated_tiles/ocean_tile.png" id="tex_ocean"]
+
+[sub_resource type="CircleShape2D" id="shape_interact"]
+radius = 30.0
 
 [node name="Submarine" type="Node2D"]
-script = ExtResource("1_sub")
+script = ExtResource("scr_sub")
+max_depth = 500.0
+speed = 80.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = preload("res://assets/generated_tiles/ocean_tile.png")
+texture = ExtResource("tex_ocean")
 scale = Vector2(0.8, 0.5)
 
 [node name="InteractZone" type="Area2D" parent="."]
 monitoring = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="./InteractZone"]
-shape = CircleShape2D.new("shape")
-shape_radius = 30.0
+shape = SubResource("shape_interact")

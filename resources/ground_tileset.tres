@@ -1,9 +1,0 @@
-[gd_resource type="TileSet" format=4 uid="uid://ground1tiles"]
-
-[ext_resource type="Texture2D" path="res://assets/generated_tiles/ground_tile.png" id="1_ground"]
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ground"]
-texture = ExtResource("1_ground")
-0:0/0 = 0
-
-[resource]

@@ -1,9 +1,0 @@
-[gd_resource type="TileSet" format=4 uid="uid://qdpjie8ha30v"]
-
-[ext_resource type="Texture2D" path="res://assets/generated_tiles/sky_tile.png" id="1_sky"]
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_sky"]
-texture = ExtResource("1_sky")
-0:0/0 = 0
-
-[resource]
