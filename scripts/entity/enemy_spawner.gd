@@ -45,6 +45,25 @@ func _spawn_batch(types: Array, remaining: int, interval: float, timer: float):
 		await get_tree().create_timer(0.01).timeout
 		_spawn_batch(types, remaining, interval, timer)
 
+func spawn_enemy():
+	if packed_enemies.is_empty(): return
+	var enemy_scene = packed_enemies[randi() % packed_enemies.size()] as PackedScene
+	if not enemy_scene: return
+
+	var enemy = enemy_scene.instantiate() as Enemy
+
+	var spawn_radius = randf_range(min_spawn_radius, max_spawn_radius)
+	var dir = Vector2(randf_range(-1.0, 1.0), randf_range(-0.3, 0.3)).normalized()
+	var spawn_pos = dir * spawn_radius
+
+	if follow_target:
+		spawn_pos += follow_target.global_position
+
+	spawn_pos.y += spawn_depth_offset
+	enemy.global_position = spawn_pos
+
+	get_parent().add_child(enemy)
+
 func spawn_enemy_from_types(types: Array[PackedScene]):
 	if types.is_empty(): return
 	var enemy_scene = types[randi() % types.size()] as PackedScene
