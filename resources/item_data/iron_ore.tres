@@ -1,0 +1,9 @@
+[gd_resource load_steps=2 format=3 uid="uid://8f35cf41970d477d"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_data.gd" id="1_item"]
+
+[resource]
+id = "iron_ore"
+display_name = "铁矿"
+color = Color(0.55, 0.55, 0.55, 1)
+stack_size = 99

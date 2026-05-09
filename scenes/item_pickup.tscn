@@ -1,0 +1,14 @@
+[gd_scene format=4 uid="uid://a809b7ced75b441f"]
+
+[ext_resource type="Script" path="res://scripts/entity/item_pickup.gd" id="1_pickup"]
+
+[node name="ItemPickup" type="Area2D"]
+script = ExtResource("1_pickup")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 1)
+scale = Vector2(0.5, 0.5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = CircleShape2D.new("shape")
+shape_radius = 20.0

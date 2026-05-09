@@ -4,6 +4,7 @@ extends Node
 @export var screen_transition: ColorRect
 @export var player_health_bar: PlayerHealthBar
 @export var pause_menu: PauseMenu
+@export var resource_hud: ResourceHUD
 
 var water_particles: GPUParticles2D
 var deck_layer: TileMapLayer
@@ -19,6 +20,7 @@ func _ready():
 	_create_water_particles()
 	_place_turret()
 	_place_submarine()
+	_spawn_resources()
 
 	await get_tree().process_frame
 
@@ -167,6 +169,28 @@ func _place_submarine():
 		print("[PlayScene] 潜艇已放置在船底")
 
 	EventBus.player_in_submarine.connect(_on_submarine_state_changed)
+
+## 在海底生成资源点
+func _spawn_resources():
+	var spawner = ResourceSpawner.new()
+	spawner.name = "ResourceSpawner"
+	add_child(spawner)
+
+	var iron_ore = load("res://resources/item_data/iron_ore.tres") as ItemData
+	var deep_sea_ore = load("res://resources/item_data/deep_sea_ore.tres") as ItemData
+	var bio_sample = load("res://resources/item_data/bio_sample.tres") as ItemData
+
+	var pickup_scene = load("res://scenes/item_pickup.tscn")
+	if not pickup_scene:
+		print("[PlayScene] 警告：拾取场景未找到")
+		return
+
+	spawner.iron_ore_resource = iron_ore
+	spawner.deep_sea_ore_resource = deep_sea_ore
+	spawner.bio_sample_resource = bio_sample
+	spawner.pickup_scene = pickup_scene
+
+	spawner.spawn_resources(600, submarine.surface_y, submarine.max_depth)
 
 func _on_submarine_state_changed(is_inside: bool):
 	# 切换相机跟随目标

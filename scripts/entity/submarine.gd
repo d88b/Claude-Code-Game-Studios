@@ -24,6 +24,7 @@ func _process(delta: float):
 
 	if is_diving:
 		_handle_submarine_movement(delta)
+		_handle_resource_collection(delta)
 		_check_depth_pressure(delta)
 
 func _handle_submarine_movement(delta: float):
@@ -45,6 +46,22 @@ func _handle_submarine_movement(delta: float):
 
 	if is_diving:
 		EventBus.submarine_depth_changed.emit(current_depth, max_depth)
+
+func _handle_resource_collection(delta: float):
+	if not is_diving: return
+
+	var pickups = get_tree().get_nodes_in_group("item_pickup")
+	for node in pickups:
+		var pickup = node as ItemPickup
+		if pickup and not pickup.collected:
+			var dist = global_position.distance_to(pickup.global_position)
+			if dist < 50.0 and Input.is_action_just_pressed("interact"):
+				pickup.collect()
+				return
+
+	# 离开潜艇（在潜艇内按 E 返回船面）
+	if Input.is_action_just_pressed("enter_submarine"):
+		exit_submarine()
 
 func _check_depth_pressure(delta: float):
 	if current_depth > max_depth * 0.9:

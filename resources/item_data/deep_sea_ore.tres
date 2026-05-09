@@ -1,0 +1,9 @@
+[gd_resource load_steps=2 format=3 uid="uid://6baaa4e2e0b14d51"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_data.gd" id="1_item"]
+
+[resource]
+id = "deep_sea_ore"
+display_name = "深海矿"
+color = Color(0.2, 0.5, 0.9, 1)
+stack_size = 99
